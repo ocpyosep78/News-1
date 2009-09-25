@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/">
+
+  <Resource
+    url="jdbc:mysql://localhost:3306/news_dev?useUnicode=true&amp;characterEncoding=utf8"
+    username="news_dev"
+    name="jdbc/news"
+    password="news_dev"
+    auth="Container"
+    driverClassName="com.mysql.jdbc.Driver"
+    maxActive="5" maxIdle="2" maxWait="10000"
+    removeAbandoned="true"
+    type="javax.sql.DataSource"
+    />
+
+  <Resource
+    url="jdbc:mysql://localhost:3306/news_dev?useUnicode=true&amp;characterEncoding=utf8"
+    username="news_dev"
+    name="jdbc/secdb"
+    password="news_dev"
+    auth="Container"
+    driverClassName="com.mysql.jdbc.Driver"
+    maxActive="5" maxIdle="2" maxWait="10000"
+    removeAbandoned="true"
+    type="javax.sql.DataSource"
+    />
+
+  <Parameter name="smtp.server" value="smtp.unimelb.edu.au" override="false"/>
+  <Parameter name="temporary.folder" value="/tmp" override="false"/>
+
+</Context> 

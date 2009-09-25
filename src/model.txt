@@ -1,0 +1,128 @@
+package="au.edu.unimelb.news"
+datasource="comp/env/jdbc/news"
+
+category.name : String
+category display order name
+category key name
+category.name rule maxlength 250
+
+publication.name : String
+publication display order name
+publication key name
+publication.name rule maxlength 250
+
+newsletter.name : String
+newsletter.status : String
+newsletter.version : integer
+newsletter.number : String
+newsletter.published : boolean
+newsletter.deleted : boolean
+newsletter.archived : boolean
+newsletter.last_update : Date
+newsletter.last_update_person_id : integer
+newsletter display order name
+newsletter key number
+newsletter key name
+newsletter key deleted
+newsletter foreign key last_update_person_id=person.id
+newsletter.name rule maxlength 250
+newsletter.status rule maxlength 100
+newsletter.version rule maxlength 100
+newsletter.number rule maxlength 30
+
+NewsletterViewCount.newsletter_id : long
+NewsletterViewCount.views : long
+
+ArticleViewCount.article_id : long
+ArticleViewCount.views : long
+
+search_index.article_id : long
+search_index.field_name : String
+search_index.field_value : String
+search_index.field_name rule maxlength 100
+search_index.field_value rule maxlength 21000
+
+article.newsletter_id : integer
+article.number : String
+article.name : String
+article.details : String
+article.status : String
+article.deleted : bool
+article.published : bool
+article.last_update : Date
+article.last_update_person_id : integer
+article.number rule maxlength 20
+article.name rule maxlength 250
+article.status rule maxlength 100
+article.details rule maxlength 21000
+article display order name
+article key name
+article key deleted
+article key newsletter_id
+article foreign key newsletter_id=newsletter.id
+article foreign key last_update_person_id=person.id
+
+attachment.article_id : integer
+attachment.name : String
+attachment.size : integer
+attachment.disk_name : String
+attachment display order name
+attachment key name
+attachment key article_id
+attachment foreignkey article_id=article.id
+attachment.name rule maxlength 250
+attachment.disk_name rule maxlength 250
+
+article_info.id : long
+article_info.name : String
+article_info.status : String
+article_info.number : String
+article_info.published : boolean
+article_info queryonly
+
+ArticleByBrowse query "select a.id,a.name,a.status,a.number,a.published from article a where name like ? order by a.name,a.number"
+ArticleByBrowse parameter name : String
+ArticleByBrowse returns article_info
+
+ArticleByCategory query "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
+ArticleByCategory parameter category_id : integer
+ArticleByCategory returns article_info
+
+ArticleRecentlyUpdated query "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"
+ArticleRecentlyUpdated returns article_info
+
+ArticleMostPopular query "select a.id,a.name,a.status,a.number,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
+ArticleMostPopular returns article_info
+
+ArticleRecentlyPublished query "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"
+ArticleRecentlyPublished returns article_info
+
+search_result.id : long
+search_result.name : String
+search_result.status : String
+search_result.version : String
+search_result.number : String
+search_result.category_id : integer
+search_result.rank : integer
+search_result.published : boolean
+search_result.duplicated : boolean
+search_result queryonly
+
+ArticleSimpleSearch query "select id,d.name,d.status,d.number,d.category_id,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
+ArticleSimpleSearch parameter field : String
+ArticleSimpleSearch parameter keywords : String
+ArticleSimpleSearch returns search_result
+
+string_result.string : String
+string_result queryonly
+
+integer_result.number : long
+integer_result queryonly
+
+#LastArticleNumber query "select max(number) from article"
+#LastArticleNumber returns string_result
+
+startupsql "create trigger si_article_ins after insert on article for each row begin insert into search_index (document_id, field_name, field_value) values (NEW.id, 'article_name', NEW.name); insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_details', NEW.details); end;"
+startupsql "create trigger si_article_upd after update on article for each row begin update search_index set field_value=NEW.name where article_id=NEW.id and field_name='article_name'; update search_index set field_value=NEW.details where article_id=NEW.id and field_name='article_details'; end;"
+startupsql "alter table search_index type=MyISAM;"
+startupsql "create fulltext index si_search on search_index (field_value);"

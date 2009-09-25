@@ -1,0 +1,734 @@
+/* @override 
+	http://policy-test.unimelb.edu.au/styles/custom.css
+	file:///styles/custom.css
+*/
+
+/* @group General */
+
+.accent {
+	background-color: #6633CC;
+}
+
+#top /* the background banner image */
+{
+	background-image: url("http://www.unimelb.edu.au/template-assets/07/images/banner/002.jpg");
+}
+
+#metalinks
+{
+	border-bottom-color: #6633CC;
+	border-top-color: #6633CC;
+}
+
+#content.content-wide {
+	max-width: none;
+	padding: 0 24px;
+	margin: 24px 0;
+}
+
+a.rssfeed {
+	background-image: url("../images/rss.png");
+	background-repeat: no-repeat;
+	background-position: top left;
+	padding-left: 20px;
+	display: block;
+	height: 24px;
+}
+
+/* @end */
+
+/* @group Glossary */
+
+a.add_glossary_entry {
+	background-image: url("../images/add_16.png");
+	background-repeat: no-repeat;
+	background-position: 10px 6px;
+	padding-left: 32px;
+	padding-top: 6px;
+	display: block;
+	height: 24px;
+
+	background-color: #ffd;
+	border: 2px solid #dd9;
+	border-radius:1em;
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+}
+
+div#content .glossary_command {
+	font-size: 0.8em;
+	color: #aaa;
+}
+div#glossary_edit #glossary_definition {
+	display: block;
+	width: 100%;
+}
+div#glossary_edit #glossary_name {
+	display: inline;
+	width: 100%;
+	font-size: 1.5em;	
+	font-weight: bold;
+}
+
+/* @end */
+
+/* @group Start */
+#start {
+	padding: 0;
+	margin: 0 0 12px;
+	background-color: #cef;
+	border: 2px solid #6cf;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+#start div {
+	padding: 0;
+	margin: 0;
+}
+#start .about_box {
+	width: 50%;
+	float: left;
+	margin-left: 12px;
+}
+#start .about_box h3 {
+	margin: 0;
+	font-size: 150%;
+}
+#start .about_contents {
+	font-size: 130%;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-style: italic;
+	color: #39c;
+}
+#start #search {
+	width: 35%;
+	margin-left: 60%;
+	padding: 0;
+}
+#policysearch {
+	margin: 0;
+	padding: 0;
+	background-color: none !important;
+	width: 100%;
+}
+#policysearch #keywords {
+	width: 95%;
+}
+#policysearch input, #policysearch select {
+	font-size: 120%;
+	display: block;
+	margin-bottom: 0.5em;
+}
+/* @end */
+
+/* @group homepage browse */
+#browse-lists {
+	width: 57%;
+	float: left;
+	color: #666;
+}
+#content #browse div {
+	padding: 0;
+}
+#browse h3 {
+	margin: 8px 0;
+	padding-left: 12px;
+}
+#browse .jumpto {
+	display: block;
+	text-align: right;
+	padding:0 12px 8px;
+}
+#browse .jumpto a {
+	font-style: italic;
+	color: #666;
+	text-decoration: none;
+	padding-right: 1.5em;
+	background-image: url(http://www.unimelb.edu.au/template-assets/07/images/tiny_next_arrow.png);
+	background-position: 100% 50%;
+	background-repeat: no-repeat;
+}
+#browse .jumpto a:hover {
+	text-decoration: underline;
+	color: #c00;
+}
+#browse-lists .subject_options {
+	width: 45%;
+	float: left;
+	margin-right: 5%;
+}
+#browse-lists .audience_options {
+	width: 45%;
+	float: left;
+}
+.a-z {
+	font-weight: bold;
+}
+#browse-activity {
+	width: 40%;
+	float: right;
+	background-color: #eee;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+#browse-activity ul {
+	list-style: none;
+	padding-left: 1em;
+	margin: 0;
+}
+#browse-activity .faded, #browse-activity .policy-number {
+	color: #666;
+}
+/* @end */
+
+/* @group Subject */
+
+a.add_subject {
+	background-image: url("../images/add_16.png");
+	background-repeat: no-repeat;
+	background-position: 10px 6px;
+	padding-left: 32px;
+	padding-top: 6px;
+	display: block;
+	height: 24px;
+
+	background-color: #ffd;
+	border: 2px solid #dd9;
+	border-radius:1em;
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+}
+
+div#content .subject_command {
+	font-size: 0.8em;
+	color: #aaa;
+}
+div#subject_edit #subject_name {
+	display: inline;
+	width: 30em;
+}
+
+a.manage_subject_areas {
+	padding-left: 32px;
+	padding-top: 6px;
+	display: block;
+	height: 24px;
+
+	background-color: #ffd;
+	border: 2px solid #dd9;
+	border-radius:1em;
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+}
+
+/* @end */
+
+
+/* @group sidebar */
+
+.policy_sidebar {
+	width: 25%;
+	float: right;
+	margin: 0 0 0 18px;
+	padding: 12px;
+	background-color: #eee;
+	border-top-left-radius:1em;
+	-moz-border-radius-topleft:1em;
+	-webkit-border-top-left-radius:1em;
+	border-bottom-left-radius:1em;
+	-moz-border-radius-bottomleft:1em;
+	-webkit-border-bottom-left-radius:1em;
+}
+.policy_sidebar #search {
+	padding: 6px 12px;
+	margin: 0 0 12px;
+	background-color: #cef;
+	border: 2px solid #6cf;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+.policy_sidebar #search h2, .policy_sidebar #search h3 {
+	color: #567;
+	font-size: 130%;
+}
+.policy_sidebar #search h2 {
+	padding: 0;
+	margin: 0;
+}
+.policy_sidebar ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.policy_sidebar li {
+	padding-bottom: 4px;
+}
+.policy_sidebar .policy-number {
+	color: #666;
+}
+.policy_sidebar p.jumpto {
+	margin-top: 0;
+	text-align: right;
+	font-style: italic;
+}
+.policy_sidebar .jumpto a {
+	font-style: italic;
+	color: #666;
+	text-decoration: none;
+}
+.policy_sidebar .jumpto a:hover {
+	text-decoration: underline;
+	color: #c00;
+}
+
+/* @end */
+
+/* @group Browse page */
+
+ul.browse_options {
+	border: 1px solid #999;
+	background-color: #eee;
+	margin: 0 0 2em;
+	padding: 0;
+	list-style: none;
+	height: 32px;
+	font-size: 110%;
+	letter-spacing: 1px;
+}
+#content ul.browse_options li {
+	display: inline;
+	margin: 0;
+}
+ul.browse_options li a {
+	display: block;
+	height: 26px;
+	padding: 6px 1em 0;
+	float: left;
+}
+ul.browse_options li a:hover {
+	background-color: #ddd;
+}
+ul.browse-policy-list .policy-number {
+	color: #666;
+}
+
+/* @end */
+
+/* @group Policy page */
+
+#content div.document_heading_box {
+	background-color: #ffd;
+	border: 2px solid #dd9;
+	padding: 0px 0;
+	border-radius:1em;
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+}
+
+#content div.document_heading_box div.document_status_line {
+	letter-spacing: +2px;
+	font-size: 1.8em;
+	font-weight: bold;
+	background-color: #dd9;
+	color: #aa5;
+	margin: 0;
+	padding: 0.2em 0.2em 0.2em 0.5em;
+	padding-left: 1em;
+	-moz-border-radius-topright:18px;
+	-moz-border-radius-topleft:18px;
+	-webkit-border-top-right-radius:18px;
+	-webkit-border-top-left-radius:18px;
+}
+
+#content div.document_heading_box h1, #content div.document_heading_box h2 {
+	padding: 12px 12px;
+	color: #567;
+	letter-spacing: 1px;
+	margin: 0;
+	font-size: 1.8em;
+}
+.policy-toc {
+	margin: 0 24px;
+	float: left;
+	width: 50%;
+}
+.policy-toc ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+#content .policy-toc li {
+	margin: 0;
+}
+.policy-toc li a {
+	display: block;
+	text-decoration: none;
+	padding: 4px 0 1px;
+	border-bottom: 1px solid #ffd;
+}
+.policy-toc li a:hover {
+	background-color: #eec;
+	border-bottom: 1px solid #cc8;
+}
+.policy-toc li a .section-number {
+	display: block;
+	float: left;
+	color: #666;
+	letter-spacing: -1px;
+}
+.policy-toc li.level1 {
+	font-weight: bold;
+}
+
+
+#content .display-document-attributes {
+	padding: 0;
+	float: left;
+}
+#content .display-document-attributes h3 {
+	font-size: 120%;
+	letter-spacing: 1px;
+	margin: 0;
+}
+.display-document-attributes ul {
+	padding: 0 1.5em;
+	list-style: none;
+}
+.display-document-attributes strong {
+	color: #666;
+}
+
+#content .document-contents .section-number {
+	display: block;
+	float: left;
+	color: #888;
+	margin-right: 0.5em;
+}
+
+#content .document-contents .subsection {
+	padding-top: 1em;
+	margin-left: 30px;
+}
+#content .document-contents .subsection * {
+	line-height: 1.4;
+}
+
+#content .subsection-heading:hover a {
+	color: #373;
+}
+
+#content .subsection-heading:hover a:hover {
+	color: #020;
+}
+
+#content .subsection-heading a {
+	margin-right: 1em;
+	color: white;
+}
+
+#content .subsection-heading:hover {
+	background: #dfd;
+	border: 2px solid #8c8;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+#content .subsection-heading {
+	border: 2px solid white;
+}
+
+#content .subsection-heading-commands {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	text-align: right;
+	float: right;
+}
+#content .document-contents h2,
+#content .document-contents h3,
+#content .document-contents h4,
+#content .document-contents h5 {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+/* @group Document commands */
+
+#content div.document_commands {
+	padding: 0;
+	margin: 8px 0;
+}
+#content div.document_commands ul {
+	margin: 0;
+	padding: 0;
+	text-align: right;
+}
+#content div.document_commands li {
+	margin: 0 0 0 0px;
+	padding: 0 0 0 10px;
+	display: inline;
+}
+#content div.document_commands li:first-child {
+	border-left: none;
+}
+#content div.document_commands li a {
+	padding: 0 0 6px 22px;
+}
+#content div.document_commands li a.document_history {
+	padding-left: 20px !important;
+	background-image: url("../images/history3.png");
+	background-repeat: no-repeat;
+}
+#content div.document_commands li a.edit_document_attributes {
+	background-image: url("../images/editgrid.gif");
+	background-repeat: no-repeat;
+}
+#content div.document_commands li a.edit_document_status {
+	background-image: url("../images/cog.png");
+	background-repeat: no-repeat;
+}
+#content div.document_commands li a.duplicate_document {
+	background-image: url("../images/copy.png");
+	background-repeat: no-repeat;
+	padding-left: 20px !important;
+}
+#content div.document_commands li a.document_pdf_version {
+	background-image: url("../images/icon-pdf.gif");
+	background-repeat: no-repeat;
+}
+
+/* @end */
+
+/* @group Indents */
+
+.policy-toc li.level1 a .section-number {
+	width: 1.5em;
+}
+.policy-toc li.level2 a .section-number {
+	width: 2.5em;
+}
+.policy-toc li.level3 a .section-number {
+	width: 3.5em;
+}
+.policy-toc li.level4 a .section-number {
+	width: 4.5em;
+}
+.policy-toc li.level5 a .section-number {
+	width: 5.5em;
+}
+
+.document-contents h3 .level3, #content .document-contents .level4 {
+	margin-left: 30px ;
+}
+.document-contents h4 .level4, #content .document-contents .level4 {
+	margin-left: 50px ;
+}
+.document-contents h5 .level5, #content .document-contents .level5 {
+	margin-left: 70px ;
+}
+.document-contents h5 .level6, #content .document-contents .level6 {
+	margin-left: 90px ;
+}
+
+/* @end */
+/* @end */
+
+/* @group Legacy - to be improved */
+
+span.policy-category {
+	display: block;
+}
+
+span.faded {
+	color: grey;	
+}
+
+/* @end */
+
+/* @group Document status */
+div.mode_info {
+	padding: 12px;
+	margin: 0 0 12px;
+	background-color: #ffd;
+	border: 2px solid #dd9;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+div.mode_info h3 {
+	margin-top: 0;
+	padding-top: 0;
+	color: #4ad;
+}
+
+div.mode_info a.status_update_link {
+	background-image: url("../images/arrow_small.png");
+	background-repeat: no-repeat;
+	padding: 0 0 6px 20px;
+	display: block;
+}
+
+div.mode_info_grey {
+	padding: 12px;
+	margin: 0 0 12px;
+	background-color: #ddd;
+	border: 2px solid #999;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+div.mode_info_grey h3 {
+	margin-top: 0;
+	padding-top: 0;
+	color: #777;
+}
+
+
+/* @end */
+
+/* @group Document attributes */
+
+div#document_attributes {
+	padding: 12px;
+	margin: 0 0 12px;
+	background-color: #cef;
+	border: 2px solid #6cf;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+div#document_attributes h2 {
+	margin-top: 0;
+	padding-top: 0;
+	color: #4ad;
+}
+
+div#document_attributes table#main_attributes {
+	border-collapse:collapse;
+	width: 100%;
+}
+
+div#document_attributes table#main_attributes td {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+div#document_attributes table#main_attributes tr {
+	padding: 1px;
+	margin: 0;
+}
+
+div#document_attributes  table#main_attributes td.attribute_name {
+	text-align: right;
+	width: 20%;
+	font-weight: bold;
+	padding-right: 1em;
+}
+
+div#other_document_attributes table#unspecified_attributes {
+	border-collapse:collapse;
+	width: 100%;
+}
+div#other_document_attributes table#unspecified_attributes td.commands {
+	text-align: right;
+}
+
+/* blue striped table */
+
+table.bluestriped tr:hover {
+	background-color: #cce;
+}
+table.bluestriped tr th {
+	text-align: left;
+}
+
+table.bluestriped tr:nth-child(odd) {
+	background-color: #dff;
+}
+table.bluestriped tr:nth-child(odd):hover {
+	background-color: #cce;
+}
+table.bluestriped td.commands {
+	text-align: right;
+}
+
+div#attribute_update {
+	padding: 12px;
+	margin: 0 0 12px;
+	background-color: #cef;
+	border: 2px solid #6cf;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+
+div#other_document_attributes {
+	padding: 12px;
+	margin: 0 0 12px;
+	background-color: #cef;
+	border: 2px solid #6cf;
+	border-radius:1em;
+	-moz-border-radius:1em;
+	-webkit-border-radius:1em;
+}
+div#other_document_attributes h3 {
+	margin-top: 0;
+	padding-top: 0;
+	color: #4ad;
+}
+
+div#document_attribute_update table#people_search_results {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+/* @end */
+
+
+/* yellow striped table */
+
+table.yellowstriped {
+	width: 100%;
+	border-collapse: collapse
+}
+
+table.yellowstriped tr:hover {
+	background-color: #ddb;
+}
+table.yellowstriped tr th {
+	text-align: left;
+}
+
+table.yellowstriped tr:nth-child(odd) {
+	background-color: #eec;
+}
+table.yellowstriped tr:nth-child(odd):hover {
+	background-color: #ddb;
+}
+table.yellowstriped td.commands {
+	text-align: right;
+}
+
+div#section_edit #section_details {
+	display: block;
+	width: 100%;
+}
+
+div#section_edit #section_number {
+	display: inline;
+	width: 12%;
+	font-size: 2em;
+	font-weight: bold;	
+}
+div#section_edit #section_name {
+	display: inline;
+	width: 83%;
+	font-size: 2em;	
+	font-weight: bold;
+}

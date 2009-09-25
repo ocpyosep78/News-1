@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validations>
+
+    <!-- Subject validations -->
+    <validation>
+        <field>subject_name</field>
+        <type>string</type>
+        <min_length>2</min_length>
+        <max_length>100</max_length>
+    </validation>
+
+    <!-- Glossary validations -->
+    <validation>
+        <field>glossary_name</field>
+        <type>string</type>
+        <min_length>2</min_length>
+        <max_length>100</max_length>
+    </validation>
+
+    <validation>
+        <field>glossary_definition</field>
+        <type>string</type>
+        <min_length>6</min_length>
+        <max_length>8000</max_length>
+    </validation>
+
+</validations>
