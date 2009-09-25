@@ -13,9 +13,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	private long id;
 	private String name = "";
 	private String status = "";
-	private String version = "";
 	private String number = "";
-	private long categoryId;
 	private long rank;
 	private boolean published;
 	private boolean duplicated;
@@ -32,16 +30,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		return status;
 	}
 
-	public String getVersion() {
-		return version;
-	}
-
 	public String getNumber() {
 		return number;
-	}
-
-	public long getCategoryId() {
-		return categoryId;
 	}
 
 	public long getRank() {
@@ -68,16 +58,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		 this.status = status;
 	}
 
-	public void setVersion(String version) {
-		 this.version = version;
-	}
-
 	public void setNumber(String number) {
 		 this.number = number;
-	}
-
-	public void setCategoryId(long categoryId) {
-		 this.categoryId = categoryId;
 	}
 
 	public void setRank(long rank) {
@@ -102,14 +84,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		if(status.compareTo(o.getStatus())!=0) {
 			return status.compareTo(o.getStatus());
 		}
-		if(version.compareTo(o.getVersion())!=0) {
-			return version.compareTo(o.getVersion());
-		}
 		if(number.compareTo(o.getNumber())!=0) {
 			return number.compareTo(o.getNumber());
-		}
-		if(categoryId!=o.getCategoryId()) {
-			if(this.categoryId < o.getCategoryId()) return -1; else return 1;
 		}
 		if(rank!=o.getRank()) {
 			if(this.rank < o.getRank()) return -1; else return 1;

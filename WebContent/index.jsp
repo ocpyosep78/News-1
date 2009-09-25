@@ -81,13 +81,11 @@
 </div>
 
 <div class="audience_options">
-<h3>Categories</h3>
+<h3>Topics</h3>
 <ul>
-	<li><a href="audience/Students">Students</a></li>
-	<li><a href="audience/Professional+staff">Professional staff</a></li>
-	<li><a href="audience/Researchers">Researchers</a></li>
-	<li><a href="audience/Academics">Academics</a></li>
-	<li><a href="audience/Affiliates">Affiliates</a></li>
+<% for(Topic topic : DAOFactory.getTopicFactory().getAll(0,100)) { %>
+	<li><a href="topic/<%=StringHelper.urlEscape(topic.getName())%>"><%=StringHelper.escapeHtml(topic.getName())%></a></li>
+<% } %>
 </ul>
 </div>
 

@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.ArrayList;
 public class DAOFactory {
 
+    private static TopicFactory topicFactory;
     private static PublicationFactory publicationFactory;
     private static NewsletterViewCountFactory newsletterViewCountFactory;
     private static ArticleFactory articleFactory;
     private static AttachmentFactory attachmentFactory;
     private static ArticleViewCountFactory articleViewCountFactory;
-    private static CategoryFactory categoryFactory;
     private static SearchIndexFactory searchIndexFactory;
     private static NewsletterFactory newsletterFactory;
 
@@ -42,30 +42,30 @@ public class DAOFactory {
 		if(dataSource==null)
 			throw new IOException("Problem setting up / reading database DataSource");
 
+        topicFactory=new TopicFactory(dataSource);
         publicationFactory=new PublicationFactory(dataSource);
         newsletterViewCountFactory=new NewsletterViewCountFactory(dataSource);
         articleFactory=new ArticleFactory(dataSource);
         attachmentFactory=new AttachmentFactory(dataSource);
         articleViewCountFactory=new ArticleViewCountFactory(dataSource);
-        categoryFactory=new CategoryFactory(dataSource);
         searchIndexFactory=new SearchIndexFactory(dataSource);
         newsletterFactory=new NewsletterFactory(dataSource);
 
+        topicFactory.setup();
         publicationFactory.setup();
         newsletterViewCountFactory.setup();
         articleFactory.setup();
         attachmentFactory.setup();
         articleViewCountFactory.setup();
-        categoryFactory.setup();
         searchIndexFactory.setup();
         newsletterFactory.setup();
 
+        topicFactory.postSetup();
         publicationFactory.postSetup();
         newsletterViewCountFactory.postSetup();
         articleFactory.postSetup();
         attachmentFactory.postSetup();
         articleViewCountFactory.postSetup();
-        categoryFactory.postSetup();
         searchIndexFactory.postSetup();
         newsletterFactory.postSetup();
 
@@ -85,6 +85,13 @@ public class DAOFactory {
 			executeCommand("create fulltext index si_search on search_index (field_value);");
 		} catch(IOException e) { e.printStackTrace(); }
 
+    }
+
+    public static TopicFactory getTopicFactory() throws IOException {
+        if(topicFactory==null) {
+            setup();
+        }
+        return topicFactory;
     }
 
     public static PublicationFactory getPublicationFactory() throws IOException {
@@ -120,13 +127,6 @@ public class DAOFactory {
             setup();
         }
         return articleViewCountFactory;
-    }
-
-    public static CategoryFactory getCategoryFactory() throws IOException {
-        if(categoryFactory==null) {
-            setup();
-        }
-        return categoryFactory;
     }
 
     public static SearchIndexFactory getSearchIndexFactory() throws IOException {
@@ -240,81 +240,6 @@ public class DAOFactory {
                 "select a.id,a.name,a.status,a.number,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc " +
                 "limit "+index+","+limit
               );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
-                item.setPublished(results.getBoolean(5));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
-
-		return list;
-	}
-
-	public static List<ArticleInfo> queryArticleByCategory(Long categoryId) throws IOException {
-		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
-              );
-            s.setLong(1,categoryId);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
-                item.setPublished(results.getBoolean(5));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
-
-		return list;
-	}
-
-	public static List<ArticleInfo> queryArticleByCategory(Long categoryId, int index, int limit) throws IOException {
-		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number " +
-                "limit "+index+","+limit
-              );
-            s.setLong(1,categoryId);
             results=s.executeQuery();
             while(results.next()) {
                 ArticleInfo item=new ArticleInfo();
@@ -564,6 +489,81 @@ public class DAOFactory {
 		return list;
 	}
 
+	public static List<ArticleInfo> queryArticleByTopic(Long categoryId) throws IOException {
+		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
+              );
+            s.setLong(1,categoryId);
+            results=s.executeQuery();
+            while(results.next()) {
+                ArticleInfo item=new ArticleInfo();
+                item.setId(results.getLong(1));
+                item.setName(results.getString(2));
+                item.setStatus(results.getString(3));
+                item.setNumber(results.getString(4));
+                item.setPublished(results.getBoolean(5));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+		return list;
+	}
+
+	public static List<ArticleInfo> queryArticleByTopic(Long categoryId, int index, int limit) throws IOException {
+		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number " +
+                "limit "+index+","+limit
+              );
+            s.setLong(1,categoryId);
+            results=s.executeQuery();
+            while(results.next()) {
+                ArticleInfo item=new ArticleInfo();
+                item.setId(results.getLong(1));
+                item.setName(results.getString(2));
+                item.setStatus(results.getString(3));
+                item.setNumber(results.getString(4));
+                item.setPublished(results.getBoolean(5));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+		return list;
+	}
+
 	public static List<SearchResult> queryArticleSimpleSearch(String field, String keywords) throws IOException {
 		List<SearchResult> list = new ArrayList<SearchResult>();
         Connection c=null;
@@ -572,7 +572,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,d.name,d.status,d.number,d.category_id,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
+                "select id,d.name,d.status,d.number,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
               );
             s.setString(1,field);
             s.setString(2,keywords);
@@ -582,12 +582,10 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setVersion(results.getString(4));
-                item.setNumber(results.getString(5));
-                item.setCategoryId(results.getLong(6));
-                item.setRank(results.getLong(7));
-                item.setPublished(results.getBoolean(8));
-                item.setDuplicated(results.getBoolean(9));
+                item.setNumber(results.getString(4));
+                item.setRank(results.getLong(5));
+                item.setPublished(results.getBoolean(6));
+                item.setDuplicated(results.getBoolean(7));
                 list.add(item);
             }
             results.close();
@@ -614,7 +612,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,d.name,d.status,d.number,d.category_id,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc " +
+                "select id,d.name,d.status,d.number,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc " +
                 "limit "+index+","+limit
               );
             s.setString(1,field);
@@ -625,12 +623,10 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setVersion(results.getString(4));
-                item.setNumber(results.getString(5));
-                item.setCategoryId(results.getLong(6));
-                item.setRank(results.getLong(7));
-                item.setPublished(results.getBoolean(8));
-                item.setDuplicated(results.getBoolean(9));
+                item.setNumber(results.getString(4));
+                item.setRank(results.getLong(5));
+                item.setPublished(results.getBoolean(6));
+                item.setDuplicated(results.getBoolean(7));
                 list.add(item);
             }
             results.close();

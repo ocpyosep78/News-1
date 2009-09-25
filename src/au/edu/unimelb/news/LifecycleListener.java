@@ -26,7 +26,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
-import au.edu.unimelb.news.model.Categories;
+import au.edu.unimelb.news.model.Topics;
 import au.edu.unimelb.news.resource.PublicationResourceManager;
 import au.edu.unimelb.security.AdministrationMenu;
 import au.edu.unimelb.security.AdministrationMenuItem;
@@ -175,7 +175,7 @@ public class LifecycleListener implements ServletContextListener {
 		 * already exist.
 		 */
 		try {
-			Categories.add("Finance");
+			Topics.add("Finance");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

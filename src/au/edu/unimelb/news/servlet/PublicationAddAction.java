@@ -59,7 +59,7 @@ public class PublicationAddAction extends javax.servlet.http.HttpServlet impleme
 
 		StringBuffer warnings=new StringBuffer();
 		warnings.append(Configuration.validator.checkField("publication_name", publication.getName()));
-		if(publication.getId()==0 && DAOFactory.getCategoryFactory().countByName(publication.getName())>0)
+		if(publication.getId()==0 && DAOFactory.getPublicationFactory().countByName(publication.getName())>0)
 			warnings.append("<li>A publication entry already exists with this exact name.</li>");
 		
 		if(warnings.length()>0) {

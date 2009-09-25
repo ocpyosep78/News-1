@@ -10,7 +10,7 @@
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
 <%
 	String name = request.getParameter("name");
-	Category category = DAOFactory.getCategoryFactory().getByName(name,0,1).get(0);
+	Topic category = DAOFactory.getCategoryFactory().getByName(name,0,1).get(0);
 %>
 <% LayoutHelper.headerTitled(out,category.getName()); %>
 <% User user = UserHelper.getUser(request); %>

@@ -1,10 +1,10 @@
 package="au.edu.unimelb.news"
 datasource="comp/env/jdbc/news"
 
-category.name : String
-category display order name
-category key name
-category.name rule maxlength 250
+topic.name : String
+topic display order name
+topic key name
+topic.name rule maxlength 250
 
 publication.name : String
 publication display order name
@@ -85,9 +85,9 @@ ArticleByBrowse query "select a.id,a.name,a.status,a.number,a.published from art
 ArticleByBrowse parameter name : String
 ArticleByBrowse returns article_info
 
-ArticleByCategory query "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
-ArticleByCategory parameter category_id : integer
-ArticleByCategory returns article_info
+ArticleByTopic query "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
+ArticleByTopic parameter category_id : integer
+ArticleByTopic returns article_info
 
 ArticleRecentlyUpdated query "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"
 ArticleRecentlyUpdated returns article_info
@@ -112,15 +112,13 @@ NewsletterByPublication returns newsletter_info
 search_result.id : long
 search_result.name : String
 search_result.status : String
-search_result.version : String
 search_result.number : String
-search_result.category_id : integer
 search_result.rank : integer
 search_result.published : boolean
 search_result.duplicated : boolean
 search_result queryonly
 
-ArticleSimpleSearch query "select id,d.name,d.status,d.number,d.category_id,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
+ArticleSimpleSearch query "select id,d.name,d.status,d.number,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
 ArticleSimpleSearch parameter field : String
 ArticleSimpleSearch parameter keywords : String
 ArticleSimpleSearch returns search_result
