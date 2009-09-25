@@ -14,7 +14,7 @@
  * NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
  * MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
  */
-package au.edu.unimelb.news.model;
+package au.edu.unimelb.news.servlet;
 
 import java.io.IOException;
 
@@ -27,6 +27,7 @@ import au.edu.unimelb.helper.StringHelper;
 import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.Configuration;
 import au.edu.unimelb.news.dao.DAOFactory;
+import au.edu.unimelb.news.model.Publications;
 import au.edu.unimelb.security.LogHelper;
 import au.edu.unimelb.security.UserHelper;
 import au.edu.unimelb.security.action.AuthorisationFailAction;

@@ -68,7 +68,7 @@ public class Publications {
 		Publication publication = null;
 
 		try {
-			publication = DAOFactory.getPublicationFactory().get(Long.parseLong(request.getParameter("category_id")));
+			publication = DAOFactory.getPublicationFactory().get(Long.parseLong(request.getParameter("publication_id")));
 		} catch(Exception e) {}
 		if(publication == null)
 			publication = new Publication();
