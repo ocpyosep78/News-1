@@ -183,9 +183,9 @@ div#glossary_edit #glossary_name {
 }
 /* @end */
 
-/* @group Subject */
+/* @group Publication */
 
-a.add_subject {
+a.add_publication {
 	background-image: url("../images/add_16.png");
 	background-repeat: no-repeat;
 	background-position: 10px 6px;
@@ -201,16 +201,16 @@ a.add_subject {
 	-webkit-border-radius:20px;
 }
 
-div#content .subject_command {
+div#content .publication_command {
 	font-size: 0.8em;
 	color: #aaa;
 }
-div#subject_edit #subject_name {
+div#subject_edit #publication_name {
 	display: inline;
 	width: 30em;
 }
 
-a.manage_subject_areas {
+a.manage_publications {
 	padding-left: 32px;
 	padding-top: 6px;
 	display: block;

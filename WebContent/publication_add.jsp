@@ -17,8 +17,8 @@
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
 	<a href="<%=Settings.baseUrl%>/">Policy Library</a> &gt;
-	<a href="<%=Settings.baseUrl%>/glossary/ABC">Glossary</a> &gt;
-	Update glossary entry
+	<a href="<%=Settings.baseUrl%>/publications.jsp">Publications</a> &gt;
+	Add publication
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
@@ -47,7 +47,7 @@ Publication publication = Publications.load(request);
   }
 %>
 
-<input type="text" id="subject_name" name="subject_name" value="<%=StringHelper.escapeHtml(publication.getName())%>"/>
+<input type="text" id="publication_name" name="publication_name" value="<%=StringHelper.escapeHtml(publication.getName())%>"/>
 
 <input type="submit" name="save_button" value="Add new publication"/>
 </form>

@@ -11,6 +11,7 @@ publication display order name
 publication key name
 publication.name rule maxlength 250
 
+newsletter.publication_id : integer
 newsletter.name : String
 newsletter.status : String
 newsletter.version : integer
@@ -96,6 +97,17 @@ ArticleMostPopular returns article_info
 
 ArticleRecentlyPublished query "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"
 ArticleRecentlyPublished returns article_info
+
+newsletter_info.id : long
+newsletter_info.name : String
+newsletter_info.status : String
+newsletter_info.number : String
+newsletter_info.published : boolean
+newsletter_info queryonly
+
+NewsletterByPublication query "select n.id,n.name,n.status,n.number,n.published from newsletter n where publication_id = ? order by n.name,n.last_update"
+NewsletterByPublication parameter publication_id : integer
+NewsletterByPublication returns newsletter_info
 
 search_result.id : long
 search_result.name : String

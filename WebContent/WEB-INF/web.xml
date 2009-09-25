@@ -104,25 +104,25 @@
 	<servlet>
 		<description>
 		</description>
-		<display-name>SubjectAddAction</display-name>
-		<servlet-name>SubjectAddAction</servlet-name>
-		<servlet-class>au.edu.unimelb.news.servlet.SubjectAddAction</servlet-class>
+		<display-name>PublicationAddAction</display-name>
+		<servlet-name>PublicationAddAction</servlet-name>
+		<servlet-class>au.edu.unimelb.news.servlet.PublicationAddAction</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>SubjectAddAction</servlet-name>
-		<url-pattern>/SubjectAddAction</url-pattern>
+		<servlet-name>PublicationAddAction</servlet-name>
+		<url-pattern>/PublicationAddAction</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<description>
 		</description>
-		<display-name>SubjectUpdateAction</display-name>
-		<servlet-name>SubjectUpdateAction</servlet-name>
-		<servlet-class>au.edu.unimelb.news.servlet.SubjectUpdateAction</servlet-class>
+		<display-name>PublicationUpdateAction</display-name>
+		<servlet-name>PublicationUpdateAction</servlet-name>
+		<servlet-class>au.edu.unimelb.news.servlet.PublicationUpdateAction</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>SubjectUpdateAction</servlet-name>
-		<url-pattern>/SubjectUpdateAction</url-pattern>
+		<servlet-name>PublicationUpdateAction</servlet-name>
+		<url-pattern>/PublicationUpdateAction</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

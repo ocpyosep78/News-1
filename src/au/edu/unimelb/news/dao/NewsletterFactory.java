@@ -38,6 +38,7 @@ public class NewsletterFactory {
 			s=c.prepareStatement(
 				"create table if not exists newsletter (" +
 				"id bigint auto_increment primary key,"+
+                "publication_id bigint,"+
                 "name varchar(250),"+
                 "status varchar(100),"+
                 "version bigint,"+
@@ -81,7 +82,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,name,status,version,number,published,deleted,archived,last_update,last_update_person_id "+
+                "select id,publication_id,name,status,version,number,published,deleted,archived,last_update,last_update_person_id "+
                 "from newsletter " +
                 "where id=?");
             s.setLong(1,id);
@@ -89,15 +90,16 @@ public class NewsletterFactory {
             if(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getTimestamp(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getTimestamp(10));
+                item.setLastUpdatePersonId(results.getLong(11));
             }
             results.close();
             results=null;
@@ -127,7 +129,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "order by name " +
                 "limit "+index+","+limit
@@ -136,15 +138,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 Newsletter item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getTimestamp(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getTimestamp(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -224,6 +227,7 @@ public class NewsletterFactory {
 
             s=c.prepareStatement(
                 "insert into newsletter ("+
+                    "publication_id, "+
                     "name, "+
                     "status, "+
                     "version, "+
@@ -233,16 +237,17 @@ public class NewsletterFactory {
                     "archived, "+
                     "last_update, "+
                     "last_update_person_id) "+
-                "values(?,?,?,?,?,?,?,?,?)");
-            s.setString(1,item.getName());
-            s.setString(2,item.getStatus());
-            s.setLong(3,item.getVersion());
-            s.setString(4,item.getNumber());
-            s.setBoolean(5,item.isPublished());
-            s.setBoolean(6,item.isDeleted());
-            s.setBoolean(7,item.isArchived());
-            s.setTimestamp(8,new java.sql.Timestamp(item.getLastUpdate().getTime()));
-            s.setLong(9,item.getLastUpdatePersonId());
+                "values(?,?,?,?,?,?,?,?,?,?)");
+            s.setLong(1,item.getPublicationId());
+            s.setString(2,item.getName());
+            s.setString(3,item.getStatus());
+            s.setLong(4,item.getVersion());
+            s.setString(5,item.getNumber());
+            s.setBoolean(6,item.isPublished());
+            s.setBoolean(7,item.isDeleted());
+            s.setBoolean(8,item.isArchived());
+            s.setTimestamp(9,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(10,item.getLastUpdatePersonId());
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();
@@ -259,6 +264,7 @@ public class NewsletterFactory {
             if(s!=null) { try { s.close(); } catch(Exception f){} }
             if(c!=null) { try { c.close(); } catch(Exception f){} }
             System.err.println("Problem duing inserting into table newsletter. "+
+                "publication_id="+item.getPublicationId()+", "+ 
                 "name="+item.getName()+", "+ 
                 "status="+item.getStatus()+", "+ 
                 "version="+item.getVersion()+", "+ 
@@ -286,18 +292,19 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "update newsletter set name=?, status=?, version=?, number=?, published=?, deleted=?, archived=?, last_update=?, last_update_person_id=? "+
+                "update newsletter set publication_id=?, name=?, status=?, version=?, number=?, published=?, deleted=?, archived=?, last_update=?, last_update_person_id=? "+
                 "where id=?");
-            s.setString(1,item.getName());
-            s.setString(2,item.getStatus());
-            s.setLong(3,item.getVersion());
-            s.setString(4,item.getNumber());
-            s.setBoolean(5,item.isPublished());
-            s.setBoolean(6,item.isDeleted());
-            s.setBoolean(7,item.isArchived());
-            s.setTimestamp(8,new java.sql.Timestamp(item.getLastUpdate().getTime()));
-            s.setLong(9,item.getLastUpdatePersonId());
-            s.setLong(10,item.getId());
+            s.setLong(1,item.getPublicationId());
+            s.setString(2,item.getName());
+            s.setString(3,item.getStatus());
+            s.setLong(4,item.getVersion());
+            s.setString(5,item.getNumber());
+            s.setBoolean(6,item.isPublished());
+            s.setBoolean(7,item.isDeleted());
+            s.setBoolean(8,item.isArchived());
+            s.setTimestamp(9,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(10,item.getLastUpdatePersonId());
+            s.setLong(11,item.getId());
             s.execute();
             s.close();
             s=null;
@@ -347,6 +354,132 @@ public class NewsletterFactory {
 
     /**
      * Retrieve a set from the Newsletter data source
+     * matching on publicationId. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationId(Long publicationId,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     */
+    public long countByPublicationId(Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? " +
+                "");
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     */
+    public long deleteByPublicationId(Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
      * matching on status. 
      *
      * @param status Value to match on Status.
@@ -362,7 +495,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? " +
                 "order by name " +
@@ -373,15 +506,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -487,7 +621,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where version=? " +
                 "order by name " +
@@ -498,15 +632,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -612,7 +747,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where published=? " +
                 "order by name " +
@@ -623,15 +758,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -737,7 +873,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where archived=? " +
                 "order by name " +
@@ -748,15 +884,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -862,7 +999,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update=? " +
                 "order by name " +
@@ -873,15 +1010,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -987,7 +1125,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update_person_id=? " +
                 "order by name " +
@@ -998,15 +1136,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1097,6 +1236,1194 @@ public class NewsletterFactory {
 
     /**
      * Retrieve a set from the Newsletter data source
+     * matching on name publicationId. 
+     *
+     * @param name Value to match on Name.
+     * @param publicationId Value to match on Publication Id.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByNamePublicationId(String name, Long publicationId,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where name=? and publication_id=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,name);
+            s.setLong(2,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Name Publication Id. 
+     *
+     * @param name Value to match on Name.
+     * @param publicationId Value to match on Publication Id.
+     */
+    public long countByNamePublicationId(String name, Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where name=? and publication_id=? " +
+                "");
+            s.setString(1,name);
+            s.setLong(2,publicationId);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Name Publication Id. 
+     *
+     * @param Name Value to match on Name.
+     * @param PublicationId Value to match on Publication Id.
+     */
+    public long deleteByNamePublicationId(String name, Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where name=? and publication_id=? " +
+                "");
+            s.setString(1,name);
+            s.setLong(2,publicationId);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on status publicationId. 
+     *
+     * @param status Value to match on Status.
+     * @param publicationId Value to match on Publication Id.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByStatusPublicationId(String status, Long publicationId,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where status=? and publication_id=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,status);
+            s.setLong(2,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Status Publication Id. 
+     *
+     * @param status Value to match on Status.
+     * @param publicationId Value to match on Publication Id.
+     */
+    public long countByStatusPublicationId(String status, Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where status=? and publication_id=? " +
+                "");
+            s.setString(1,status);
+            s.setLong(2,publicationId);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Status Publication Id. 
+     *
+     * @param Status Value to match on Status.
+     * @param PublicationId Value to match on Publication Id.
+     */
+    public long deleteByStatusPublicationId(String status, Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where status=? and publication_id=? " +
+                "");
+            s.setString(1,status);
+            s.setLong(2,publicationId);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on publicationId version. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param version Value to match on Version.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationIdVersion(Long publicationId, Long version,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? and version=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setLong(2,version);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id Version. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param version Value to match on Version.
+     */
+    public long countByPublicationIdVersion(Long publicationId, Long version) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? and version=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setLong(2,version);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id Version. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param Version Value to match on Version.
+     */
+    public long deleteByPublicationIdVersion(Long publicationId, Long version) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? and version=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setLong(2,version);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on number publicationId. 
+     *
+     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByNumberPublicationId(String number, Long publicationId,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where number=? and publication_id=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,number);
+            s.setLong(2,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Number Publication Id. 
+     *
+     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
+     */
+    public long countByNumberPublicationId(String number, Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where number=? and publication_id=? " +
+                "");
+            s.setString(1,number);
+            s.setLong(2,publicationId);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Number Publication Id. 
+     *
+     * @param Number Value to match on Number.
+     * @param PublicationId Value to match on Publication Id.
+     */
+    public long deleteByNumberPublicationId(String number, Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where number=? and publication_id=? " +
+                "");
+            s.setString(1,number);
+            s.setLong(2,publicationId);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on publicationId published. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param published Value to match on Published.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationIdPublished(Long publicationId, Boolean published,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? and published=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setBoolean(2,published);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id Published. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param published Value to match on Published.
+     */
+    public long countByPublicationIdPublished(Long publicationId, Boolean published) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? and published=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setBoolean(2,published);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id Published. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param Published Value to match on Published.
+     */
+    public long deleteByPublicationIdPublished(Long publicationId, Boolean published) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? and published=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setBoolean(2,published);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on publicationId deleted. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param deleted Value to match on Deleted.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationIdDeleted(Long publicationId, Boolean deleted,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? and deleted=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setBoolean(2,deleted);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id Deleted. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param deleted Value to match on Deleted.
+     */
+    public long countByPublicationIdDeleted(Long publicationId, Boolean deleted) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? and deleted=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setBoolean(2,deleted);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id Deleted. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param Deleted Value to match on Deleted.
+     */
+    public long deleteByPublicationIdDeleted(Long publicationId, Boolean deleted) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? and deleted=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setBoolean(2,deleted);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on publicationId archived. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param archived Value to match on Archived.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationIdArchived(Long publicationId, Boolean archived,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? and archived=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setBoolean(2,archived);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id Archived. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param archived Value to match on Archived.
+     */
+    public long countByPublicationIdArchived(Long publicationId, Boolean archived) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? and archived=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setBoolean(2,archived);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id Archived. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param Archived Value to match on Archived.
+     */
+    public long deleteByPublicationIdArchived(Long publicationId, Boolean archived) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? and archived=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setBoolean(2,archived);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on publicationId lastUpdate. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param lastUpdate Value to match on Last Update.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationIdLastUpdate(Long publicationId, Date lastUpdate,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? and last_update=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id Last Update. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param lastUpdate Value to match on Last Update.
+     */
+    public long countByPublicationIdLastUpdate(Long publicationId, Date lastUpdate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? and last_update=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id Last Update. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param LastUpdate Value to match on Last Update.
+     */
+    public long deleteByPublicationIdLastUpdate(Long publicationId, Date lastUpdate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? and last_update=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
+     * matching on publicationId lastUpdatePersonId. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param lastUpdatePersonId Value to match on Last Update Person Id.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Newsletter> getByPublicationIdLastUpdatePersonId(Long publicationId, Long lastUpdatePersonId,  long index, long limit) throws IOException {
+        List<Newsletter> list=new ArrayList<Newsletter>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Newsletter item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "from newsletter " +
+                "where publication_id=? and last_update_person_id=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setLong(2,lastUpdatePersonId);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Newsletter();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Newsletter</i> data source
+     * matching on Publication Id Last Update Person Id. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param lastUpdatePersonId Value to match on Last Update Person Id.
+     */
+    public long countByPublicationIdLastUpdatePersonId(Long publicationId, Long lastUpdatePersonId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from newsletter " +
+                "where publication_id=? and last_update_person_id=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setLong(2,lastUpdatePersonId);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Newsletter data source
+     * matching on Publication Id Last Update Person Id. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param LastUpdatePersonId Value to match on Last Update Person Id.
+     */
+    public long deleteByPublicationIdLastUpdatePersonId(Long publicationId, Long lastUpdatePersonId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from newsletter " +
+                "where publication_id=? and last_update_person_id=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setLong(2,lastUpdatePersonId);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Newsletter data source
      * matching on name status. 
      *
      * @param name Value to match on Name.
@@ -1113,7 +2440,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and status=? " +
                 "order by name " +
@@ -1125,15 +2452,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1244,7 +2572,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and version=? " +
                 "order by name " +
@@ -1256,15 +2584,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1375,7 +2704,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and number=? " +
                 "order by name " +
@@ -1387,15 +2716,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1506,7 +2836,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and published=? " +
                 "order by name " +
@@ -1518,15 +2848,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1637,7 +2968,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and deleted=? " +
                 "order by name " +
@@ -1649,15 +2980,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1768,7 +3100,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and archived=? " +
                 "order by name " +
@@ -1780,15 +3112,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -1899,7 +3232,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and last_update=? " +
                 "order by name " +
@@ -1911,15 +3244,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2030,7 +3364,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? and last_update_person_id=? " +
                 "order by name " +
@@ -2042,15 +3376,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2161,7 +3496,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and version=? " +
                 "order by name " +
@@ -2173,15 +3508,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2292,7 +3628,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and number=? " +
                 "order by name " +
@@ -2304,15 +3640,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2423,7 +3760,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and published=? " +
                 "order by name " +
@@ -2435,15 +3772,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2554,7 +3892,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and deleted=? " +
                 "order by name " +
@@ -2566,15 +3904,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2685,7 +4024,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and archived=? " +
                 "order by name " +
@@ -2697,15 +4036,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2816,7 +4156,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and last_update=? " +
                 "order by name " +
@@ -2828,15 +4168,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -2947,7 +4288,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where status=? and last_update_person_id=? " +
                 "order by name " +
@@ -2959,15 +4300,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3078,7 +4420,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? and version=? " +
                 "order by name " +
@@ -3090,15 +4432,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3209,7 +4552,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where version=? and published=? " +
                 "order by name " +
@@ -3221,15 +4564,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3340,7 +4684,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where version=? and deleted=? " +
                 "order by name " +
@@ -3352,15 +4696,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3471,7 +4816,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where version=? and archived=? " +
                 "order by name " +
@@ -3483,15 +4828,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3602,7 +4948,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where version=? and last_update=? " +
                 "order by name " +
@@ -3614,15 +4960,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3733,7 +5080,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where version=? and last_update_person_id=? " +
                 "order by name " +
@@ -3745,15 +5092,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3864,7 +5212,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? and published=? " +
                 "order by name " +
@@ -3876,15 +5224,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -3995,7 +5344,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? and deleted=? " +
                 "order by name " +
@@ -4007,15 +5356,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4126,7 +5476,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? and archived=? " +
                 "order by name " +
@@ -4138,15 +5488,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4257,7 +5608,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? and last_update=? " +
                 "order by name " +
@@ -4269,15 +5620,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4388,7 +5740,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? and last_update_person_id=? " +
                 "order by name " +
@@ -4400,15 +5752,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4519,7 +5872,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where published=? and deleted=? " +
                 "order by name " +
@@ -4531,15 +5884,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4650,7 +6004,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where published=? and archived=? " +
                 "order by name " +
@@ -4662,15 +6016,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4781,7 +6136,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update=? and published=? " +
                 "order by name " +
@@ -4793,15 +6148,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -4912,7 +6268,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update_person_id=? and published=? " +
                 "order by name " +
@@ -4924,15 +6280,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5043,7 +6400,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where deleted=? and archived=? " +
                 "order by name " +
@@ -5055,15 +6412,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5174,7 +6532,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update=? and deleted=? " +
                 "order by name " +
@@ -5186,15 +6544,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5305,7 +6664,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update_person_id=? and deleted=? " +
                 "order by name " +
@@ -5317,15 +6676,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5436,7 +6796,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update=? and archived=? " +
                 "order by name " +
@@ -5448,15 +6808,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5567,7 +6928,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update_person_id=? and archived=? " +
                 "order by name " +
@@ -5579,15 +6940,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5698,7 +7060,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where last_update_person_id=? and last_update=? " +
                 "order by name " +
@@ -5710,15 +7072,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5828,7 +7191,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where number=? " +
                 "order by name " +
@@ -5839,15 +7202,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -5953,7 +7317,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where name=? " +
                 "order by name " +
@@ -5964,15 +7328,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();
@@ -6078,7 +7443,7 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
+                "select id, publication_id, name, status, version, number, published, deleted, archived, last_update, last_update_person_id "+
                 "from newsletter " +
                 "where deleted=? " +
                 "order by name " +
@@ -6089,15 +7454,16 @@ public class NewsletterFactory {
             while(results.next()) {
                 item=new Newsletter();
                 item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setVersion(results.getLong(4));
-                item.setNumber(results.getString(5));
-                item.setPublished(results.getBoolean(6));
-                item.setDeleted(results.getBoolean(7));
-                item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
-                item.setLastUpdatePersonId(results.getLong(10));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setStatus(results.getString(4));
+                item.setVersion(results.getLong(5));
+                item.setNumber(results.getString(6));
+                item.setPublished(results.getBoolean(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setArchived(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
                 list.add(item);
             }
             results.close();

@@ -58,12 +58,12 @@ public class UrlFilter implements Filter {
 		String uri = ((HttpServletRequest)request).getRequestURI().substring(Settings.baseUrl.length()+1);
 
 		String[] parts=uri.split("/");
-		if(parts[0].equals("category") && parts.length > 1) {
-			request.getRequestDispatcher("/category.jsp?name="+parts[1]).forward(request,response);
+		if(parts[0].equals("topic") && parts.length > 1) {
+			request.getRequestDispatcher("/topic.jsp?name="+parts[1]).forward(request,response);
 			return;					
 		}
-		if(parts[0].equals("audience") && parts.length > 1) {
-			request.getRequestDispatcher("/audience.jsp?name="+parts[1]).forward(request,response);
+		if(parts[0].equals("publication") && parts.length > 1) {
+			request.getRequestDispatcher("/publication?name="+parts[1]).forward(request,response);
 			return;					
 		}
 		if(parts[0].toLowerCase().startsWith("uom")) {

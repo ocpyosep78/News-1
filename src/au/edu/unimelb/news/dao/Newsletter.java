@@ -12,6 +12,7 @@ import java.util.Date;
 public class Newsletter implements Comparable<Newsletter> {
 
 	private long id = 0;
+	private long publicationId;
 	private String name = "";
 	private String status = "";
 	private long version;
@@ -24,6 +25,10 @@ public class Newsletter implements Comparable<Newsletter> {
 
 	public long getId() {
 		return id;
+	}
+
+	public long getPublicationId() {
+		return publicationId;
 	}
 
 	public String getName() {
@@ -66,6 +71,10 @@ public class Newsletter implements Comparable<Newsletter> {
 		this.id = id;
 	}
 
+	public void setPublicationId(long publicationId) {
+		 this.publicationId = publicationId;
+	}
+
 	public void setName(String name) {
 		 this.name = name;
 	}
@@ -103,6 +112,9 @@ public class Newsletter implements Comparable<Newsletter> {
 	}
 
 	public int compareTo(Newsletter o) {
+		if(publicationId!=o.getPublicationId()) {
+			if(this.publicationId < o.getPublicationId()) return -1; else return 1;
+		}
 		if(name.compareTo(o.getName())!=0) {
 			return name.compareTo(o.getName());
 		}

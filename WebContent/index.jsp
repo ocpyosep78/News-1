@@ -63,25 +63,25 @@
 <div id="browse-lists">
 
 <div class="subject_options">
-<h3>Browse by articles</h3>
+<h3>Browse</h3>
 <ul style="margin-bottom: 1.5em;">
 	<li class="a-z"><a href="browse/ABC">A-Z list of articles</a></li>
-<% for(Category category : DAOFactory.getCategoryFactory().getAll(0,100)) {
-	if(user.can("Category","ViewPublished",category.getId()) || user.can("Category","ViewUnpublished",category.getId()) || user.can("Category","ViewArchived",category.getId())) {
+<% for(Publication publication : DAOFactory.getPublicationFactory().getAll(0,100)) {
+	if(user.can("Publication","ViewPublished",publication.getId()) || user.can("Publication","ViewUnpublished",publication.getId()) || user.can("Publication","ViewArchived",publication.getId())) {
 %>
-	<li><a href="category/<%=StringHelper.urlEscape(category.getName())%>"><%=StringHelper.escapeHtml(category.getName())%></a></li>
+	<li><a href="publication/<%=StringHelper.urlEscape(publication.getName())%>"><%=StringHelper.escapeHtml(publication.getName())%></a></li>
 <%   } %>
 <% } %>
 </ul>
 
 <% if(user.can("Publication","Add")||user.can("Publication","Update")) { %>
-<a class="manage_subject_areas" href="<%=Settings.baseUrl %>/publications.jsp">Manage publications</a>
+<a class="manage_publications" href="<%=Settings.baseUrl %>/publications.jsp">Manage publications</a>
 <% } %>
 
 </div>
 
 <div class="audience_options">
-<h3>Publications</h3>
+<h3>Categories</h3>
 <ul>
 	<li><a href="audience/Students">Students</a></li>
 	<li><a href="audience/Professional+staff">Professional staff</a></li>

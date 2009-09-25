@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import au.edu.unimelb.helper.StringHelper;
-import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.Configuration;
 import au.edu.unimelb.news.dao.DAOFactory;
+import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.model.Publications;
 import au.edu.unimelb.security.LogHelper;
 import au.edu.unimelb.security.UserHelper;
@@ -36,11 +36,11 @@ import au.edu.unimelb.security.model.User;
 /**
  * Handles requests to create new agenda items for a speciffic meeting.
  */
-public class SubjectUpdateAction extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
+public class PublicationAddAction extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
 	static final long serialVersionUID = 1L;   
 
-	public SubjectUpdateAction() {
+	public PublicationAddAction() {
 		super();
 	}   	
 
@@ -59,24 +59,26 @@ public class SubjectUpdateAction extends javax.servlet.http.HttpServlet implemen
 
 		StringBuffer warnings=new StringBuffer();
 		warnings.append(Configuration.validator.checkField("publication_name", publication.getName()));
+		if(publication.getId()==0 && DAOFactory.getCategoryFactory().countByName(publication.getName())>0)
+			warnings.append("<li>A publication entry already exists with this exact name.</li>");
 		
 		if(warnings.length()>0) {
 			session.setAttribute("errors", warnings.toString());
-			getServletContext().getRequestDispatcher("/categories.jsp").forward(request, response);
+			getServletContext().getRequestDispatcher("/publications.jsp").forward(request, response);
 			return;
 		}
 
-		if(publication.getId()!=0) {
-			if(!user.can("Publication","Update")) {
+		if(publication.getId()==0) {
+			if(!user.can("Publication","Add")) {
 				AuthorisationFailAction.display(request, response, true);
 				return;
 			}
-			DAOFactory.getPublicationFactory().update(publication);
-			LogHelper.log("Category", "Update", user.getPersonId(), "Subject <i>"+StringHelper.escapeHtml(publication.getName())+"</i> was updated.", user.getIP());
+			DAOFactory.getPublicationFactory().insert(publication);
+			LogHelper.log("Publication", "Add", user.getPersonId(), "Category <i>"+StringHelper.escapeHtml(publication.getName())+"</i> was added.", user.getIP());
+			session.setAttribute("info", "Category <i>"+StringHelper.escapeHtml(publication.getName())+"</i> has been saved.");
 		}
 
-		session.setAttribute("info", "Subject <i>"+StringHelper.escapeHtml(publication.getName())+" has been updated.");
-		getServletContext().getRequestDispatcher("/categories.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/publications.jsp").forward(request, response);
 	}
 
 

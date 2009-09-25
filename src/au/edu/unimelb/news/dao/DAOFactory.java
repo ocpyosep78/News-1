@@ -416,6 +416,81 @@ public class DAOFactory {
 		return list;
 	}
 
+	public static List<NewsletterInfo> queryNewsletterByPublication(Long publicationId) throws IOException {
+		List<NewsletterInfo> list = new ArrayList<NewsletterInfo>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select n.id,n.name,n.status,n.number,n.published from newsletter n where publication_id = ? order by n.name,n.last_update"
+              );
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                NewsletterInfo item=new NewsletterInfo();
+                item.setId(results.getLong(1));
+                item.setName(results.getString(2));
+                item.setStatus(results.getString(3));
+                item.setNumber(results.getString(4));
+                item.setPublished(results.getBoolean(5));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+		return list;
+	}
+
+	public static List<NewsletterInfo> queryNewsletterByPublication(Long publicationId, int index, int limit) throws IOException {
+		List<NewsletterInfo> list = new ArrayList<NewsletterInfo>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select n.id,n.name,n.status,n.number,n.published from newsletter n where publication_id = ? order by n.name,n.last_update " +
+                "limit "+index+","+limit
+              );
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                NewsletterInfo item=new NewsletterInfo();
+                item.setId(results.getLong(1));
+                item.setName(results.getString(2));
+                item.setStatus(results.getString(3));
+                item.setNumber(results.getString(4));
+                item.setPublished(results.getBoolean(5));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+		return list;
+	}
+
 	public static List<ArticleInfo> queryArticleRecentlyUpdated() throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
         Connection c=null;

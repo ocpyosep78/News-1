@@ -9,9 +9,10 @@
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
 <%
-	String audience = request.getParameter("name");
+	String newsletterName = request.getParameter("name");
+	Publication publication = Publications.get(newsletterName);
 %>
-<% LayoutHelper.headerTitled(out,StringHelper.escapeHtml(audience)); %>
+<% LayoutHelper.headerTitled(out,StringHelper.escapeHtml(newsletterName)); %>
 <% User user = UserHelper.getUser(request); %>
 <% LayoutHelper.menubar(out,user); %>
 <% ResourceBundle messages = ResourceBundle.getBundle("messages"); %>
@@ -20,8 +21,7 @@
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
 	<a href="<%=Settings.baseUrl%>/">Policy Library</a> &gt;
-	<a href="<%=Settings.baseUrl%>/">Audience</a> &gt;
-	<%= audience %>
+	<%= StringHelper.escapeHtml(newsletterName) %>
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
@@ -31,27 +31,27 @@
 
 <% SessionFeedback.display(session,out); %>
 
-<% List<ArticleInfo> documents =DAOFactory.queryArticleByPublication(audience); %>
+<% List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId()); %>
 
-<h2><%= StringHelper.escapeHtml(audience) %></h2>
-<p>Key policy documents relevant for <%= StringHelper.escapeHtml(audience) %>.
+<h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
+<p>Most recent newsletters for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
 
 <ul>
-<% for(ArticleInfo document : documents) {
+<% for(NewsletterInfo document : newsletters) {
 //	if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
 //	if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=Articles.asLink(document)%>)</span></li>
+<li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=Newsletters.asLink(document)%>)</span></li>
 <% } %>
 </ul>
 
 <%
-if(documents.size()==0 || !user.isAuthenticated()) {
+if(newsletters.size()==0 || !user.isAuthenticated()) {
 	out.print("<div class=\"info\">");
-	if(documents.size()==0)
-	    out.print("No policy documents are currently available for this category. ");
+	if(newsletters.size()==0)
+	    out.print("This publication currently has no newsletters. ");
 	if(!user.isAuthenticated())
-		out.print("Some documents are only available once you <a href=\""+Settings.baseUrl+"/signin\">Sign in</a>.");
+		out.print("Some newsletters are only available once you <a href=\""+Settings.baseUrl+"/signin\">Sign in</a>.");
 	out.println("</div>");
 }
 %>

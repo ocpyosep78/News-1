@@ -39,17 +39,17 @@
 
 <p>Below are the current publications available within University News. Some subject areas are only visible once you have signed in to the system.</p>
 <ul>
-<% for(Category category : DAOFactory.getCategoryFactory().getAll(0,100)) {
-	if(user.can("Publication","ViewPublished",category.getId()) || user.can("Publication","ViewUnpublished",category.getId()) || user.can("Publication","ViewArchived",category.getId())) {
+<% for(Publication publication : DAOFactory.getPublicationFactory().getAll(0,100)) {
+	if(user.can("Publication","ViewPublished",publication.getId()) || user.can("Publication","ViewUnpublished",publication.getId()) || user.can("Publication","ViewArchived",publication.getId()) || user.can("Publication","Add",publication.getId())) {
 %>
-	<li><a href="category/<%=StringHelper.urlEscape(category.getName())%>"><%=StringHelper.escapeHtml(category.getName())%></a></li>
+	<li><a href="category/<%=StringHelper.urlEscape(publication.getName())%>"><%=StringHelper.escapeHtml(publication.getName())%></a></li>
 <% }
 } %>
 </ul>
 </div>
 
 <% if(user.can("Publication","Add")) { %>
-<a class="add_subject" href="<%=Settings.baseUrl %>/publication_add.jsp">Add new publication</a>
+<a class="add_publication" href="<%=Settings.baseUrl %>/publication_add.jsp">Add new publication</a>
 <% } %>
 
 
