@@ -63,7 +63,7 @@ public class UrlFilter implements Filter {
 			return;					
 		}
 		if(parts[0].equals("publication") && parts.length > 1) {
-			request.getRequestDispatcher("/publication?name="+parts[1]).forward(request,response);
+			request.getRequestDispatcher("/publication.jsp?name="+parts[1]).forward(request,response);
 			return;					
 		}
 		if(parts[0].toLowerCase().startsWith("uom")) {
