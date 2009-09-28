@@ -10,7 +10,7 @@
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
 <%
 	String name = request.getParameter("name");
-	Topic category = DAOFactory.getCategoryFactory().getByName(name,0,1).get(0);
+	Topic category = DAOFactory.getTopicFactory().getByName(name,0,1).get(0);
 %>
 <% LayoutHelper.headerTitled(out,category.getName()); %>
 <% User user = UserHelper.getUser(request); %>
@@ -20,8 +20,8 @@
 
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
-	<a href="<%=Settings.baseUrl%>/">Policy Library</a> &gt;
-	<a href="<%=Settings.baseUrl%>/categories.jsp">Subjects</a> &gt;
+	<a href="<%=Settings.baseUrl%>/">University News</a> &gt;
+	<a href="<%=Settings.baseUrl%>/categories.jsp">Topics</a> &gt;
 	<%= category.getName() %>
 </div>
 
@@ -32,7 +32,7 @@
 <% SessionFeedback.display(session,out); %>
 
 
-<% List<ArticleInfo> articles = DAOFactory.queryArticleByCategory(category.getId()); %>
+<% List<ArticleInfo> articles = DAOFactory.queryArticleByTopic(category.getId()); %>
 
 <h2><%= category.getName() %></h2>
 <p>The policy documents related to <%= category.getName() %>.</p>
@@ -53,9 +53,7 @@
 if(articles.size()==0 || !user.isAuthenticated()) {
 	out.print("<div class=\"info\">");
 	if(articles.size()==0)
-	    out.print("No articles are currently available for this category. ");
-	if(!user.isAuthenticated())
-		out.print("Some articles are only available once you <a href=\""+Settings.baseUrl+"/signin\">Sign in</a>.");
+	    out.print("No articles are currently available for this topic. ");
 	out.println("</div>");
 }
 %>
