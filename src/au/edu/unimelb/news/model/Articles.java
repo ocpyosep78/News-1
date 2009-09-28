@@ -66,19 +66,19 @@ public class Articles {
 	 * @param request Web request details
 	 * @return Glossary entry
 	 */
-	public static Publication load(HttpServletRequest request) {
-		Publication publication = null;
+	public static Article load(HttpServletRequest request) {
+		Article article = null;
 
 		try {
-			publication = DAOFactory.getPublicationFactory().get(Long.parseLong(request.getParameter("category_id")));
+			article = DAOFactory.getArticleFactory().get(Long.parseLong(request.getParameter("article_id")));
 		} catch(Exception e) {}
-		if(publication == null)
-			publication = new Publication();
+		if(article == null)
+			article = new Article();
 
-		if(request.getParameter("publication_name")!=null)
-			publication.setName(request.getParameter("publication_name"));
+		if(request.getParameter("article_name")!=null)
+			article.setName(request.getParameter("article_name"));
 
-		return publication;
+		return article;
 	}
 
 	public static String asLink(Article article) {

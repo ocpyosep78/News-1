@@ -62,6 +62,10 @@ public class UrlFilter implements Filter {
 			request.getRequestDispatcher("/topic.jsp?topic="+parts[1]).forward(request,response);
 			return;					
 		}
+		if(parts[0].equals("article") && parts.length > 1) {
+			request.getRequestDispatcher("/article.jsp?article_id="+parts[1]).forward(request,response);
+			return;					
+		}
 		if(parts[0].equals("publication") && parts.length > 1) {
 			request.getRequestDispatcher("/publication.jsp?name="+parts[1]).forward(request,response);
 			return;					
