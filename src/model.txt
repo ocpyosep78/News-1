@@ -43,9 +43,10 @@ search_index.field_value : String
 search_index.field_name rule maxlength 100
 search_index.field_value rule maxlength 21000
 
-article.newsletter_id : integer
 article.number : String
 article.name : String
+article.byline : String
+article.introduction : String
 article.details : String
 article.status : String
 article.deleted : bool
@@ -54,13 +55,14 @@ article.last_update : Date
 article.last_update_person_id : integer
 article.number rule maxlength 20
 article.name rule maxlength 250
+article.byline rule maxlength 250
+article.introduction rule maxlength 250
 article.status rule maxlength 100
 article.details rule maxlength 21000
 article display order name
 article key name
 article key deleted
 article key newsletter_id
-article foreign key newsletter_id=newsletter.id
 article foreign key last_update_person_id=person.id
 
 attachment.article_id : integer

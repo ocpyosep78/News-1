@@ -9,7 +9,7 @@
 <%@ page import='au.edu.unimelb.security.model.User' %>
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
-<% LayoutHelper.headerTitled(out,"Policy Library"); %>
+<% LayoutHelper.headerTitled(out,"University News"); %>
 <% User user = UserHelper.getUser(request); %>
 <% LayoutHelper.menubar(out,user); %>
 <% ResourceBundle messages = ResourceBundle.getBundle("messages"); %>

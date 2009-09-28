@@ -15,6 +15,8 @@ public class Article implements Comparable<Article> {
 	private long newsletterId;
 	private String number = "";
 	private String name = "";
+	private String byline = "";
+	private String introduction = "";
 	private String details = "";
 	private String status = "";
 	private boolean deleted;
@@ -36,6 +38,14 @@ public class Article implements Comparable<Article> {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getByline() {
+		return byline;
+	}
+
+	public String getIntroduction() {
+		return introduction;
 	}
 
 	public String getDetails() {
@@ -78,6 +88,14 @@ public class Article implements Comparable<Article> {
 		 this.name = name;
 	}
 
+	public void setByline(String byline) {
+		 this.byline = byline;
+	}
+
+	public void setIntroduction(String introduction) {
+		 this.introduction = introduction;
+	}
+
 	public void setDetails(String details) {
 		 this.details = details;
 	}
@@ -111,6 +129,12 @@ public class Article implements Comparable<Article> {
 		}
 		if(name.compareTo(o.getName())!=0) {
 			return name.compareTo(o.getName());
+		}
+		if(byline.compareTo(o.getByline())!=0) {
+			return byline.compareTo(o.getByline());
+		}
+		if(introduction.compareTo(o.getIntroduction())!=0) {
+			return introduction.compareTo(o.getIntroduction());
 		}
 		if(details.compareTo(o.getDetails())!=0) {
 			return details.compareTo(o.getDetails());
