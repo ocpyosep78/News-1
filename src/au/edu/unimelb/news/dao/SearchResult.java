@@ -13,7 +13,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	private long id;
 	private String name = "";
 	private String status = "";
-	private String number = "";
+	private String introduction = "";
 	private long rank;
 	private boolean published;
 
@@ -29,8 +29,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		return status;
 	}
 
-	public String getNumber() {
-		return number;
+	public String getIntroduction() {
+		return introduction;
 	}
 
 	public long getRank() {
@@ -53,8 +53,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		 this.status = status;
 	}
 
-	public void setNumber(String number) {
-		 this.number = number;
+	public void setIntroduction(String introduction) {
+		 this.introduction = introduction;
 	}
 
 	public void setRank(long rank) {
@@ -75,8 +75,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		if(status.compareTo(o.getStatus())!=0) {
 			return status.compareTo(o.getStatus());
 		}
-		if(number.compareTo(o.getNumber())!=0) {
-			return number.compareTo(o.getNumber());
+		if(introduction.compareTo(o.getIntroduction())!=0) {
+			return introduction.compareTo(o.getIntroduction());
 		}
 		if(rank!=o.getRank()) {
 			if(this.rank < o.getRank()) return -1; else return 1;

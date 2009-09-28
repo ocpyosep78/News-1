@@ -360,7 +360,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.number,n.published from newsletter n where publication_id = ? order by n.name,n.last_update"
+                "select n.id,n.name,n.status,n.publication_id,n.published from newsletter n where publication_id = ? order by n.name,n.last_update"
               );
             s.setLong(1,publicationId);
             results=s.executeQuery();
@@ -369,7 +369,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -397,7 +397,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.number,n.published from newsletter n where publication_id = ? order by n.name,n.last_update " +
+                "select n.id,n.name,n.status,n.publication_id,n.published from newsletter n where publication_id = ? order by n.name,n.last_update " +
                 "limit "+index+","+limit
               );
             s.setLong(1,publicationId);
@@ -407,7 +407,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -583,7 +583,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select d.id,d.name,d.status,d.number,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
+                "select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
               );
             s.setString(1,field);
             s.setString(2,keywords);
@@ -593,7 +593,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setIntroduction(results.getString(4));
                 item.setRank(results.getLong(5));
                 item.setPublished(results.getBoolean(6));
                 list.add(item);
@@ -622,7 +622,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select d.id,d.name,d.status,d.number,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc " +
+                "select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc " +
                 "limit "+index+","+limit
               );
             s.setString(1,field);
@@ -633,7 +633,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setIntroduction(results.getString(4));
                 item.setRank(results.getLong(5));
                 item.setPublished(results.getBoolean(6));
                 list.add(item);

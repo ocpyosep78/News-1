@@ -34,20 +34,6 @@ public class ArticleSearch {
 	public String error = "";
 	private List<SearchResult> results = null;
 	Map<String,SearchResult> hash = new Hashtable<String,SearchResult>();
-
-	/*
-	public void addToResults(List<SearchResult> entries, int rank) {
-		for(SearchResult item : entries) {
-			item.setRank(item.getRank()*rank);
-			if(!hash.containsKey(item.getNumber()))
-				hash.put(item.getNumber(), item);
-			else {
-				item.setRank(item.getRank()+hash.get(item.getNumber()).getRank());
-				hash.put(item.getNumber(), item);
-			}
-		}
-	}
-	*/
 	
 	public boolean search(String keywords, User user) throws IOException {
 		

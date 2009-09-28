@@ -13,7 +13,7 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 	private long id;
 	private String name = "";
 	private String status = "";
-	private String number = "";
+	private long publicationId;
 	private boolean published;
 
 	public long getId() {
@@ -28,8 +28,8 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 		return status;
 	}
 
-	public String getNumber() {
-		return number;
+	public long getPublicationId() {
+		return publicationId;
 	}
 
 	public boolean isPublished() {
@@ -48,8 +48,8 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 		 this.status = status;
 	}
 
-	public void setNumber(String number) {
-		 this.number = number;
+	public void setPublicationId(long publicationId) {
+		 this.publicationId = publicationId;
 	}
 
 	public void setPublished(boolean published) {
@@ -66,8 +66,8 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 		if(status.compareTo(o.getStatus())!=0) {
 			return status.compareTo(o.getStatus());
 		}
-		if(number.compareTo(o.getNumber())!=0) {
-			return number.compareTo(o.getNumber());
+		if(publicationId!=o.getPublicationId()) {
+			if(this.publicationId < o.getPublicationId()) return -1; else return 1;
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;

@@ -29,6 +29,7 @@ import au.edu.unimelb.helper.StringHelper;
 import au.edu.unimelb.news.dao.ArticleTopic;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.Article;
+import au.edu.unimelb.news.dao.Newsletter;
 import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.dao.Topic;
 import au.edu.unimelb.news.model.Topics;
@@ -89,15 +90,13 @@ public class ArticleImport {
 				LogHelper.log("System","Import",user.getPersonId(),"Extracting file from zip file: "+outFile,user.getIP());
 				messages.add("Extracting file from zip file: "+outFile);
 				FileOutputStream fout = new FileOutputStream(outFile);
+
 				int bytesRead;
 				byte[] tempBuffer = new byte[1024*16];
 				while ( (bytesRead = zin.read(tempBuffer)) != -1 ){
 					fout.write(tempBuffer, 0, bytesRead);
 				}
 
-				//for (int c = zin.read(); c != -1; c = zin.read()) {
-				//	fout.write(c);
-				//}
 				zin.closeEntry();
 				fout.close();
 				count=count+1;
@@ -151,38 +150,14 @@ public class ArticleImport {
 
 			doc.getDocumentElement().normalize();
 
-			NodeList committeeNodes = doc.getElementsByTagName("articles");
-			if(committeeNodes.getLength()==0) {
-				messages.add("Top level of XML document should be <articles>");
-				LogHelper.log("System","Import",user.getPersonId(),"Top level of XML document should be <articles>",user.getIP());
-				return;
-			}
+			NodeList articleNodes = doc.getElementsByTagName("articles");
+			if(articleNodes.getLength()>0)
+				loadArticles(doc.getElementsByTagName("article"),user);
 
-			loadArticles(doc.getElementsByTagName("article"),user);
-			//List<Section> sections = loadSections(doc.getElementsByTagName("sections"),user);
 
-			/*
-			if(attributes == null) {
-				messages.add("Problem while reading <attributes>");
-				LogHelper.log("System","Import",user.getPersonId(),"Problem while reading <attributes>",user.getIP());
-				return;
-			}
-			if(sections == null) {
-				messages.add("Problem while reading <sections>");
-				LogHelper.log("System","Import",user.getPersonId(),"Problem while reading <sections>",user.getIP());
-				return;
-			}
-
-			article.setLastUpdatePersonId(user.getPersonId());
-			article = DAOFactory.getArticleFactory().insert(article);
-			for(DocumentAttribute attribute : attributes) {
-				attribute.setDocumentId(document.getId());
-				DAOFactory.getDocumentAttributeFactory().insert(attribute);
-			}
-			for(Section section : sections) {
-				section.setDocumentId(document.getId());
-				DAOFactory.getSectionFactory().insert(section);
-			}*/
+			NodeList newsletterNodes = doc.getElementsByTagName("newsletters");
+			if(newsletterNodes.getLength()>0)
+				loadNewsletters(doc.getElementsByTagName("newsletter"),user);
 
 		} catch (SAXParseException err) {
 			String error="Import document parsing problem: line=" + err.getLineNumber() + " uri=" + err.getSystemId()+" message="+err.getMessage();
@@ -269,64 +244,6 @@ public class ArticleImport {
 		return stringOut.toString() ;
 	}
 
-	/*
-	private List<Section> loadSections(NodeList sections, User user) {
-		List<Section> list = new ArrayList<Section>();
-		NodeList nodes = getChildNodeNamed(sections,"sections");
-
-		int goodSections = 0;
-		int badSections = 0;
-		// Now process the meeting information
-		for(int s=0; s<nodes.getLength() ; s++){
-			Node node=nodes.item(s);
-			if(node.getNodeType() == Node.ELEMENT_NODE){
-				String number = getElementTagString((Element)node,"number");
-				String heading = getElementTagString((Element)node,"heading");
-                String details = "";
-				try {
-					details = getElementTagData((Element)node,"details");
-				} catch (ParserConfigurationException e) {
-					e.printStackTrace();
-					messages.add("Problem occured while reading the <section> <details> information.");
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Problem occured while reading the <section> <details> information.",user.getIP());
-					badSections++;
-					continue;
-				}
-
-				if(heading.length()==0) {
-					messages.add("<heading> tag in <section> element had no contents");
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"<heading> tag in <section> element had no contents",user.getIP());
-					badSections++;
-					continue;
-				}
-				if(heading.length()==0) {
-					messages.add("<number> tag in <section> element had no contents");
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"<number> tag in <section> element had no contents",user.getIP());
-					badSections++;
-					continue;
-				}
-				Section item=new Section();
-				item.setNumber(number);
-				item.setName(heading);
-				item.setDetails(details);
-				item.setLastUpdatePersonId(user.getPersonId());
-				list.add(item);
-				goodSections++;
-			}
-		}
-
-		messages.add("Document contains "+(goodSections+badSections) + " section(s).");
-		LogHelper.log("System","Import",user.getPersonId(),"Document contains "+(goodSections+badSections) + " section(s).",user.getIP());
-
-		if(badSections>0) {
-			messages.add(badSections + " section(s) were ignored due to having invalid data.");
-			LogHelper.log("System","Import",user.getPersonId(),badSections + " section(s) were ignored due to having invalid data.",user.getIP());
-		}
-
-		return list;
-	}
-	*/
-
 	private void loadArticles(NodeList articles,User user) throws IOException {
 
 		for(int s=0; s<articles.getLength() ; s++){
@@ -360,6 +277,9 @@ public class ArticleImport {
 				article.setByline(byline);
 				article.setIntroduction(introduction);
 				article.setDetails(details);
+				article.setPublished(true);
+				article.setStatus("Published");
+				article.setDeleted(false);
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);
@@ -384,6 +304,62 @@ public class ArticleImport {
 					at.setTopicId(topic.getId());
 					DAOFactory.getArticleTopicFactory().insert(at);
 				}
+			}
+		}
+
+	}
+
+	private void loadNewsletters(NodeList newsletters,User user) throws IOException {
+
+		for(int s=0; s<newsletters.getLength() ; s++){
+			Node node=newsletters.item(s);
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				String id = getElementTagString((Element)node,"id");
+				String name = getElementTagString((Element)node,"name");
+				String publicationName = getElementTagString((Element)node,"publication");
+				String dateCreated = getElementTagString((Element)node,"dateCreated");
+				String username = getElementTagString((Element)node,"user");
+
+				Publication publication = Publications.get(publicationName);
+				if(publication == null) {
+					messages.add("Article referring to an unknown publication: "+publicationName);
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown publication. Name="+publicationName,user.getIP());
+					continue;
+				}
+
+				Newsletter newsletter=new Newsletter();
+				newsletter.setId(Long.parseLong(id));
+				newsletter.setPublicationId(publication.getId());
+				newsletter.setName(name);
+				newsletter.setPublished(true);
+				newsletter.setStatus("Published");
+				newsletter.setArchived(false);
+				newsletter.setDeleted(false);
+
+				List<Person> people;
+				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);
+				if(people.size()==0) {
+					newsletter.setLastUpdatePersonId(user.getPersonId());
+				} else {
+					newsletter.setLastUpdatePersonId(people.get(0).getId());
+				}
+
+				newsletter = DAOFactory.getNewsletterFactory().insert(newsletter);
+
+				/*
+				for(String item : topics.split(" *, *")) {
+					if(item.length()==0) continue;
+					Topic topic = Topics.get(item);
+					if(topic == null) {
+						messages.add("Article referring to an unknown topic: "+item);
+						continue;
+					}
+					ArticleTopic at = new ArticleTopic();
+					at.setArticleId(article.getId());
+					at.setTopicId(topic.getId());
+					DAOFactory.getArticleTopicFactory().insert(at);
+				}
+				*/
 			}
 		}
 

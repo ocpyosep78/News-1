@@ -16,7 +16,6 @@ public class Newsletter implements Comparable<Newsletter> {
 	private String name = "";
 	private String status = "";
 	private long version;
-	private String number = "";
 	private boolean published;
 	private boolean deleted;
 	private boolean archived;
@@ -41,10 +40,6 @@ public class Newsletter implements Comparable<Newsletter> {
 
 	public long getVersion() {
 		return version;
-	}
-
-	public String getNumber() {
-		return number;
 	}
 
 	public boolean isPublished() {
@@ -87,10 +82,6 @@ public class Newsletter implements Comparable<Newsletter> {
 		 this.version = version;
 	}
 
-	public void setNumber(String number) {
-		 this.number = number;
-	}
-
 	public void setPublished(boolean published) {
 		 this.published = published;
 	}
@@ -123,9 +114,6 @@ public class Newsletter implements Comparable<Newsletter> {
 		}
 		if(version!=o.getVersion()) {
 			if(this.version < o.getVersion()) return -1; else return 1;
-		}
-		if(number.compareTo(o.getNumber())!=0) {
-			return number.compareTo(o.getNumber());
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;
