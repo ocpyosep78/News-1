@@ -12,7 +12,6 @@ import java.util.Date;
 public class Article implements Comparable<Article> {
 
 	private long id = 0;
-	private long newsletterId;
 	private String number = "";
 	private String name = "";
 	private String byline = "";
@@ -26,10 +25,6 @@ public class Article implements Comparable<Article> {
 
 	public long getId() {
 		return id;
-	}
-
-	public long getNewsletterId() {
-		return newsletterId;
 	}
 
 	public String getNumber() {
@@ -76,10 +71,6 @@ public class Article implements Comparable<Article> {
 		this.id = id;
 	}
 
-	public void setNewsletterId(long newsletterId) {
-		 this.newsletterId = newsletterId;
-	}
-
 	public void setNumber(String number) {
 		 this.number = number;
 	}
@@ -121,9 +112,6 @@ public class Article implements Comparable<Article> {
 	}
 
 	public int compareTo(Article o) {
-		if(newsletterId!=o.getNewsletterId()) {
-			if(this.newsletterId < o.getNewsletterId()) return -1; else return 1;
-		}
 		if(number.compareTo(o.getNumber())!=0) {
 			return number.compareTo(o.getNumber());
 		}

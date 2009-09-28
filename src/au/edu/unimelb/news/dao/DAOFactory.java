@@ -70,7 +70,7 @@ public class DAOFactory {
         newsletterFactory.postSetup();
 
 		try {
-			executeCommand("create trigger si_article_ins after insert on article for each row begin insert into search_index (document_id, field_name, field_value) values (NEW.id, 'article_name', NEW.name); insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_details', NEW.details); end;");
+			executeCommand("create trigger si_article_ins after insert on article for each row begin insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_name', NEW.name); insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_details', NEW.details); end;");
 		} catch(IOException e) { e.printStackTrace(); }
 
 		try {

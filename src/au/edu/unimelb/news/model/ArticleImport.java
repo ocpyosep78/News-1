@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import au.edu.unimelb.helper.DeleteFolder;
+import au.edu.unimelb.helper.StringHelper;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.Article;
 import au.edu.unimelb.news.model.Topics;
@@ -85,9 +86,15 @@ public class ArticleImport {
 				LogHelper.log("System","Import",user.getPersonId(),"Extracting file from zip file: "+outFile,user.getIP());
 				messages.add("Extracting file from zip file: "+outFile);
 				FileOutputStream fout = new FileOutputStream(outFile);
-				for (int c = zin.read(); c != -1; c = zin.read()) {
-					fout.write(c);
+				int bytesRead;
+				byte[] tempBuffer = new byte[1024*16];
+				while ( (bytesRead = zin.read(tempBuffer)) != -1 ){
+					fout.write(tempBuffer, 0, bytesRead);
 				}
+
+				//for (int c = zin.read(); c != -1; c = zin.read()) {
+				//	fout.write(c);
+				//}
 				zin.closeEntry();
 				fout.close();
 				count=count+1;
@@ -333,12 +340,14 @@ public class ArticleImport {
 				String document = getElementTagString((Element)node,"document");
 				String username = getElementTagString((Element)node,"user");
 
+				document = StringHelper.maxLength(document+"\r\n"+contact, 17000);
+
 				Article article=new Article();
 				article.setId(Long.parseLong(id));
 				article.setName(title);
 				article.setByline(byline);
 				article.setIntroduction(introduction);
-				article.setDetails(document + "\r\n" + contact);
+				article.setDetails(document);
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);

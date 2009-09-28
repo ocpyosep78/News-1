@@ -56,9 +56,9 @@ article.last_update_person_id : integer
 article.number rule maxlength 20
 article.name rule maxlength 250
 article.byline rule maxlength 250
-article.introduction rule maxlength 250
+article.introduction rule maxlength 2000
 article.status rule maxlength 100
-article.details rule maxlength 21000
+article.details rule maxlength 18000
 article display order name
 article key name
 article key deleted
@@ -134,7 +134,7 @@ integer_result queryonly
 #LastArticleNumber query "select max(number) from article"
 #LastArticleNumber returns string_result
 
-startupsql "create trigger si_article_ins after insert on article for each row begin insert into search_index (document_id, field_name, field_value) values (NEW.id, 'article_name', NEW.name); insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_details', NEW.details); end;"
+startupsql "create trigger si_article_ins after insert on article for each row begin insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_name', NEW.name); insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_details', NEW.details); end;"
 startupsql "create trigger si_article_upd after update on article for each row begin update search_index set field_value=NEW.name where article_id=NEW.id and field_name='article_name'; update search_index set field_value=NEW.details where article_id=NEW.id and field_name='article_details'; end;"
 startupsql "alter table search_index type=MyISAM;"
 startupsql "create fulltext index si_search on search_index (field_value);"

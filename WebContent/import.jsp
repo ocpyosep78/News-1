@@ -8,22 +8,22 @@
 <%@ page import='au.edu.unimelb.security.model.User' %>
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
-<% LayoutHelper.headerTitled(out,"Sign in"); %>
+<% LayoutHelper.headerTitled(out,"Article Import"); %>
 <% User user = UserHelper.getUser(request); %>
 <% LayoutHelper.menubar(out,user); %>
 <% ResourceBundle messages = ResourceBundle.getBundle("messages"); %>
 
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
-	<a href="<%=Settings.baseUrl%>/">Policy Library</a> &gt;
-	Document Import
+	<a href="<%=Settings.baseUrl%>/">University News</a> &gt;
+	Article Import
 </div>
 
 <div id="content">
 <% SessionFeedback.display(session,out); %>
 
 <form method="POST" action="import" class="contentform" enctype="multipart/form-data">
-<h3>Document import</h3>
+<h3>Article import</h3>
 
 <label for='committee_code'>
 <span class='question'>File:</span>
