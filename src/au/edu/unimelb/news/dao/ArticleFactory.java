@@ -38,7 +38,7 @@ public class ArticleFactory {
 			s=c.prepareStatement(
 				"create table if not exists article (" +
 				"id bigint auto_increment primary key,"+
-                "number varchar(20),"+
+                "publication_id bigint,"+
                 "name varchar(250),"+
                 "byline varchar(250),"+
                 "introduction varchar(2000),"+
@@ -82,7 +82,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,number,name,byline,introduction,details,status,deleted,published,last_update,last_update_person_id "+
+                "select id,publication_id,name,byline,introduction,details,status,deleted,published,last_update,last_update_person_id "+
                 "from article " +
                 "where id=?");
             s.setLong(1,id);
@@ -90,7 +90,7 @@ public class ArticleFactory {
             if(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -129,7 +129,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "order by name " +
                 "limit "+index+","+limit
@@ -138,7 +138,7 @@ public class ArticleFactory {
             while(results.next()) {
                 Article item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -227,7 +227,7 @@ public class ArticleFactory {
 
             s=c.prepareStatement(
                 "insert into article ("+
-                    "number, "+
+                    "publication_id, "+
                     "name, "+
                     "byline, "+
                     "introduction, "+
@@ -238,7 +238,7 @@ public class ArticleFactory {
                     "last_update, "+
                     "last_update_person_id) "+
                 "values(?,?,?,?,?,?,?,?,?,?)");
-            s.setString(1,item.getNumber());
+            s.setLong(1,item.getPublicationId());
             s.setString(2,item.getName());
             s.setString(3,item.getByline());
             s.setString(4,item.getIntroduction());
@@ -264,7 +264,7 @@ public class ArticleFactory {
             if(s!=null) { try { s.close(); } catch(Exception f){} }
             if(c!=null) { try { c.close(); } catch(Exception f){} }
             System.err.println("Problem duing inserting into table article. "+
-                "number="+item.getNumber()+", "+ 
+                "publication_id="+item.getPublicationId()+", "+ 
                 "name="+item.getName()+", "+ 
                 "byline="+item.getByline()+", "+ 
                 "introduction="+item.getIntroduction()+", "+ 
@@ -292,9 +292,9 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "update article set number=?, name=?, byline=?, introduction=?, details=?, status=?, deleted=?, published=?, last_update=?, last_update_person_id=? "+
+                "update article set publication_id=?, name=?, byline=?, introduction=?, details=?, status=?, deleted=?, published=?, last_update=?, last_update_person_id=? "+
                 "where id=?");
-            s.setString(1,item.getNumber());
+            s.setLong(1,item.getPublicationId());
             s.setString(2,item.getName());
             s.setString(3,item.getByline());
             s.setString(4,item.getIntroduction());
@@ -354,132 +354,6 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number. 
-     *
-     * @param number Value to match on Number.
-     * @param index Search results should start from this item.
-     * @param limit Search results should return at most this many items.
-     */
-    public List<Article> getByNumber(String number,  long index, long limit) throws IOException {
-        List<Article> list=new ArrayList<Article>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        Article item=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
-                "from article " +
-                "where number=? " +
-                "order by name " +
-                "limit "+index+","+limit
-                );
-            s.setString(1,number);
-            results=s.executeQuery();
-            while(results.next()) {
-                item=new Article();
-                item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
-                item.setName(results.getString(3));
-                item.setByline(results.getString(4));
-                item.setIntroduction(results.getString(5));
-                item.setDetails(results.getString(6));
-                item.setStatus(results.getString(7));
-                item.setDeleted(results.getBoolean(8));
-                item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
-
-        return list;
-    }
-
-    /**
-     * Count number of items in the <i>Article</i> data source
-     * matching on Number. 
-     *
-     * @param number Value to match on Number.
-     */
-    public long countByNumber(String number) throws IOException {
-        long total=0;
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select count(*)"+
-                "from article " +
-                "where number=? " +
-                "");
-            s.setString(1,number);
-            results=s.executeQuery();
-            if(results.next()) {
-                total=results.getLong(1);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
-
-        return total;
-    }
-
-    /**
-     * Delete of item(s) in the Article data source
-     * matching on Number. 
-     *
-     * @param Number Value to match on Number.
-     */
-    public long deleteByNumber(String number) throws IOException {
-        long total=0;
-        Connection c=null;
-        PreparedStatement s=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "delete from article " +
-                "where number=? " +
-                "");
-            s.setString(1,number);
-            s.executeUpdate();
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
-
-        return total;
-    }
-
-    /**
-     * Retrieve a set from the Article data source
      * matching on byline. 
      *
      * @param byline Value to match on Byline.
@@ -495,7 +369,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? " +
                 "order by name " +
@@ -506,7 +380,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -621,7 +495,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? " +
                 "order by name " +
@@ -632,7 +506,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -747,7 +621,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? " +
                 "order by name " +
@@ -758,7 +632,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -873,7 +747,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? " +
                 "order by name " +
@@ -884,7 +758,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -999,7 +873,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where published=? " +
                 "order by name " +
@@ -1010,7 +884,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1125,7 +999,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update=? " +
                 "order by name " +
@@ -1136,7 +1010,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1251,7 +1125,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? " +
                 "order by name " +
@@ -1262,7 +1136,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1362,14 +1236,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number name. 
+     * matching on name publicationId. 
      *
-     * @param number Value to match on Number.
      * @param name Value to match on Name.
+     * @param publicationId Value to match on Publication Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberName(String number, String name,  long index, long limit) throws IOException {
+    public List<Article> getByNamePublicationId(String name, Long publicationId,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1378,19 +1252,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and name=? " +
+                "where name=? and publication_id=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
-            s.setString(2,name);
+            s.setString(1,name);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1420,12 +1294,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Name. 
+     * matching on Name Publication Id. 
      *
-     * @param number Value to match on Number.
      * @param name Value to match on Name.
+     * @param publicationId Value to match on Publication Id.
      */
-    public long countByNumberName(String number, String name) throws IOException {
+    public long countByNamePublicationId(String name, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1435,10 +1309,10 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and name=? " +
+                "where name=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,name);
+            s.setString(1,name);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             if(results.next()) {
                 total=results.getLong(1);
@@ -1461,12 +1335,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Name. 
+     * matching on Name Publication Id. 
      *
-     * @param Number Value to match on Number.
      * @param Name Value to match on Name.
+     * @param PublicationId Value to match on Publication Id.
      */
-    public long deleteByNumberName(String number, String name) throws IOException {
+    public long deleteByNamePublicationId(String name, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1474,10 +1348,10 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and name=? " +
+                "where name=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,name);
+            s.setString(1,name);
+            s.setLong(2,publicationId);
             s.executeUpdate();
             s.close();
             s=null;
@@ -1494,14 +1368,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number byline. 
+     * matching on byline publicationId. 
      *
-     * @param number Value to match on Number.
      * @param byline Value to match on Byline.
+     * @param publicationId Value to match on Publication Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberByline(String number, String byline,  long index, long limit) throws IOException {
+    public List<Article> getByBylinePublicationId(String byline, Long publicationId,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1510,19 +1384,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and byline=? " +
+                "where byline=? and publication_id=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
-            s.setString(2,byline);
+            s.setString(1,byline);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1552,12 +1426,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Byline. 
+     * matching on Byline Publication Id. 
      *
-     * @param number Value to match on Number.
      * @param byline Value to match on Byline.
+     * @param publicationId Value to match on Publication Id.
      */
-    public long countByNumberByline(String number, String byline) throws IOException {
+    public long countByBylinePublicationId(String byline, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1567,10 +1441,10 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and byline=? " +
+                "where byline=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,byline);
+            s.setString(1,byline);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             if(results.next()) {
                 total=results.getLong(1);
@@ -1593,12 +1467,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Byline. 
+     * matching on Byline Publication Id. 
      *
-     * @param Number Value to match on Number.
      * @param Byline Value to match on Byline.
+     * @param PublicationId Value to match on Publication Id.
      */
-    public long deleteByNumberByline(String number, String byline) throws IOException {
+    public long deleteByBylinePublicationId(String byline, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1606,10 +1480,10 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and byline=? " +
+                "where byline=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,byline);
+            s.setString(1,byline);
+            s.setLong(2,publicationId);
             s.executeUpdate();
             s.close();
             s=null;
@@ -1626,14 +1500,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number introduction. 
+     * matching on introduction publicationId. 
      *
-     * @param number Value to match on Number.
      * @param introduction Value to match on Introduction.
+     * @param publicationId Value to match on Publication Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberIntroduction(String number, String introduction,  long index, long limit) throws IOException {
+    public List<Article> getByIntroductionPublicationId(String introduction, Long publicationId,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1642,19 +1516,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and introduction=? " +
+                "where introduction=? and publication_id=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
-            s.setString(2,introduction);
+            s.setString(1,introduction);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1684,12 +1558,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Introduction. 
+     * matching on Introduction Publication Id. 
      *
-     * @param number Value to match on Number.
      * @param introduction Value to match on Introduction.
+     * @param publicationId Value to match on Publication Id.
      */
-    public long countByNumberIntroduction(String number, String introduction) throws IOException {
+    public long countByIntroductionPublicationId(String introduction, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1699,10 +1573,10 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and introduction=? " +
+                "where introduction=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,introduction);
+            s.setString(1,introduction);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             if(results.next()) {
                 total=results.getLong(1);
@@ -1725,12 +1599,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Introduction. 
+     * matching on Introduction Publication Id. 
      *
-     * @param Number Value to match on Number.
      * @param Introduction Value to match on Introduction.
+     * @param PublicationId Value to match on Publication Id.
      */
-    public long deleteByNumberIntroduction(String number, String introduction) throws IOException {
+    public long deleteByIntroductionPublicationId(String introduction, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1738,10 +1612,10 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and introduction=? " +
+                "where introduction=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,introduction);
+            s.setString(1,introduction);
+            s.setLong(2,publicationId);
             s.executeUpdate();
             s.close();
             s=null;
@@ -1758,14 +1632,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number details. 
+     * matching on details publicationId. 
      *
-     * @param number Value to match on Number.
      * @param details Value to match on Details.
+     * @param publicationId Value to match on Publication Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberDetails(String number, String details,  long index, long limit) throws IOException {
+    public List<Article> getByDetailsPublicationId(String details, Long publicationId,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1774,19 +1648,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and details=? " +
+                "where details=? and publication_id=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
-            s.setString(2,details);
+            s.setString(1,details);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1816,12 +1690,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Details. 
+     * matching on Details Publication Id. 
      *
-     * @param number Value to match on Number.
      * @param details Value to match on Details.
+     * @param publicationId Value to match on Publication Id.
      */
-    public long countByNumberDetails(String number, String details) throws IOException {
+    public long countByDetailsPublicationId(String details, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1831,10 +1705,10 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and details=? " +
+                "where details=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,details);
+            s.setString(1,details);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             if(results.next()) {
                 total=results.getLong(1);
@@ -1857,12 +1731,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Details. 
+     * matching on Details Publication Id. 
      *
-     * @param Number Value to match on Number.
      * @param Details Value to match on Details.
+     * @param PublicationId Value to match on Publication Id.
      */
-    public long deleteByNumberDetails(String number, String details) throws IOException {
+    public long deleteByDetailsPublicationId(String details, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1870,10 +1744,10 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and details=? " +
+                "where details=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,details);
+            s.setString(1,details);
+            s.setLong(2,publicationId);
             s.executeUpdate();
             s.close();
             s=null;
@@ -1890,14 +1764,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number status. 
+     * matching on status publicationId. 
      *
-     * @param number Value to match on Number.
      * @param status Value to match on Status.
+     * @param publicationId Value to match on Publication Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberStatus(String number, String status,  long index, long limit) throws IOException {
+    public List<Article> getByStatusPublicationId(String status, Long publicationId,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1906,19 +1780,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and status=? " +
+                "where status=? and publication_id=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
-            s.setString(2,status);
+            s.setString(1,status);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -1948,12 +1822,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Status. 
+     * matching on Status Publication Id. 
      *
-     * @param number Value to match on Number.
      * @param status Value to match on Status.
+     * @param publicationId Value to match on Publication Id.
      */
-    public long countByNumberStatus(String number, String status) throws IOException {
+    public long countByStatusPublicationId(String status, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1963,10 +1837,10 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and status=? " +
+                "where status=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,status);
+            s.setString(1,status);
+            s.setLong(2,publicationId);
             results=s.executeQuery();
             if(results.next()) {
                 total=results.getLong(1);
@@ -1989,12 +1863,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Status. 
+     * matching on Status Publication Id. 
      *
-     * @param Number Value to match on Number.
      * @param Status Value to match on Status.
+     * @param PublicationId Value to match on Publication Id.
      */
-    public long deleteByNumberStatus(String number, String status) throws IOException {
+    public long deleteByStatusPublicationId(String status, Long publicationId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2002,10 +1876,10 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and status=? " +
+                "where status=? and publication_id=? " +
                 "");
-            s.setString(1,number);
-            s.setString(2,status);
+            s.setString(1,status);
+            s.setLong(2,publicationId);
             s.executeUpdate();
             s.close();
             s=null;
@@ -2022,14 +1896,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number deleted. 
+     * matching on publicationId deleted. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param deleted Value to match on Deleted.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberDeleted(String number, Boolean deleted,  long index, long limit) throws IOException {
+    public List<Article> getByPublicationIdDeleted(Long publicationId, Boolean deleted,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -2038,19 +1912,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and deleted=? " +
+                "where publication_id=? and deleted=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setBoolean(2,deleted);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2080,12 +1954,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Deleted. 
+     * matching on Publication Id Deleted. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param deleted Value to match on Deleted.
      */
-    public long countByNumberDeleted(String number, Boolean deleted) throws IOException {
+    public long countByPublicationIdDeleted(Long publicationId, Boolean deleted) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2095,9 +1969,9 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and deleted=? " +
+                "where publication_id=? and deleted=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setBoolean(2,deleted);
             results=s.executeQuery();
             if(results.next()) {
@@ -2121,12 +1995,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Deleted. 
+     * matching on Publication Id Deleted. 
      *
-     * @param Number Value to match on Number.
+     * @param PublicationId Value to match on Publication Id.
      * @param Deleted Value to match on Deleted.
      */
-    public long deleteByNumberDeleted(String number, Boolean deleted) throws IOException {
+    public long deleteByPublicationIdDeleted(Long publicationId, Boolean deleted) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2134,9 +2008,9 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and deleted=? " +
+                "where publication_id=? and deleted=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setBoolean(2,deleted);
             s.executeUpdate();
             s.close();
@@ -2154,14 +2028,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number published. 
+     * matching on publicationId published. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param published Value to match on Published.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberPublished(String number, Boolean published,  long index, long limit) throws IOException {
+    public List<Article> getByPublicationIdPublished(Long publicationId, Boolean published,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -2170,19 +2044,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and published=? " +
+                "where publication_id=? and published=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setBoolean(2,published);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2212,12 +2086,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Published. 
+     * matching on Publication Id Published. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param published Value to match on Published.
      */
-    public long countByNumberPublished(String number, Boolean published) throws IOException {
+    public long countByPublicationIdPublished(Long publicationId, Boolean published) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2227,9 +2101,9 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and published=? " +
+                "where publication_id=? and published=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setBoolean(2,published);
             results=s.executeQuery();
             if(results.next()) {
@@ -2253,12 +2127,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Published. 
+     * matching on Publication Id Published. 
      *
-     * @param Number Value to match on Number.
+     * @param PublicationId Value to match on Publication Id.
      * @param Published Value to match on Published.
      */
-    public long deleteByNumberPublished(String number, Boolean published) throws IOException {
+    public long deleteByPublicationIdPublished(Long publicationId, Boolean published) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2266,9 +2140,9 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and published=? " +
+                "where publication_id=? and published=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setBoolean(2,published);
             s.executeUpdate();
             s.close();
@@ -2286,14 +2160,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number lastUpdate. 
+     * matching on publicationId lastUpdate. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param lastUpdate Value to match on Last Update.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberLastUpdate(String number, Date lastUpdate,  long index, long limit) throws IOException {
+    public List<Article> getByPublicationIdLastUpdate(Long publicationId, Date lastUpdate,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -2302,19 +2176,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and last_update=? " +
+                "where publication_id=? and last_update=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2344,12 +2218,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Last Update. 
+     * matching on Publication Id Last Update. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param lastUpdate Value to match on Last Update.
      */
-    public long countByNumberLastUpdate(String number, Date lastUpdate) throws IOException {
+    public long countByPublicationIdLastUpdate(Long publicationId, Date lastUpdate) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2359,9 +2233,9 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and last_update=? " +
+                "where publication_id=? and last_update=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
             results=s.executeQuery();
             if(results.next()) {
@@ -2385,12 +2259,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Last Update. 
+     * matching on Publication Id Last Update. 
      *
-     * @param Number Value to match on Number.
+     * @param PublicationId Value to match on Publication Id.
      * @param LastUpdate Value to match on Last Update.
      */
-    public long deleteByNumberLastUpdate(String number, Date lastUpdate) throws IOException {
+    public long deleteByPublicationIdLastUpdate(Long publicationId, Date lastUpdate) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2398,9 +2272,9 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and last_update=? " +
+                "where publication_id=? and last_update=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
             s.executeUpdate();
             s.close();
@@ -2418,14 +2292,14 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
-     * matching on number lastUpdatePersonId. 
+     * matching on publicationId lastUpdatePersonId. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param lastUpdatePersonId Value to match on Last Update Person Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<Article> getByNumberLastUpdatePersonId(String number, Long lastUpdatePersonId,  long index, long limit) throws IOException {
+    public List<Article> getByPublicationIdLastUpdatePersonId(Long publicationId, Long lastUpdatePersonId,  long index, long limit) throws IOException {
         List<Article> list=new ArrayList<Article>();
         Connection c=null;
         PreparedStatement s=null;
@@ -2434,19 +2308,19 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
-                "where number=? and last_update_person_id=? " +
+                "where publication_id=? and last_update_person_id=? " +
                 "order by name " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setLong(2,lastUpdatePersonId);
             results=s.executeQuery();
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2476,12 +2350,12 @@ public class ArticleFactory {
 
     /**
      * Count number of items in the <i>Article</i> data source
-     * matching on Number Last Update Person Id. 
+     * matching on Publication Id Last Update Person Id. 
      *
-     * @param number Value to match on Number.
+     * @param publicationId Value to match on Publication Id.
      * @param lastUpdatePersonId Value to match on Last Update Person Id.
      */
-    public long countByNumberLastUpdatePersonId(String number, Long lastUpdatePersonId) throws IOException {
+    public long countByPublicationIdLastUpdatePersonId(Long publicationId, Long lastUpdatePersonId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2491,9 +2365,9 @@ public class ArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from article " +
-                "where number=? and last_update_person_id=? " +
+                "where publication_id=? and last_update_person_id=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setLong(2,lastUpdatePersonId);
             results=s.executeQuery();
             if(results.next()) {
@@ -2517,12 +2391,12 @@ public class ArticleFactory {
 
     /**
      * Delete of item(s) in the Article data source
-     * matching on Number Last Update Person Id. 
+     * matching on Publication Id Last Update Person Id. 
      *
-     * @param Number Value to match on Number.
+     * @param PublicationId Value to match on Publication Id.
      * @param LastUpdatePersonId Value to match on Last Update Person Id.
      */
-    public long deleteByNumberLastUpdatePersonId(String number, Long lastUpdatePersonId) throws IOException {
+    public long deleteByPublicationIdLastUpdatePersonId(Long publicationId, Long lastUpdatePersonId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2530,9 +2404,9 @@ public class ArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from article " +
-                "where number=? and last_update_person_id=? " +
+                "where publication_id=? and last_update_person_id=? " +
                 "");
-            s.setString(1,number);
+            s.setLong(1,publicationId);
             s.setLong(2,lastUpdatePersonId);
             s.executeUpdate();
             s.close();
@@ -2566,7 +2440,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and byline=? " +
                 "order by name " +
@@ -2578,7 +2452,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2698,7 +2572,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and introduction=? " +
                 "order by name " +
@@ -2710,7 +2584,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2830,7 +2704,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and details=? " +
                 "order by name " +
@@ -2842,7 +2716,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -2962,7 +2836,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and status=? " +
                 "order by name " +
@@ -2974,7 +2848,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3094,7 +2968,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and deleted=? " +
                 "order by name " +
@@ -3106,7 +2980,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3226,7 +3100,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and published=? " +
                 "order by name " +
@@ -3238,7 +3112,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3358,7 +3232,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and last_update=? " +
                 "order by name " +
@@ -3370,7 +3244,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3490,7 +3364,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and last_update_person_id=? " +
                 "order by name " +
@@ -3502,7 +3376,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3622,7 +3496,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and introduction=? " +
                 "order by name " +
@@ -3634,7 +3508,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3754,7 +3628,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and details=? " +
                 "order by name " +
@@ -3766,7 +3640,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -3886,7 +3760,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and status=? " +
                 "order by name " +
@@ -3898,7 +3772,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4018,7 +3892,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and deleted=? " +
                 "order by name " +
@@ -4030,7 +3904,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4150,7 +4024,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and published=? " +
                 "order by name " +
@@ -4162,7 +4036,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4282,7 +4156,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and last_update=? " +
                 "order by name " +
@@ -4294,7 +4168,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4414,7 +4288,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and last_update_person_id=? " +
                 "order by name " +
@@ -4426,7 +4300,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4546,7 +4420,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and details=? " +
                 "order by name " +
@@ -4558,7 +4432,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4678,7 +4552,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and status=? " +
                 "order by name " +
@@ -4690,7 +4564,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4810,7 +4684,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and deleted=? " +
                 "order by name " +
@@ -4822,7 +4696,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -4942,7 +4816,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and published=? " +
                 "order by name " +
@@ -4954,7 +4828,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5074,7 +4948,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and last_update=? " +
                 "order by name " +
@@ -5086,7 +4960,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5206,7 +5080,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and last_update_person_id=? " +
                 "order by name " +
@@ -5218,7 +5092,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5338,7 +5212,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and status=? " +
                 "order by name " +
@@ -5350,7 +5224,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5470,7 +5344,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and deleted=? " +
                 "order by name " +
@@ -5482,7 +5356,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5602,7 +5476,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and published=? " +
                 "order by name " +
@@ -5614,7 +5488,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5734,7 +5608,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and last_update=? " +
                 "order by name " +
@@ -5746,7 +5620,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5866,7 +5740,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and last_update_person_id=? " +
                 "order by name " +
@@ -5878,7 +5752,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -5998,7 +5872,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and deleted=? " +
                 "order by name " +
@@ -6010,7 +5884,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6130,7 +6004,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and published=? " +
                 "order by name " +
@@ -6142,7 +6016,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6262,7 +6136,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and last_update=? " +
                 "order by name " +
@@ -6274,7 +6148,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6394,7 +6268,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and last_update_person_id=? " +
                 "order by name " +
@@ -6406,7 +6280,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6526,7 +6400,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where deleted=? and published=? " +
                 "order by name " +
@@ -6538,7 +6412,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6658,7 +6532,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update=? and deleted=? " +
                 "order by name " +
@@ -6670,7 +6544,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6790,7 +6664,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? and deleted=? " +
                 "order by name " +
@@ -6802,7 +6676,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -6922,7 +6796,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update=? and published=? " +
                 "order by name " +
@@ -6934,7 +6808,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -7054,7 +6928,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? and published=? " +
                 "order by name " +
@@ -7066,7 +6940,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -7186,7 +7060,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? and last_update=? " +
                 "order by name " +
@@ -7198,7 +7072,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -7317,7 +7191,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? " +
                 "order by name " +
@@ -7328,7 +7202,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -7443,7 +7317,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, number, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
                 "from article " +
                 "where deleted=? " +
                 "order by name " +
@@ -7454,7 +7328,7 @@ public class ArticleFactory {
             while(results.next()) {
                 item=new Article();
                 item.setId(results.getLong(1));
-                item.setNumber(results.getString(2));
+                item.setPublicationId(results.getLong(2));
                 item.setName(results.getString(3));
                 item.setByline(results.getString(4));
                 item.setIntroduction(results.getString(5));
@@ -7538,6 +7412,132 @@ public class ArticleFactory {
                 "where deleted=? " +
                 "");
             s.setBoolean(1,deleted);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on publicationId. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublicationId(Long publicationId,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "from article " +
+                "where publication_id=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setLastUpdate(results.getDate(10));
+                item.setLastUpdatePersonId(results.getLong(11));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Publication Id. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     */
+    public long countByPublicationId(Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where publication_id=? " +
+                "");
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Publication Id. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     */
+    public long deleteByPublicationId(Long publicationId) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where publication_id=? " +
+                "");
+            s.setLong(1,publicationId);
             s.executeUpdate();
             s.close();
             s=null;

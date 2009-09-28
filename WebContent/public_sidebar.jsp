@@ -38,11 +38,11 @@
 <%
 int i=0;
 for(ArticleInfo document : DAOFactory.queryArticleMostPopular(0,30)) {
-    //if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
-    //if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
+    //if(document.isPublished() && !user.can("Publication","ViewPublished",document.getPublicationId())) continue;
+    //if(!document.isPublished() && !user.can("Publication","ViewUnpublished",document.getPublicationId())) continue;
     if(++i > 5) break;
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>" title="<%=StringHelper.escapeHtml(document.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(document.getName(),30))%></a> <span class="policy-number">(<%=Articles.asLink(document)%>)</span></li>
+<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>" title="<%=StringHelper.escapeHtml(document.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(document.getName(),30))%></a> <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(document.getPublicationId()).getName())%>)</span></li>
 <% } %>
 </ul>
 </div>
@@ -60,11 +60,11 @@ for(ArticleInfo document : DAOFactory.queryArticleMostPopular(0,30)) {
 <%
 int i=0;
 for(ArticleInfo document : DAOFactory.queryArticleRecentlyUpdated(0,updateListLength*3)) {
-    //if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
-    //if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
+    //if(document.isPublished() && !user.can("Publication","ViewPublished",document.getPublicationId())) continue;
+    //if(!document.isPublished() && !user.can("Publication","ViewUnpublished",document.getPublicationId())) continue;
     if(++i > updateListLength) break;
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>" title="<%=StringHelper.escapeHtml(document.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(document.getName(),30))%></a> <span class="policy-number">(<%=Articles.asLink(document)%>)</span></li>
+<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>" title="<%=StringHelper.escapeHtml(document.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(document.getName(),30))%></a> <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(document.getPublicationId()).getName())%>)</span></li>
 <% } %>
 </ul>
 </div>

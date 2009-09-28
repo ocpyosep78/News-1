@@ -114,7 +114,7 @@ public class LifecycleListener implements ServletContextListener {
 		try {
 			ctx = new InitialContext();
 			if(ctx==null) return;
-			DataSource dataSource=(DataSource)ctx.lookup("java:comp/env/jdbc/policy");
+			DataSource dataSource=(DataSource)ctx.lookup("java:comp/env/jdbc/news");
 			if(dataSource==null) return;
 			String dbUsername = dataSource.getConnection().getMetaData().getUserName();
 			if(dbUsername.contains("@")) dbUsername=dbUsername.substring(0,dbUsername.indexOf('@'));
@@ -150,16 +150,17 @@ public class LifecycleListener implements ServletContextListener {
 
 		// Inform the template manager of new items to display on the administration page
 		AdministrationMenuItem menu = new AdministrationMenuItem();
-		menu.name="Test";
+		menu.name="Import";
 		menu.description="Load previously exported data files";
-		menu.link="test.jsp";
+		menu.link="import.jsp";
 		AdministrationMenu.add(menu);
 
 		LayoutHelper.addMenuItem("Browse", "browse/ABC", false, false, 10);
 		LayoutHelper.addMenuItem("Browse", "browse/ABC", false, true, 10);
 
-		LayoutHelper.addMenuItem("Policy framework", "http://www.policy.unimelb.edu.au/pdf/mpf.pdf", false, false, 60);
-		LayoutHelper.addMenuItem("Policy framework", "http://www.policy.unimelb.edu.au/pdf/mpf.pdf", false, true, 60);
+		LayoutHelper.addMenuItem("Faculties", "http://www.unimelb.edu.au/az/faculties.html", false, false, 60);
+		LayoutHelper.addMenuItem("A-Z Directory", "http://www.unimelb.edu.au/az/index.html", false, false, 64);
+		LayoutHelper.addMenuItem("Library", "http://www.library.unimelb.edu.au/", false, false, 68);
 
 	}
 

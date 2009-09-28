@@ -19,7 +19,7 @@
 
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
-	<a href="<%=Settings.baseUrl%>/">Policy Library</a> &gt;
+	<a href="<%=Settings.baseUrl%>/">University News</a> &gt;
 	Search results
 </div>
 

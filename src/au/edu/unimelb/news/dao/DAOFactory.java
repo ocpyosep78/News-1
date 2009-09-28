@@ -212,7 +212,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
               );
             results=s.executeQuery();
             while(results.next()) {
@@ -220,7 +220,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -248,7 +248,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc " +
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc " +
                 "limit "+index+","+limit
               );
             results=s.executeQuery();
@@ -257,7 +257,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -285,7 +285,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a where name like ? order by a.name,a.number"
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a where name like ? order by a.name,a.publication_id"
               );
             s.setString(1,name);
             results=s.executeQuery();
@@ -294,7 +294,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -322,7 +322,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a where name like ? order by a.name,a.number " +
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a where name like ? order by a.name,a.publication_id " +
                 "limit "+index+","+limit
               );
             s.setString(1,name);
@@ -332,7 +332,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -435,7 +435,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a order by a.last_update desc"
               );
             results=s.executeQuery();
             while(results.next()) {
@@ -443,7 +443,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -471,7 +471,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc " +
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a order by a.last_update desc " +
                 "limit "+index+","+limit
               );
             results=s.executeQuery();
@@ -480,7 +480,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -508,7 +508,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.number"
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id"
               );
             s.setLong(1,topicId);
             results=s.executeQuery();
@@ -517,7 +517,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -545,7 +545,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.number " +
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id " +
                 "limit "+index+","+limit
               );
             s.setLong(1,topicId);
@@ -555,7 +555,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -662,7 +662,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a order by a.last_update desc"
               );
             results=s.executeQuery();
             while(results.next()) {
@@ -670,7 +670,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }
@@ -698,7 +698,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc " +
+                "select a.id,a.name,a.status,a.publication_id,a.published from article a order by a.last_update desc " +
                 "limit "+index+","+limit
               );
             results=s.executeQuery();
@@ -707,7 +707,7 @@ public class DAOFactory {
                 item.setId(results.getLong(1));
                 item.setName(results.getString(2));
                 item.setStatus(results.getString(3));
-                item.setNumber(results.getString(4));
+                item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
                 list.add(item);
             }

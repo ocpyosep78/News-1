@@ -66,9 +66,9 @@ public class RssServlet extends javax.servlet.http.HttpServlet implements javax.
 		out.println("<language>en-au</language>");
 
 		for(ArticleInfo document : DAOFactory.queryArticleRecentlyUpdated(0,20)) {
-			out.println("<item id=\""+document.getNumber()+"\">");
-			out.println("<link>http://"+request.getLocalName()+Settings.baseUrl+"/"+document.getNumber()+"</link>");
-			out.println("<title>"+StringHelper.escapeHtml(document.getName())+" ("+document.getNumber()+")</title>");
+			out.println("<item id=\""+document.getId()+"\">");
+			out.println("<link>http://"+request.getLocalName()+Settings.baseUrl+"/"+document.getId()+"</link>");
+			out.println("<title>"+StringHelper.escapeHtml(document.getName())+" ("+document.getId()+")</title>");
 			out.println("<pubDate/>");
 			out.println("</item>");
 		}
@@ -87,9 +87,9 @@ public class RssServlet extends javax.servlet.http.HttpServlet implements javax.
 		out.println("<language>en-au</language>");
 
 		for(ArticleInfo document : DAOFactory.queryArticleMostPopular(0, 20)) {
-			out.println("<item id=\""+document.getNumber()+"\">");
-			out.println("<link>http://"+request.getLocalName()+Settings.baseUrl+"/"+document.getNumber()+"</link>");
-			out.println("<title>"+StringHelper.escapeHtml(document.getName())+" ("+document.getNumber()+")</title>");
+			out.println("<item id=\""+document.getId()+"\">");
+			out.println("<link>http://"+request.getLocalName()+Settings.baseUrl+"/"+document.getId()+"</link>");
+			out.println("<title>"+StringHelper.escapeHtml(document.getName())+" ("+document.getId()+")</title>");
 			out.println("<pubDate/>");
 			out.println("</item>");
 		}

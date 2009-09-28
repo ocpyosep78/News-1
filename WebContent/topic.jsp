@@ -35,9 +35,9 @@ for(ArticleInfo document : DAOFactory.queryArticleByTopic(topic.getId(),0,100)) 
 	//if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 %>
 <li>
-<a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>"><%=StringHelper.escapeHtml(document.getName())%></a>
-<span class="policy-number">(<%=Articles.asLink(document)%>)</span>
-<span class="policy-category"></span>
+  <a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>"><%=StringHelper.escapeHtml(document.getName())%></a>
+  <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(document.getPublicationId()).getName())%>)</span>
+  <span class="policy-category"></span>
 </li>
 <% } %>
 </ul>

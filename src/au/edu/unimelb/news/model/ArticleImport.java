@@ -29,6 +29,7 @@ import au.edu.unimelb.helper.StringHelper;
 import au.edu.unimelb.news.dao.ArticleTopic;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.Article;
+import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.dao.Topic;
 import au.edu.unimelb.news.model.Topics;
 import au.edu.unimelb.security.LogHelper;
@@ -112,7 +113,7 @@ public class ArticleImport {
 			messages.add("Zip file is either invald or it has no files inside.");
 			return;
 		}
-		
+
 		LogHelper.log("System","Import",user.getPersonId(),"Finished unzip of uploaded file",user.getIP());
 	}
 
@@ -139,7 +140,7 @@ public class ArticleImport {
 		}
 
 	}
-	
+
 	private void processFile(User user, FileInputStream in) {
 		LogHelper.log("System","Import",user.getPersonId(),"Analysing the index file",user.getIP());
 
@@ -332,30 +333,39 @@ public class ArticleImport {
 			Node node=articles.item(s);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				String id = getElementTagString((Element)node,"id");
-				String title = getElementTagString((Element)node,"title");
+				String name = getElementTagString((Element)node,"name");
+				String publicationName = getElementTagString((Element)node,"publication");
 				String byline = getElementTagString((Element)node,"byline");
 				String topics = getElementTagString((Element)node,"topic");
 				String introduction = getElementTagString((Element)node,"introduction");
 				String date = getElementTagString((Element)node,"date");
 				String dateCreated = getElementTagString((Element)node,"dateCreated");
 				String contact = getElementTagString((Element)node,"contact");
-				String document = getElementTagString((Element)node,"document");
+				String details = getElementTagString((Element)node,"details");
 				String username = getElementTagString((Element)node,"user");
 
-				document = StringHelper.maxLength(document+"\r\n"+contact, 17000);
+				details = StringHelper.maxLength(details+"\r\n"+contact, 17000);
+
+				Publication publication = Publications.get(publicationName);
+				if(publication == null) {
+					messages.add("Article referring to an unknown publication: "+publicationName);
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown publication. Name="+publicationName,user.getIP());
+					continue;
+				}
 
 				Article article=new Article();
 				article.setId(Long.parseLong(id));
-				article.setName(title);
+				article.setPublicationId(publication.getId());
+				article.setName(name);
 				article.setByline(byline);
 				article.setIntroduction(introduction);
-				article.setDetails(document);
+				article.setDetails(details);
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);
 				if(people.size()==0) {
 					messages.add("Article referring to an unknown person with username: "+username);
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown person. Name="+title+" Username="+username,user.getIP());
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown person. Name="+name+" Username="+username,user.getIP());
 					continue;
 				}
 				article.setLastUpdatePersonId(people.get(0).getId());

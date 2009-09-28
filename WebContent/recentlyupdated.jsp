@@ -38,7 +38,7 @@ for(ArticleInfo document : DAOFactory.queryArticleRecentlyUpdated(0,100)) {
 %>
 <li>
 <a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>"><%=StringHelper.escapeHtml(document.getName())%></a>
-<span class="policy-number">(<%=Articles.asLink(document)%>)</span>
+<span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(document.getPublicationId()).getName())%>)</span>
 <span class="policy-category"></span>
 </li>
 <% } %>

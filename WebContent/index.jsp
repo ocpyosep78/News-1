@@ -111,7 +111,10 @@ for(ArticleInfo article : DAOFactory.queryArticleMostPopular(0,30)) {
 	//if(!article.isPublished() && !user.can("Category","ViewUnpublished",article.getCategoryId())) continue;
 	if(++i > 5) break;
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>" title="<%=StringHelper.escapeHtml(article.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(article.getName(),45))%></a> </li>
+<li>
+    <a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>" title="<%=StringHelper.escapeHtml(article.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(article.getName(),45))%></a>
+    <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(article.getPublicationId()).getName())%>)</span>
+</li>
 <% } %>
 </ul>
 </div>
@@ -133,7 +136,10 @@ for(ArticleInfo article : DAOFactory.queryArticleRecentlyUpdated(0,updateListLen
 	//if(!article.isPublished() && !user.can("Category","ViewUnpublished",article.getCategoryId())) continue;
 	if(++i > updateListLength) break;
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>" title="<%=StringHelper.escapeHtml(article.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(article.getName(),45))%></a></li>
+<li>
+    <a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>" title="<%=StringHelper.escapeHtml(article.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(article.getName(),45))%></a>
+    <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(article.getPublicationId()).getName())%>)</span>
+</li>
 <% } %>
 </ul>
 </div>

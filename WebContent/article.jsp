@@ -25,7 +25,10 @@
 <% SessionFeedback.display(session,out); %>
 
 <h2><%= StringHelper.escapeHtml(article.getName()) %></h2>
-<p><%= StringHelper.escapeHtml(article.getDetails()) %></p>
+
+<p><b><%= StringHelper.escapeHtml(article.getIntroduction()) %></b></p>
+
+<p><%= article.getDetails() %></p>
 
 </div>
 <% LayoutHelper.footer(out); %>
