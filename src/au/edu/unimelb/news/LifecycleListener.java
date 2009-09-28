@@ -69,7 +69,7 @@ public class LifecycleListener implements ServletContextListener {
 
 	/**
 	 * Reads configuration parameters into the global Configuration class.
-	 * 
+	 *
 	 * @param sce Software startup parameter object
 	 */
 	private void loadConfigurationSettings(ServletContextEvent sce) {
@@ -91,14 +91,14 @@ public class LifecycleListener implements ServletContextListener {
 		}
 		if(catalinaHome == null)
 			System.err.println("Unable to find catalina.home in the Java System Properties. Could not establish default data folder.");
-		
+
 		// Ensure the data folder exists
 		File home = new File(catalinaHome);
 		File data = new File(home.getAbsolutePath()+"/data/");
 		File applicationData = new File(data.getAbsolutePath()+"/"+sce.getServletContext().getServletContextName()+"/");
 		if(!data.exists()) data.mkdir();
 		if(!applicationData.exists()) applicationData.mkdir();
-		
+
 		// Ensure our app folders exist
 		File pdfFolder = new File(applicationData.getAbsoluteFile()+"/pdfs/");
 		if(!pdfFolder.exists()) pdfFolder.mkdir();
@@ -175,7 +175,16 @@ public class LifecycleListener implements ServletContextListener {
 		 * already exist.
 		 */
 		try {
-			Topics.add("Finance");
+			Topics.add("Business");
+			Topics.add("Sport");
+			Topics.add("Politics");
+			Topics.add("Law");
+			Topics.add("Technology");
+			Topics.add("Science & Nature");
+			Topics.add("Health & Medicine");
+			Topics.add("Entertainment");
+			Topics.add("Education");
+			Topics.add("Arts");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
