@@ -65,6 +65,11 @@ article key deleted
 article key newsletter_id
 article foreign key last_update_person_id=person.id
 
+article_topic.article_id : long
+article_topic.topic_id : long
+article_topic key article_id
+article_topic key topic_id
+
 attachment.article_id : integer
 attachment.name : String
 attachment.size : integer
@@ -87,8 +92,8 @@ ArticleByBrowse query "select a.id,a.name,a.status,a.number,a.published from art
 ArticleByBrowse parameter name : String
 ArticleByBrowse returns article_info
 
-ArticleByTopic query "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
-ArticleByTopic parameter category_id : integer
+ArticleByTopic query "select a.id,a.name,a.status,a.number,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.number"
+ArticleByTopic parameter topic_id : integer
 ArticleByTopic returns article_info
 
 ArticleRecentlyUpdated query "select a.id,a.name,a.status,a.number,a.published from article a order by a.last_update desc"

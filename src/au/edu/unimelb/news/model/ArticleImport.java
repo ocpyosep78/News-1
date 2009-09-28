@@ -26,8 +26,10 @@ import org.xml.sax.SAXParseException;
 
 import au.edu.unimelb.helper.DeleteFolder;
 import au.edu.unimelb.helper.StringHelper;
+import au.edu.unimelb.news.dao.ArticleTopic;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.Article;
+import au.edu.unimelb.news.dao.Topic;
 import au.edu.unimelb.news.model.Topics;
 import au.edu.unimelb.security.LogHelper;
 import au.edu.unimelb.security.dao.Person;
@@ -358,7 +360,20 @@ public class ArticleImport {
 				}
 				article.setLastUpdatePersonId(people.get(0).getId());
 				
-				DAOFactory.getArticleFactory().insert(article);
+				article = DAOFactory.getArticleFactory().insert(article);
+
+				for(String item : topics.split(" *, *")) {
+					if(item.length()==0) continue;
+					Topic topic = Topics.get(item);
+					if(topic == null) {
+						messages.add("Article referring to an unknown topic: "+item);
+						continue;
+					}
+					ArticleTopic at = new ArticleTopic();
+					at.setArticleId(article.getId());
+					at.setTopicId(topic.getId());
+					DAOFactory.getArticleTopicFactory().insert(at);
+				}
 			}
 		}
 

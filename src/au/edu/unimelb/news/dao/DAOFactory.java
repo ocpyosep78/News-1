@@ -22,9 +22,10 @@ public class DAOFactory {
     private static TopicFactory topicFactory;
     private static PublicationFactory publicationFactory;
     private static NewsletterViewCountFactory newsletterViewCountFactory;
-    private static ArticleFactory articleFactory;
     private static AttachmentFactory attachmentFactory;
+    private static ArticleFactory articleFactory;
     private static ArticleViewCountFactory articleViewCountFactory;
+    private static ArticleTopicFactory articleTopicFactory;
     private static SearchIndexFactory searchIndexFactory;
     private static NewsletterFactory newsletterFactory;
 
@@ -45,27 +46,30 @@ public class DAOFactory {
         topicFactory=new TopicFactory(dataSource);
         publicationFactory=new PublicationFactory(dataSource);
         newsletterViewCountFactory=new NewsletterViewCountFactory(dataSource);
-        articleFactory=new ArticleFactory(dataSource);
         attachmentFactory=new AttachmentFactory(dataSource);
+        articleFactory=new ArticleFactory(dataSource);
         articleViewCountFactory=new ArticleViewCountFactory(dataSource);
+        articleTopicFactory=new ArticleTopicFactory(dataSource);
         searchIndexFactory=new SearchIndexFactory(dataSource);
         newsletterFactory=new NewsletterFactory(dataSource);
 
         topicFactory.setup();
         publicationFactory.setup();
         newsletterViewCountFactory.setup();
-        articleFactory.setup();
         attachmentFactory.setup();
+        articleFactory.setup();
         articleViewCountFactory.setup();
+        articleTopicFactory.setup();
         searchIndexFactory.setup();
         newsletterFactory.setup();
 
         topicFactory.postSetup();
         publicationFactory.postSetup();
         newsletterViewCountFactory.postSetup();
-        articleFactory.postSetup();
         attachmentFactory.postSetup();
+        articleFactory.postSetup();
         articleViewCountFactory.postSetup();
+        articleTopicFactory.postSetup();
         searchIndexFactory.postSetup();
         newsletterFactory.postSetup();
 
@@ -108,13 +112,6 @@ public class DAOFactory {
         return newsletterViewCountFactory;
     }
 
-    public static ArticleFactory getArticleFactory() throws IOException {
-        if(articleFactory==null) {
-            setup();
-        }
-        return articleFactory;
-    }
-
     public static AttachmentFactory getAttachmentFactory() throws IOException {
         if(attachmentFactory==null) {
             setup();
@@ -122,11 +119,25 @@ public class DAOFactory {
         return attachmentFactory;
     }
 
+    public static ArticleFactory getArticleFactory() throws IOException {
+        if(articleFactory==null) {
+            setup();
+        }
+        return articleFactory;
+    }
+
     public static ArticleViewCountFactory getArticleViewCountFactory() throws IOException {
         if(articleViewCountFactory==null) {
             setup();
         }
         return articleViewCountFactory;
+    }
+
+    public static ArticleTopicFactory getArticleTopicFactory() throws IOException {
+        if(articleTopicFactory==null) {
+            setup();
+        }
+        return articleTopicFactory;
     }
 
     public static SearchIndexFactory getSearchIndexFactory() throws IOException {
@@ -489,7 +500,7 @@ public class DAOFactory {
 		return list;
 	}
 
-	public static List<ArticleInfo> queryArticleByTopic(Long categoryId) throws IOException {
+	public static List<ArticleInfo> queryArticleByTopic(Long topicId) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
         Connection c=null;
         PreparedStatement s=null;
@@ -497,9 +508,9 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number"
+                "select a.id,a.name,a.status,a.number,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.number"
               );
-            s.setLong(1,categoryId);
+            s.setLong(1,topicId);
             results=s.executeQuery();
             while(results.next()) {
                 ArticleInfo item=new ArticleInfo();
@@ -526,7 +537,7 @@ public class DAOFactory {
 		return list;
 	}
 
-	public static List<ArticleInfo> queryArticleByTopic(Long categoryId, int index, int limit) throws IOException {
+	public static List<ArticleInfo> queryArticleByTopic(Long topicId, int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
         Connection c=null;
         PreparedStatement s=null;
@@ -534,10 +545,10 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.number,a.published from article a where category_id = ? order by a.name,a.number " +
+                "select a.id,a.name,a.status,a.number,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.number " +
                 "limit "+index+","+limit
               );
-            s.setLong(1,categoryId);
+            s.setLong(1,topicId);
             results=s.executeQuery();
             while(results.next()) {
                 ArticleInfo item=new ArticleInfo();

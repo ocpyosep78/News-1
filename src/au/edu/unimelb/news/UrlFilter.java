@@ -59,7 +59,7 @@ public class UrlFilter implements Filter {
 
 		String[] parts=uri.split("/");
 		if(parts[0].equals("topic") && parts.length > 1) {
-			request.getRequestDispatcher("/topic.jsp?name="+parts[1]).forward(request,response);
+			request.getRequestDispatcher("/topic.jsp?topic="+parts[1]).forward(request,response);
 			return;					
 		}
 		if(parts[0].equals("publication") && parts.length > 1) {
