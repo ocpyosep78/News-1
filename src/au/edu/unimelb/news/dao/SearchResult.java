@@ -16,7 +16,6 @@ public class SearchResult implements Comparable<SearchResult> {
 	private String number = "";
 	private long rank;
 	private boolean published;
-	private boolean duplicated;
 
 	public long getId() {
 		return id;
@@ -40,10 +39,6 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	public boolean isPublished() {
 		return published;
-	}
-
-	public boolean isDuplicated() {
-		return duplicated;
 	}
 
 	public void setId(long id) {
@@ -70,10 +65,6 @@ public class SearchResult implements Comparable<SearchResult> {
 		 this.published = published;
 	}
 
-	public void setDuplicated(boolean duplicated) {
-		 this.duplicated = duplicated;
-	}
-
 	public int compareTo(SearchResult o) {
 		if(id!=o.getId()) {
 			if(this.id < o.getId()) return -1; else return 1;
@@ -92,9 +83,6 @@ public class SearchResult implements Comparable<SearchResult> {
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;
-		}
-		if(duplicated!=o.duplicated) {
-			if(this.duplicated) return -1; else return 1;
 		}
 		return 0;
 	}

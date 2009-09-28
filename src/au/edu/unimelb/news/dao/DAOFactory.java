@@ -583,7 +583,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,d.name,d.status,d.number,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
+                "select d.id,d.name,d.status,d.number,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
               );
             s.setString(1,field);
             s.setString(2,keywords);
@@ -596,7 +596,6 @@ public class DAOFactory {
                 item.setNumber(results.getString(4));
                 item.setRank(results.getLong(5));
                 item.setPublished(results.getBoolean(6));
-                item.setDuplicated(results.getBoolean(7));
                 list.add(item);
             }
             results.close();
@@ -623,7 +622,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,d.name,d.status,d.number,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc " +
+                "select d.id,d.name,d.status,d.number,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc " +
                 "limit "+index+","+limit
               );
             s.setString(1,field);
@@ -637,7 +636,6 @@ public class DAOFactory {
                 item.setNumber(results.getString(4));
                 item.setRank(results.getLong(5));
                 item.setPublished(results.getBoolean(6));
-                item.setDuplicated(results.getBoolean(7));
                 list.add(item);
             }
             results.close();

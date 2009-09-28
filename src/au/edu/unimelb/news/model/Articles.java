@@ -11,6 +11,7 @@ import au.edu.unimelb.news.dao.ArticleInfo;
 import au.edu.unimelb.news.dao.PublicationFactory;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.Publication;
+import au.edu.unimelb.news.dao.SearchResult;
 
 public class Articles {
 	
@@ -86,6 +87,10 @@ public class Articles {
 	}
 
 	public static String asLink(ArticleInfo article) {
+		return "article/" + article.getId();
+	}
+
+	public static String asLink(SearchResult article) {
 		return "article/" + article.getId();
 	}
 

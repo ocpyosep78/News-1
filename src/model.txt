@@ -122,10 +122,9 @@ search_result.status : String
 search_result.number : String
 search_result.rank : integer
 search_result.published : boolean
-search_result.duplicated : boolean
 search_result queryonly
 
-ArticleSimpleSearch query "select id,d.name,d.status,d.number,count(id),d.published,d.duplicated as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and match(field_value) against (?) group by article_id order by headingcount desc"
+ArticleSimpleSearch query "select d.id,d.name,d.status,d.number,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
 ArticleSimpleSearch parameter field : String
 ArticleSimpleSearch parameter keywords : String
 ArticleSimpleSearch returns search_result

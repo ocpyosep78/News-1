@@ -73,7 +73,7 @@
 <ul>
 <%
 	for(int i=0;i<ArticleSearch.PAGESIZE&&(_page*ArticleSearch.PAGESIZE+i<results.size());i++) {
-		SearchResult document = results.get(_page*DocumentSearch.PAGESIZE+i);
+		SearchResult document = results.get(_page*ArticleSearch.PAGESIZE+i);
 %>
 <li><a href="<%=Articles.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=Articles.asLink(document)%>)</span><br/>
 <%=document.getStatus() %> 
