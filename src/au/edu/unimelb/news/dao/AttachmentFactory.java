@@ -207,17 +207,26 @@ public class AttachmentFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into attachment ("+
+			s=c.prepareStatement(
+				"insert into attachment ("+
+					((item.getId()>0)?"id, ":"")+
                     "article_id, "+
                     "name, "+
                     "size, "+
                     "disk_name) "+
-                "values(?,?,?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?,?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getArticleId());
+            s.setString(3,item.getName());
+            s.setLong(4,item.getSize());
+            s.setString(5,item.getDiskName());
+			} else {
             s.setLong(1,item.getArticleId());
             s.setString(2,item.getName());
             s.setLong(3,item.getSize());
             s.setString(4,item.getDiskName());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

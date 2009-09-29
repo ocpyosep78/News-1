@@ -201,13 +201,20 @@ public class NewsletterViewCountFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into newsletter_view_count ("+
+			s=c.prepareStatement(
+				"insert into newsletter_view_count ("+
+					((item.getId()>0)?"id, ":"")+
                     "newsletter_id, "+
                     "views) "+
-                "values(?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getNewsletterId());
+            s.setLong(3,item.getViews());
+			} else {
             s.setLong(1,item.getNewsletterId());
             s.setLong(2,item.getViews());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

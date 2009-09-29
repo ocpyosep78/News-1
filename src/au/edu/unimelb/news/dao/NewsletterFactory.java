@@ -222,8 +222,9 @@ public class NewsletterFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into newsletter ("+
+			s=c.prepareStatement(
+				"insert into newsletter ("+
+					((item.getId()>0)?"id, ":"")+
                     "publication_id, "+
                     "name, "+
                     "status, "+
@@ -233,7 +234,19 @@ public class NewsletterFactory {
                     "archived, "+
                     "last_update, "+
                     "last_update_person_id) "+
-                "values(?,?,?,?,?,?,?,?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?,?,?,?,?,?,?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getPublicationId());
+            s.setString(3,item.getName());
+            s.setString(4,item.getStatus());
+            s.setLong(5,item.getVersion());
+            s.setBoolean(6,item.isPublished());
+            s.setBoolean(7,item.isDeleted());
+            s.setBoolean(8,item.isArchived());
+            s.setTimestamp(9,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(10,item.getLastUpdatePersonId());
+			} else {
             s.setLong(1,item.getPublicationId());
             s.setString(2,item.getName());
             s.setString(3,item.getStatus());
@@ -243,6 +256,7 @@ public class NewsletterFactory {
             s.setBoolean(7,item.isArchived());
             s.setTimestamp(8,new java.sql.Timestamp(item.getLastUpdate().getTime()));
             s.setLong(9,item.getLastUpdatePersonId());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

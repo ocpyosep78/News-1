@@ -198,11 +198,17 @@ public class TopicFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into topic ("+
+			s=c.prepareStatement(
+				"insert into topic ("+
+					((item.getId()>0)?"id, ":"")+
                     "name) "+
-                "values(?)");
+                "values("+(item.getId()>0?"?,":"")+"?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setString(2,item.getName());
+			} else {
             s.setString(1,item.getName());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

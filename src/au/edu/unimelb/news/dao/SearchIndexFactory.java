@@ -204,15 +204,23 @@ public class SearchIndexFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into search_index ("+
+			s=c.prepareStatement(
+				"insert into search_index ("+
+					((item.getId()>0)?"id, ":"")+
                     "article_id, "+
                     "field_name, "+
                     "field_value) "+
-                "values(?,?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getArticleId());
+            s.setString(3,item.getFieldName());
+            s.setString(4,item.getFieldValue());
+			} else {
             s.setLong(1,item.getArticleId());
             s.setString(2,item.getFieldName());
             s.setString(3,item.getFieldValue());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

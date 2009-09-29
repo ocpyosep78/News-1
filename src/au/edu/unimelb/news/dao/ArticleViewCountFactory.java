@@ -201,13 +201,20 @@ public class ArticleViewCountFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into article_view_count ("+
+			s=c.prepareStatement(
+				"insert into article_view_count ("+
+					((item.getId()>0)?"id, ":"")+
                     "article_id, "+
                     "views) "+
-                "values(?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getArticleId());
+            s.setLong(3,item.getViews());
+			} else {
             s.setLong(1,item.getArticleId());
             s.setLong(2,item.getViews());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

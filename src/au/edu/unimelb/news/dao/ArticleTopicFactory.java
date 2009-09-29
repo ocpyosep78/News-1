@@ -201,13 +201,20 @@ public class ArticleTopicFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into article_topic ("+
+			s=c.prepareStatement(
+				"insert into article_topic ("+
+					((item.getId()>0)?"id, ":"")+
                     "article_id, "+
                     "topic_id) "+
-                "values(?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getArticleId());
+            s.setLong(3,item.getTopicId());
+			} else {
             s.setLong(1,item.getArticleId());
             s.setLong(2,item.getTopicId());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();

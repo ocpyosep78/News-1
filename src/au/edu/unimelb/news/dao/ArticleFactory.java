@@ -225,8 +225,9 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
 
-            s=c.prepareStatement(
-                "insert into article ("+
+			s=c.prepareStatement(
+				"insert into article ("+
+					((item.getId()>0)?"id, ":"")+
                     "publication_id, "+
                     "name, "+
                     "byline, "+
@@ -237,7 +238,20 @@ public class ArticleFactory {
                     "published, "+
                     "last_update, "+
                     "last_update_person_id) "+
-                "values(?,?,?,?,?,?,?,?,?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?,?,?,?,?,?,?,?,?)");
+			if(item.getId()>0) {
+			s.setLong(1,item.getId());
+            s.setLong(2,item.getPublicationId());
+            s.setString(3,item.getName());
+            s.setString(4,item.getByline());
+            s.setString(5,item.getIntroduction());
+            s.setString(6,item.getDetails());
+            s.setString(7,item.getStatus());
+            s.setBoolean(8,item.isDeleted());
+            s.setBoolean(9,item.isPublished());
+            s.setTimestamp(10,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(11,item.getLastUpdatePersonId());
+			} else {
             s.setLong(1,item.getPublicationId());
             s.setString(2,item.getName());
             s.setString(3,item.getByline());
@@ -248,6 +262,7 @@ public class ArticleFactory {
             s.setBoolean(8,item.isPublished());
             s.setTimestamp(9,new java.sql.Timestamp(item.getLastUpdate().getTime()));
             s.setLong(10,item.getLastUpdatePersonId());
+			}
             s.execute();
             // Discover the unique id allocated to the new record
             ResultSet r = s.getGeneratedKeys();
