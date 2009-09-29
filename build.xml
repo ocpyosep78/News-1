@@ -4,21 +4,13 @@
 	<property name="src" value="src"/>
 	<property name="build" value="ant.build"/>
 	<property name="dist" value="dist"/>
-	<property name="warname" value="News"/>
-
-	<property name="uat.username" value="news_uat"/>
-	<property name="uat.password" value="asoih24982fhioqubaueb8e7geoi22f"/>
-	<property name="uat.manager" value="http://news-uat.unimelb.edu.au/uom_manager"/>
-
-	<property name="test.username" value="news_test"/>
-	<property name="test.password" value="rfuhfr389g724lkajlajbv87y28yf"/>
-	<property name="test.manager" value="http://news-test.unimelb.edu.au/uom_manager"/>
+	<property file="build.properties"/>
 
 	<target name="daogenerate" description="Regenerate the DAO Java code">
-			<mkdir dir="${build}"/>
-			<java jar="lib/DAOGenerator2.jar" fork="true">
-					<arg line="javagen src/model.txt" />
-			</java>
+		<mkdir dir="${build}"/>
+		<java jar="lib/DAOGenerator2.jar" fork="true">
+			<arg line="javagen src/model.txt" />
+		</java>
 	</target>
 
 	<target name="clean">
