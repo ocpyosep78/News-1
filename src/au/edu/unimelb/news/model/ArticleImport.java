@@ -150,14 +150,14 @@ public class ArticleImport {
 
 			doc.getDocumentElement().normalize();
 
-			NodeList articleNodes = doc.getElementsByTagName("articles");
-			if(articleNodes.getLength()>0)
+			Element root = doc.getDocumentElement();
+			
+			if(root.getNodeName().equalsIgnoreCase("articles"))
 				loadArticles(doc.getElementsByTagName("article"),user);
-
-
-			NodeList newsletterNodes = doc.getElementsByTagName("newsletters");
-			if(newsletterNodes.getLength()>0)
+			else if(root.getNodeName().equalsIgnoreCase("newsletters"))
 				loadNewsletters(doc.getElementsByTagName("newsletter"),user);
+			else
+				messages.add("XML file had unknown root element name: "+root.getNodeName());
 
 		} catch (SAXParseException err) {
 			String error="Import document parsing problem: line=" + err.getLineNumber() + " uri=" + err.getSystemId()+" message="+err.getMessage();
@@ -214,7 +214,6 @@ public class ArticleImport {
 		}
 		return null;
 	}
-	*/
 
 	private NodeList getChildNodeNamed(NodeList parent, String string) {
 		for(int s=0; s<parent.getLength() ; s++) {
@@ -223,6 +222,7 @@ public class ArticleImport {
 		}
 		return null;
 	}
+	*/
 
 	public String elementToString(org.w3c.dom.Node node) throws ParserConfigurationException {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -250,6 +250,7 @@ public class ArticleImport {
 			Node node=articles.item(s);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				String id = getElementTagString((Element)node,"id");
+				if(id.length()==0) continue;
 				String name = getElementTagString((Element)node,"name");
 				String publicationName = getElementTagString((Element)node,"publication");
 				String byline = getElementTagString((Element)node,"byline");
@@ -315,7 +316,7 @@ public class ArticleImport {
 			Node node=newsletters.item(s);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				String id = getElementTagString((Element)node,"id");
-				String name = getElementTagString((Element)node,"name");
+				String heading = getElementTagString((Element)node,"heading");
 				String publicationName = getElementTagString((Element)node,"publication");
 				String dateCreated = getElementTagString((Element)node,"dateCreated");
 				String username = getElementTagString((Element)node,"user");
@@ -328,9 +329,10 @@ public class ArticleImport {
 				}
 
 				Newsletter newsletter=new Newsletter();
-				newsletter.setId(Long.parseLong(id));
+				if(id.length()>0)
+					newsletter.setId(Long.parseLong(id));
 				newsletter.setPublicationId(publication.getId());
-				newsletter.setName(name);
+				newsletter.setName(heading);
 				newsletter.setPublished(true);
 				newsletter.setStatus("Published");
 				newsletter.setArchived(false);

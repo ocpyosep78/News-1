@@ -16,7 +16,7 @@
 
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
-	<a href="<%=Settings.baseUrl%>/">Policy Library</a> &gt;
+	<a href="<%=Settings.baseUrl%>/">University News</a> &gt;
 	<a href="<%=Settings.baseUrl%>/browse/ABC">Browse</a> &gt;
 	<%= StringHelper.escapeHtml(sections) %>
 </div>
