@@ -55,37 +55,63 @@
 
 	<target name="war-uat" depends="compile">
 		<mkdir dir="${dist}"/>
+		<mkdir dir="${dist}/metainf"/>
+		<copy file="WebContent/META-INF/context.xml.templ" tofile="${dist}/metainf/context.xml">
+			<filterchain>
+				<replacetokens>
+					<token key="database.name" value="${uat.database.name}"/>
+					<token key="database.username" value="${uat.database.username}"/>
+					<token key="database.password" value="${uat.database.password}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<war destfile="${dist}/${warname}.war" webxml="WebContent/WEB-INF/web.xml">
-			<metainf dir="WebContent/META-INF.uat/">
+			<metainf dir="${dist}/metainf/">
 				<include name="context.xml"/>
 			</metainf>
-			<fileset dir="WebContent">
-				<exclude name="META-INF/*"/>
-			</fileset>
+            <fileset dir="WebContent">
+                <exclude name="META-INF/*"/>
+                <exclude name="META-INF/**"/>
+                <exclude name="META-INF"/>
+            </fileset>
 			<lib dir="lib">
 				<exclude name="jsp-api.jar"/>
 				<exclude name="servlet-api.jar"/>
 			</lib>
 			<classes dir="${build}"/>
 		</war>
+		<delete dir="${dist}/metainf"/>
 		<antcall target="clean"/>
 	</target>
 
 	<target name="war-test" depends="compile">
 		<mkdir dir="${dist}"/>
+		<mkdir dir="${dist}/metainf"/>
+		<copy file="WebContent/META-INF/context.xml.templ" tofile="${dist}/metainf/context.xml">
+			<filterchain>
+				<replacetokens>
+					<token key="database.name" value="${test.database.name}"/>
+					<token key="database.username" value="${test.database.username}"/>
+					<token key="database.password" value="${test.database.password}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<war destfile="${dist}/${warname}.war" webxml="WebContent/WEB-INF/web.xml">
-			<metainf dir="WebContent/META-INF.test/">
+			<metainf dir="${dist}/metainf/">
 				<include name="context.xml"/>
 			</metainf>
-			<fileset dir="WebContent">
-				<exclude name="**/META-INF*/*"/>
-			</fileset>
+            <fileset dir="WebContent">
+                <exclude name="META-INF/*"/>
+                <exclude name="META-INF/**"/>
+                <exclude name="META-INF"/>
+            </fileset>
 			<lib dir="lib">
 				<exclude name="jsp-api.jar"/>
 				<exclude name="servlet-api.jar"/>
 			</lib>
 			<classes dir="${build}"/>
 		</war>
+		<delete dir="${dist}/metainf"/>
 		<antcall target="clean"/>
 	</target>
 

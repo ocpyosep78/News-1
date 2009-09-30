@@ -2,10 +2,10 @@
 <Context path="/">
 
   <Resource
-    url="jdbc:mysql://localhost:3306/news_dev?useUnicode=true&amp;characterEncoding=utf8"
-    username="news_dev"
+    url="jdbc:mysql://localhost:3306/@database.name@?useUnicode=true&amp;characterEncoding=utf8"
+    username="@database.username@"
     name="jdbc/news"
-    password="news_dev"
+    password="@database.password@"
     auth="Container"
     driverClassName="com.mysql.jdbc.Driver"
     maxActive="5" maxIdle="2" maxWait="10000"
@@ -14,10 +14,10 @@
     />
 
   <Resource
-    url="jdbc:mysql://localhost:3306/news_dev?useUnicode=true&amp;characterEncoding=utf8"
-    username="news_dev"
+    url="jdbc:mysql://localhost:3306/@database.name@?useUnicode=true&amp;characterEncoding=utf8"
+    username="@database.username@"
     name="jdbc/secdb"
-    password="news_dev"
+    password="@database.password@"
     auth="Container"
     driverClassName="com.mysql.jdbc.Driver"
     maxActive="5" maxIdle="2" maxWait="10000"

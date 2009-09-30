@@ -1,3 +1,5 @@
 build
 *.swp
 ant.build
+build.properties
+context.xml
