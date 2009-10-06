@@ -36,7 +36,6 @@ public class Configuration {
 	public static String appPrefix="";
 	private static String attachmentFolder="/tmp";
 	private static String pdfFolder="/tmp";
-	private static String[] status={"Preliminary","Final","Revised Final"};
 	private static String smtpServer="smtp.unimelb.edu.au";
 	private static String databaseId = "Unknown";
 
@@ -70,14 +69,6 @@ public class Configuration {
 	public static void setDatabaseId(String databaseId) {
 		Configuration.databaseId = databaseId;
 	}
-
-	public static String[] getStatus() {
-		return status;
-	}	
-
-	public static String getStatus(int index) {
-		return status[index];
-	}	
 
 	public static String getSmtpServer() {
 		return Configuration.smtpServer;
