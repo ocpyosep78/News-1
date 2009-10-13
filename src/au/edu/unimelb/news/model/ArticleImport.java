@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -257,8 +260,9 @@ public class ArticleImport {
 				String byline = getElementTagString((Element)node,"byline");
 				String topics = getElementTagString((Element)node,"topic");
 				String introduction = getElementTagString((Element)node,"introduction");
-				String date = getElementTagString((Element)node,"date");
-				String dateCreated = getElementTagString((Element)node,"dateCreated");
+				String publishedDate = getElementTagString((Element)node,"published_date");
+				String createdDate = getElementTagString((Element)node,"created_date");
+				String lastUpdated = getElementTagString((Element)node,"last_updated");
 				String contact = getElementTagString((Element)node,"contact");
 				String details = getElementTagString((Element)node,"details");
 				String username = getElementTagString((Element)node,"user");
@@ -272,6 +276,8 @@ public class ArticleImport {
 					continue;
 				}
 
+				DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+
 				Article article=new Article();
 				article.setId(Long.parseLong(id));
 				article.setPublicationId(publication.getId());
@@ -282,6 +288,21 @@ public class ArticleImport {
 				article.setPublished(true);
 				article.setStatus("Published");
 				article.setDeleted(false);
+				try {
+					article.setCreatedDate(format.parse(createdDate));
+				} catch (ParseException e) {
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
+				}
+				try {
+					article.setPublishedDate(format.parse(publishedDate));
+				} catch (ParseException e) {
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
+				}
+				try {
+					article.setLastUpdate(format.parse(lastUpdated));
+				} catch (ParseException e) {
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
+				}
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);

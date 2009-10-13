@@ -46,6 +46,8 @@ public class ArticleFactory {
                 "status varchar(100),"+
                 "deleted boolean,"+
                 "published boolean,"+
+                "published_date timestamp,"+
+                "created_date timestamp,"+
                 "last_update timestamp,"+
                 "last_update_person_id bigint"+
 				")DEFAULT CHARSET=utf8 ENGINE=innodb");
@@ -82,7 +84,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,publication_id,name,byline,introduction,details,status,deleted,published,last_update,last_update_person_id "+
+                "select id,publication_id,name,byline,introduction,details,status,deleted,published,published_date,created_date,last_update,last_update_person_id "+
                 "from article " +
                 "where id=?");
             s.setLong(1,id);
@@ -98,8 +100,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getTimestamp(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
+                item.setLastUpdatePersonId(results.getLong(13));
             }
             results.close();
             results=null;
@@ -129,7 +133,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "order by name " +
                 "limit "+index+","+limit
@@ -146,8 +150,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getTimestamp(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -236,9 +242,11 @@ public class ArticleFactory {
                     "status, "+
                     "deleted, "+
                     "published, "+
+                    "published_date, "+
+                    "created_date, "+
                     "last_update, "+
                     "last_update_person_id) "+
-                "values("+(item.getId()>0?"?,":"")+"?,?,?,?,?,?,?,?,?,?)");
+                "values("+(item.getId()>0?"?,":"")+"?,?,?,?,?,?,?,?,?,?,?,?)");
 			if(item.getId()>0) {
 			s.setLong(1,item.getId());
             s.setLong(2,item.getPublicationId());
@@ -249,8 +257,10 @@ public class ArticleFactory {
             s.setString(7,item.getStatus());
             s.setBoolean(8,item.isDeleted());
             s.setBoolean(9,item.isPublished());
-            s.setTimestamp(10,new java.sql.Timestamp(item.getLastUpdate().getTime()));
-            s.setLong(11,item.getLastUpdatePersonId());
+            s.setTimestamp(10,new java.sql.Timestamp(item.getPublishedDate().getTime()));
+            s.setTimestamp(11,new java.sql.Timestamp(item.getCreatedDate().getTime()));
+            s.setTimestamp(12,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(13,item.getLastUpdatePersonId());
 			} else {
             s.setLong(1,item.getPublicationId());
             s.setString(2,item.getName());
@@ -260,8 +270,10 @@ public class ArticleFactory {
             s.setString(6,item.getStatus());
             s.setBoolean(7,item.isDeleted());
             s.setBoolean(8,item.isPublished());
-            s.setTimestamp(9,new java.sql.Timestamp(item.getLastUpdate().getTime()));
-            s.setLong(10,item.getLastUpdatePersonId());
+            s.setTimestamp(9,new java.sql.Timestamp(item.getPublishedDate().getTime()));
+            s.setTimestamp(10,new java.sql.Timestamp(item.getCreatedDate().getTime()));
+            s.setTimestamp(11,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(12,item.getLastUpdatePersonId());
 			}
             s.execute();
             // Discover the unique id allocated to the new record
@@ -287,6 +299,8 @@ public class ArticleFactory {
                 "status="+item.getStatus()+", "+ 
                 "deleted="+item.isDeleted()+", "+ 
                 "published="+item.isPublished()+", "+ 
+                "published_date="+item.getPublishedDate()+", "+ 
+                "created_date="+item.getCreatedDate()+", "+ 
                 "last_update="+item.getLastUpdate()+", "+ 
                 "last_update_person_id="+item.getLastUpdatePersonId()+", "+ 
         "");
@@ -307,7 +321,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "update article set publication_id=?, name=?, byline=?, introduction=?, details=?, status=?, deleted=?, published=?, last_update=?, last_update_person_id=? "+
+                "update article set publication_id=?, name=?, byline=?, introduction=?, details=?, status=?, deleted=?, published=?, published_date=?, created_date=?, last_update=?, last_update_person_id=? "+
                 "where id=?");
             s.setLong(1,item.getPublicationId());
             s.setString(2,item.getName());
@@ -317,9 +331,11 @@ public class ArticleFactory {
             s.setString(6,item.getStatus());
             s.setBoolean(7,item.isDeleted());
             s.setBoolean(8,item.isPublished());
-            s.setTimestamp(9,new java.sql.Timestamp(item.getLastUpdate().getTime()));
-            s.setLong(10,item.getLastUpdatePersonId());
-            s.setLong(11,item.getId());
+            s.setTimestamp(9,new java.sql.Timestamp(item.getPublishedDate().getTime()));
+            s.setTimestamp(10,new java.sql.Timestamp(item.getCreatedDate().getTime()));
+            s.setTimestamp(11,new java.sql.Timestamp(item.getLastUpdate().getTime()));
+            s.setLong(12,item.getLastUpdatePersonId());
+            s.setLong(13,item.getId());
             s.execute();
             s.close();
             s=null;
@@ -384,7 +400,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? " +
                 "order by name " +
@@ -403,8 +419,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -510,7 +528,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? " +
                 "order by name " +
@@ -529,8 +547,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -636,7 +656,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? " +
                 "order by name " +
@@ -655,8 +675,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -762,7 +784,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? " +
                 "order by name " +
@@ -781,8 +803,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -888,7 +912,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where published=? " +
                 "order by name " +
@@ -907,8 +931,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -999,6 +1025,262 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on publishedDate. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublishedDate(Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Published Date. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByPublishedDate(Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where published_date=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Published Date. 
+     *
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByPublishedDate(Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where published_date=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on createdDate. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByCreatedDate(Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Created Date. 
+     *
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByCreatedDate(Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where created_date=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Created Date. 
+     *
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByCreatedDate(Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where created_date=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on lastUpdate. 
      *
      * @param lastUpdate Value to match on Last Update.
@@ -1014,7 +1296,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update=? " +
                 "order by name " +
@@ -1033,8 +1315,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1140,7 +1424,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? " +
                 "order by name " +
@@ -1159,8 +1443,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1267,7 +1553,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and publication_id=? " +
                 "order by name " +
@@ -1287,8 +1573,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1399,7 +1687,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and publication_id=? " +
                 "order by name " +
@@ -1419,8 +1707,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1531,7 +1821,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and publication_id=? " +
                 "order by name " +
@@ -1551,8 +1841,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1663,7 +1955,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and publication_id=? " +
                 "order by name " +
@@ -1683,8 +1975,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1795,7 +2089,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and publication_id=? " +
                 "order by name " +
@@ -1815,8 +2109,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -1927,7 +2223,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where publication_id=? and deleted=? " +
                 "order by name " +
@@ -1947,8 +2243,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2059,7 +2357,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where publication_id=? and published=? " +
                 "order by name " +
@@ -2079,8 +2377,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2175,6 +2475,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on publicationId publishedDate. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublicationIdPublishedDate(Long publicationId, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where publication_id=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Publication Id Published Date. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByPublicationIdPublishedDate(Long publicationId, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where publication_id=? and published_date=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Publication Id Published Date. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByPublicationIdPublishedDate(Long publicationId, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where publication_id=? and published_date=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on publicationId createdDate. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublicationIdCreatedDate(Long publicationId, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where publication_id=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Publication Id Created Date. 
+     *
+     * @param publicationId Value to match on Publication Id.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByPublicationIdCreatedDate(Long publicationId, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where publication_id=? and created_date=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Publication Id Created Date. 
+     *
+     * @param PublicationId Value to match on Publication Id.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByPublicationIdCreatedDate(Long publicationId, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where publication_id=? and created_date=? " +
+                "");
+            s.setLong(1,publicationId);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on publicationId lastUpdate. 
      *
      * @param publicationId Value to match on Publication Id.
@@ -2191,7 +2759,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where publication_id=? and last_update=? " +
                 "order by name " +
@@ -2211,8 +2779,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2323,7 +2893,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where publication_id=? and last_update_person_id=? " +
                 "order by name " +
@@ -2343,8 +2913,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2455,7 +3027,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and byline=? " +
                 "order by name " +
@@ -2475,8 +3047,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2587,7 +3161,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and introduction=? " +
                 "order by name " +
@@ -2607,8 +3181,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2719,7 +3295,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and details=? " +
                 "order by name " +
@@ -2739,8 +3315,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2851,7 +3429,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and status=? " +
                 "order by name " +
@@ -2871,8 +3449,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -2983,7 +3563,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and deleted=? " +
                 "order by name " +
@@ -3003,8 +3583,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3115,7 +3697,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and published=? " +
                 "order by name " +
@@ -3135,8 +3717,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3231,6 +3815,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on name publishedDate. 
+     *
+     * @param name Value to match on Name.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByNamePublishedDate(String name, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where name=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,name);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Name Published Date. 
+     *
+     * @param name Value to match on Name.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByNamePublishedDate(String name, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where name=? and published_date=? " +
+                "");
+            s.setString(1,name);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Name Published Date. 
+     *
+     * @param Name Value to match on Name.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByNamePublishedDate(String name, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where name=? and published_date=? " +
+                "");
+            s.setString(1,name);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on name createdDate. 
+     *
+     * @param name Value to match on Name.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByNameCreatedDate(String name, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where name=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,name);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Name Created Date. 
+     *
+     * @param name Value to match on Name.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByNameCreatedDate(String name, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where name=? and created_date=? " +
+                "");
+            s.setString(1,name);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Name Created Date. 
+     *
+     * @param Name Value to match on Name.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByNameCreatedDate(String name, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where name=? and created_date=? " +
+                "");
+            s.setString(1,name);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on name lastUpdate. 
      *
      * @param name Value to match on Name.
@@ -3247,7 +4099,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and last_update=? " +
                 "order by name " +
@@ -3267,8 +4119,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3379,7 +4233,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? and last_update_person_id=? " +
                 "order by name " +
@@ -3399,8 +4253,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3511,7 +4367,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and introduction=? " +
                 "order by name " +
@@ -3531,8 +4387,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3643,7 +4501,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and details=? " +
                 "order by name " +
@@ -3663,8 +4521,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3775,7 +4635,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and status=? " +
                 "order by name " +
@@ -3795,8 +4655,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -3907,7 +4769,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and deleted=? " +
                 "order by name " +
@@ -3927,8 +4789,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4039,7 +4903,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and published=? " +
                 "order by name " +
@@ -4059,8 +4923,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4155,6 +5021,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on byline publishedDate. 
+     *
+     * @param byline Value to match on Byline.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByBylinePublishedDate(String byline, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where byline=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,byline);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Byline Published Date. 
+     *
+     * @param byline Value to match on Byline.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByBylinePublishedDate(String byline, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where byline=? and published_date=? " +
+                "");
+            s.setString(1,byline);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Byline Published Date. 
+     *
+     * @param Byline Value to match on Byline.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByBylinePublishedDate(String byline, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where byline=? and published_date=? " +
+                "");
+            s.setString(1,byline);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on byline createdDate. 
+     *
+     * @param byline Value to match on Byline.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByBylineCreatedDate(String byline, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where byline=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,byline);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Byline Created Date. 
+     *
+     * @param byline Value to match on Byline.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByBylineCreatedDate(String byline, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where byline=? and created_date=? " +
+                "");
+            s.setString(1,byline);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Byline Created Date. 
+     *
+     * @param Byline Value to match on Byline.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByBylineCreatedDate(String byline, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where byline=? and created_date=? " +
+                "");
+            s.setString(1,byline);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on byline lastUpdate. 
      *
      * @param byline Value to match on Byline.
@@ -4171,7 +5305,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and last_update=? " +
                 "order by name " +
@@ -4191,8 +5325,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4303,7 +5439,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where byline=? and last_update_person_id=? " +
                 "order by name " +
@@ -4323,8 +5459,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4435,7 +5573,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and details=? " +
                 "order by name " +
@@ -4455,8 +5593,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4567,7 +5707,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and status=? " +
                 "order by name " +
@@ -4587,8 +5727,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4699,7 +5841,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and deleted=? " +
                 "order by name " +
@@ -4719,8 +5861,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4831,7 +5975,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and published=? " +
                 "order by name " +
@@ -4851,8 +5995,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -4947,6 +6093,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on introduction publishedDate. 
+     *
+     * @param introduction Value to match on Introduction.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByIntroductionPublishedDate(String introduction, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where introduction=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,introduction);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Introduction Published Date. 
+     *
+     * @param introduction Value to match on Introduction.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByIntroductionPublishedDate(String introduction, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where introduction=? and published_date=? " +
+                "");
+            s.setString(1,introduction);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Introduction Published Date. 
+     *
+     * @param Introduction Value to match on Introduction.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByIntroductionPublishedDate(String introduction, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where introduction=? and published_date=? " +
+                "");
+            s.setString(1,introduction);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on introduction createdDate. 
+     *
+     * @param introduction Value to match on Introduction.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByIntroductionCreatedDate(String introduction, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where introduction=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,introduction);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Introduction Created Date. 
+     *
+     * @param introduction Value to match on Introduction.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByIntroductionCreatedDate(String introduction, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where introduction=? and created_date=? " +
+                "");
+            s.setString(1,introduction);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Introduction Created Date. 
+     *
+     * @param Introduction Value to match on Introduction.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByIntroductionCreatedDate(String introduction, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where introduction=? and created_date=? " +
+                "");
+            s.setString(1,introduction);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on introduction lastUpdate. 
      *
      * @param introduction Value to match on Introduction.
@@ -4963,7 +6377,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and last_update=? " +
                 "order by name " +
@@ -4983,8 +6397,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5095,7 +6511,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where introduction=? and last_update_person_id=? " +
                 "order by name " +
@@ -5115,8 +6531,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5227,7 +6645,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and status=? " +
                 "order by name " +
@@ -5247,8 +6665,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5359,7 +6779,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and deleted=? " +
                 "order by name " +
@@ -5379,8 +6799,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5491,7 +6913,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and published=? " +
                 "order by name " +
@@ -5511,8 +6933,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5607,6 +7031,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on details publishedDate. 
+     *
+     * @param details Value to match on Details.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByDetailsPublishedDate(String details, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where details=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,details);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Details Published Date. 
+     *
+     * @param details Value to match on Details.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByDetailsPublishedDate(String details, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where details=? and published_date=? " +
+                "");
+            s.setString(1,details);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Details Published Date. 
+     *
+     * @param Details Value to match on Details.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByDetailsPublishedDate(String details, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where details=? and published_date=? " +
+                "");
+            s.setString(1,details);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on details createdDate. 
+     *
+     * @param details Value to match on Details.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByDetailsCreatedDate(String details, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where details=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,details);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Details Created Date. 
+     *
+     * @param details Value to match on Details.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByDetailsCreatedDate(String details, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where details=? and created_date=? " +
+                "");
+            s.setString(1,details);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Details Created Date. 
+     *
+     * @param Details Value to match on Details.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByDetailsCreatedDate(String details, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where details=? and created_date=? " +
+                "");
+            s.setString(1,details);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on details lastUpdate. 
      *
      * @param details Value to match on Details.
@@ -5623,7 +7315,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and last_update=? " +
                 "order by name " +
@@ -5643,8 +7335,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5755,7 +7449,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where details=? and last_update_person_id=? " +
                 "order by name " +
@@ -5775,8 +7469,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -5887,7 +7583,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and deleted=? " +
                 "order by name " +
@@ -5907,8 +7603,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6019,7 +7717,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and published=? " +
                 "order by name " +
@@ -6039,8 +7737,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6135,6 +7835,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on status publishedDate. 
+     *
+     * @param status Value to match on Status.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByStatusPublishedDate(String status, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where status=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,status);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Status Published Date. 
+     *
+     * @param status Value to match on Status.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByStatusPublishedDate(String status, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where status=? and published_date=? " +
+                "");
+            s.setString(1,status);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Status Published Date. 
+     *
+     * @param Status Value to match on Status.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByStatusPublishedDate(String status, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where status=? and published_date=? " +
+                "");
+            s.setString(1,status);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on status createdDate. 
+     *
+     * @param status Value to match on Status.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByStatusCreatedDate(String status, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where status=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setString(1,status);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Status Created Date. 
+     *
+     * @param status Value to match on Status.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByStatusCreatedDate(String status, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where status=? and created_date=? " +
+                "");
+            s.setString(1,status);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Status Created Date. 
+     *
+     * @param Status Value to match on Status.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByStatusCreatedDate(String status, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where status=? and created_date=? " +
+                "");
+            s.setString(1,status);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on status lastUpdate. 
      *
      * @param status Value to match on Status.
@@ -6151,7 +8119,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and last_update=? " +
                 "order by name " +
@@ -6171,8 +8139,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6283,7 +8253,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where status=? and last_update_person_id=? " +
                 "order by name " +
@@ -6303,8 +8273,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6415,7 +8387,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where deleted=? and published=? " +
                 "order by name " +
@@ -6435,8 +8407,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6531,6 +8505,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on publishedDate deleted. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param deleted Value to match on Deleted.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublishedDateDeleted(Date publishedDate, Boolean deleted,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where published_date=? and deleted=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setBoolean(2,deleted);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Published Date Deleted. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param deleted Value to match on Deleted.
+     */
+    public long countByPublishedDateDeleted(Date publishedDate, Boolean deleted) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where published_date=? and deleted=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setBoolean(2,deleted);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Published Date Deleted. 
+     *
+     * @param PublishedDate Value to match on Published Date.
+     * @param Deleted Value to match on Deleted.
+     */
+    public long deleteByPublishedDateDeleted(Date publishedDate, Boolean deleted) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where published_date=? and deleted=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setBoolean(2,deleted);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on createdDate deleted. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param deleted Value to match on Deleted.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByCreatedDateDeleted(Date createdDate, Boolean deleted,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where created_date=? and deleted=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setBoolean(2,deleted);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Created Date Deleted. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param deleted Value to match on Deleted.
+     */
+    public long countByCreatedDateDeleted(Date createdDate, Boolean deleted) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where created_date=? and deleted=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setBoolean(2,deleted);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Created Date Deleted. 
+     *
+     * @param CreatedDate Value to match on Created Date.
+     * @param Deleted Value to match on Deleted.
+     */
+    public long deleteByCreatedDateDeleted(Date createdDate, Boolean deleted) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where created_date=? and deleted=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setBoolean(2,deleted);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on lastUpdate deleted. 
      *
      * @param lastUpdate Value to match on Last Update.
@@ -6547,7 +8789,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update=? and deleted=? " +
                 "order by name " +
@@ -6567,8 +8809,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6679,7 +8923,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? and deleted=? " +
                 "order by name " +
@@ -6699,8 +8943,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6795,6 +9041,274 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on publishedDate published. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param published Value to match on Published.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublishedDatePublished(Date publishedDate, Boolean published,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where published_date=? and published=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setBoolean(2,published);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Published Date Published. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param published Value to match on Published.
+     */
+    public long countByPublishedDatePublished(Date publishedDate, Boolean published) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where published_date=? and published=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setBoolean(2,published);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Published Date Published. 
+     *
+     * @param PublishedDate Value to match on Published Date.
+     * @param Published Value to match on Published.
+     */
+    public long deleteByPublishedDatePublished(Date publishedDate, Boolean published) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where published_date=? and published=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setBoolean(2,published);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on createdDate published. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param published Value to match on Published.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByCreatedDatePublished(Date createdDate, Boolean published,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where created_date=? and published=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setBoolean(2,published);
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Created Date Published. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param published Value to match on Published.
+     */
+    public long countByCreatedDatePublished(Date createdDate, Boolean published) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where created_date=? and published=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setBoolean(2,published);
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Created Date Published. 
+     *
+     * @param CreatedDate Value to match on Created Date.
+     * @param Published Value to match on Published.
+     */
+    public long deleteByCreatedDatePublished(Date createdDate, Boolean published) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where created_date=? and published=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setBoolean(2,published);
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on lastUpdate published. 
      *
      * @param lastUpdate Value to match on Last Update.
@@ -6811,7 +9325,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update=? and published=? " +
                 "order by name " +
@@ -6831,8 +9345,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -6943,7 +9459,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? and published=? " +
                 "order by name " +
@@ -6963,8 +9479,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -7059,6 +9577,676 @@ public class ArticleFactory {
 
     /**
      * Retrieve a set from the Article data source
+     * matching on publishedDate createdDate. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublishedDateCreatedDate(Date publishedDate, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where published_date=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Published Date Created Date. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByPublishedDateCreatedDate(Date publishedDate, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where published_date=? and created_date=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Published Date Created Date. 
+     *
+     * @param PublishedDate Value to match on Published Date.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByPublishedDateCreatedDate(Date publishedDate, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where published_date=? and created_date=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on publishedDate lastUpdate. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param lastUpdate Value to match on Last Update.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByPublishedDateLastUpdate(Date publishedDate, Date lastUpdate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where published_date=? and last_update=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Published Date Last Update. 
+     *
+     * @param publishedDate Value to match on Published Date.
+     * @param lastUpdate Value to match on Last Update.
+     */
+    public long countByPublishedDateLastUpdate(Date publishedDate, Date lastUpdate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where published_date=? and last_update=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Published Date Last Update. 
+     *
+     * @param PublishedDate Value to match on Published Date.
+     * @param LastUpdate Value to match on Last Update.
+     */
+    public long deleteByPublishedDateLastUpdate(Date publishedDate, Date lastUpdate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where published_date=? and last_update=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(publishedDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on lastUpdatePersonId publishedDate. 
+     *
+     * @param lastUpdatePersonId Value to match on Last Update Person Id.
+     * @param publishedDate Value to match on Published Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByLastUpdatePersonIdPublishedDate(Long lastUpdatePersonId, Date publishedDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where last_update_person_id=? and published_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,lastUpdatePersonId);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Last Update Person Id Published Date. 
+     *
+     * @param lastUpdatePersonId Value to match on Last Update Person Id.
+     * @param publishedDate Value to match on Published Date.
+     */
+    public long countByLastUpdatePersonIdPublishedDate(Long lastUpdatePersonId, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where last_update_person_id=? and published_date=? " +
+                "");
+            s.setLong(1,lastUpdatePersonId);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Last Update Person Id Published Date. 
+     *
+     * @param LastUpdatePersonId Value to match on Last Update Person Id.
+     * @param PublishedDate Value to match on Published Date.
+     */
+    public long deleteByLastUpdatePersonIdPublishedDate(Long lastUpdatePersonId, Date publishedDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where last_update_person_id=? and published_date=? " +
+                "");
+            s.setLong(1,lastUpdatePersonId);
+            s.setTimestamp(2,new java.sql.Timestamp(publishedDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on createdDate lastUpdate. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param lastUpdate Value to match on Last Update.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByCreatedDateLastUpdate(Date createdDate, Date lastUpdate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where created_date=? and last_update=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Created Date Last Update. 
+     *
+     * @param createdDate Value to match on Created Date.
+     * @param lastUpdate Value to match on Last Update.
+     */
+    public long countByCreatedDateLastUpdate(Date createdDate, Date lastUpdate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where created_date=? and last_update=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Created Date Last Update. 
+     *
+     * @param CreatedDate Value to match on Created Date.
+     * @param LastUpdate Value to match on Last Update.
+     */
+    public long deleteByCreatedDateLastUpdate(Date createdDate, Date lastUpdate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where created_date=? and last_update=? " +
+                "");
+            s.setTimestamp(1,new java.sql.Timestamp(createdDate.getTime()));
+            s.setTimestamp(2,new java.sql.Timestamp(lastUpdate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
+     * matching on lastUpdatePersonId createdDate. 
+     *
+     * @param lastUpdatePersonId Value to match on Last Update Person Id.
+     * @param createdDate Value to match on Created Date.
+     * @param index Search results should start from this item.
+     * @param limit Search results should return at most this many items.
+     */
+    public List<Article> getByLastUpdatePersonIdCreatedDate(Long lastUpdatePersonId, Date createdDate,  long index, long limit) throws IOException {
+        List<Article> list=new ArrayList<Article>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        Article item=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
+                "from article " +
+                "where last_update_person_id=? and created_date=? " +
+                "order by name " +
+                "limit "+index+","+limit
+                );
+            s.setLong(1,lastUpdatePersonId);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            while(results.next()) {
+                item=new Article();
+                item.setId(results.getLong(1));
+                item.setPublicationId(results.getLong(2));
+                item.setName(results.getString(3));
+                item.setByline(results.getString(4));
+                item.setIntroduction(results.getString(5));
+                item.setDetails(results.getString(6));
+                item.setStatus(results.getString(7));
+                item.setDeleted(results.getBoolean(8));
+                item.setPublished(results.getBoolean(9));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return list;
+    }
+
+    /**
+     * Count number of items in the <i>Article</i> data source
+     * matching on Last Update Person Id Created Date. 
+     *
+     * @param lastUpdatePersonId Value to match on Last Update Person Id.
+     * @param createdDate Value to match on Created Date.
+     */
+    public long countByLastUpdatePersonIdCreatedDate(Long lastUpdatePersonId, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select count(*)"+
+                "from article " +
+                "where last_update_person_id=? and created_date=? " +
+                "");
+            s.setLong(1,lastUpdatePersonId);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            results=s.executeQuery();
+            if(results.next()) {
+                total=results.getLong(1);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Delete of item(s) in the Article data source
+     * matching on Last Update Person Id Created Date. 
+     *
+     * @param LastUpdatePersonId Value to match on Last Update Person Id.
+     * @param CreatedDate Value to match on Created Date.
+     */
+    public long deleteByLastUpdatePersonIdCreatedDate(Long lastUpdatePersonId, Date createdDate) throws IOException {
+        long total=0;
+        Connection c=null;
+        PreparedStatement s=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "delete from article " +
+                "where last_update_person_id=? and created_date=? " +
+                "");
+            s.setLong(1,lastUpdatePersonId);
+            s.setTimestamp(2,new java.sql.Timestamp(createdDate.getTime()));
+            s.executeUpdate();
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+        return total;
+    }
+
+    /**
+     * Retrieve a set from the Article data source
      * matching on lastUpdatePersonId lastUpdate. 
      *
      * @param lastUpdatePersonId Value to match on Last Update Person Id.
@@ -7075,7 +10263,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where last_update_person_id=? and last_update=? " +
                 "order by name " +
@@ -7095,8 +10283,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -7206,7 +10396,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where name=? " +
                 "order by name " +
@@ -7225,8 +10415,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -7332,7 +10524,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where deleted=? " +
                 "order by name " +
@@ -7351,8 +10543,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();
@@ -7458,7 +10652,7 @@ public class ArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, publication_id, name, byline, introduction, details, status, deleted, published, last_update, last_update_person_id "+
+                "select id, publication_id, name, byline, introduction, details, status, deleted, published, published_date, created_date, last_update, last_update_person_id "+
                 "from article " +
                 "where publication_id=? " +
                 "order by name " +
@@ -7477,8 +10671,10 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setLastUpdate(results.getDate(10));
-                item.setLastUpdatePersonId(results.getLong(11));
+                item.setPublishedDate(results.getDate(10));
+                item.setCreatedDate(results.getDate(11));
+                item.setLastUpdate(results.getDate(12));
+                item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
             results.close();

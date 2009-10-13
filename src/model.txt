@@ -37,7 +37,6 @@ newsletter_article.section rule maxlength 50
 newsletter_article.picture rule maxlength 50
 newsletter_article display order newsletter_id+sort_order
 
-
 NewsletterViewCount.newsletter_id : long
 NewsletterViewCount.views : long
 
@@ -58,6 +57,8 @@ article.details : String
 article.status : String
 article.deleted : bool
 article.published : bool
+article.published_date : Date
+article.created_date : Date
 article.last_update : Date
 article.last_update_person_id : integer
 article.name rule maxlength 250

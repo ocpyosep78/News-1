@@ -20,6 +20,8 @@ public class Article implements Comparable<Article> {
 	private String status = "";
 	private boolean deleted;
 	private boolean published;
+	private Date publishedDate = new Date();
+	private Date createdDate = new Date();
 	private Date lastUpdate = new Date();
 	private long lastUpdatePersonId;
 
@@ -57,6 +59,14 @@ public class Article implements Comparable<Article> {
 
 	public boolean isPublished() {
 		return published;
+	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
 	public Date getLastUpdate() {
@@ -103,6 +113,14 @@ public class Article implements Comparable<Article> {
 		 this.published = published;
 	}
 
+	public void setPublishedDate(Date publishedDate) {
+		 this.publishedDate = publishedDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		 this.createdDate = createdDate;
+	}
+
 	public void setLastUpdate(Date lastUpdate) {
 		 this.lastUpdate = lastUpdate;
 	}
@@ -135,6 +153,12 @@ public class Article implements Comparable<Article> {
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;
+		}
+		if(publishedDate.compareTo(o.getPublishedDate())!=0) {
+			return publishedDate.compareTo(o.getPublishedDate());
+		}
+		if(createdDate.compareTo(o.getCreatedDate())!=0) {
+			return createdDate.compareTo(o.getCreatedDate());
 		}
 		if(lastUpdate.compareTo(o.getLastUpdate())!=0) {
 			return lastUpdate.compareTo(o.getLastUpdate());

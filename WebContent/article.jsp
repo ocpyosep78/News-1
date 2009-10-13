@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import='java.util.*' %>
+<%@ page import='java.text.*' %>
 <%@ page import='au.edu.unimelb.news.*' %>
 <%@ page import='au.edu.unimelb.news.model.*' %>
 <%@ page import='au.edu.unimelb.helper.*' %>
@@ -37,7 +38,8 @@ for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByArtic
 	}
 }
 if(!locationFound) {
-	out.println("<p class=\"source\">"+Publications.get(article.getPublicationId()).getName()+", "+article.getLastUpdate()+"</p>");
+	DateFormat format = new SimpleDateFormat("EEEE d MMMM yyyy");
+	out.println("<p class=\"source\">"+Publications.get(article.getPublicationId()).getName()+", "+format.format(article.getLastUpdate())+"</p>");
 }
 %>
 <p><b><%= StringHelper.escapeHtml(article.getIntroduction()) %></b></p>

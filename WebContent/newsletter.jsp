@@ -37,13 +37,19 @@ for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsl
 		storyType = item.getSection();
 		out.println("<h3>"+storyType+"</h3>");
 	}
+
+	if(article != null) {
 %>
 
 <a href="../<%=Articles.asLink(article)%>"><%= StringHelper.escapeHtml(article.getName()) %></a><br/>
 
 <p><%= article.getIntroduction() %></p>
 
-<% } %>
+<%
+	} else {
+		out.println("<p>Article "+item.getArticleId()+" does not exist.</p>");
+	}
+} %>
 
 </div>
 <% LayoutHelper.footer(out); %>
