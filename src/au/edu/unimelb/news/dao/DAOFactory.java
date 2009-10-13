@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.ArrayList;
 public class DAOFactory {
 
+    private static NewsletterArticleFactory newsletterArticleFactory;
     private static TopicFactory topicFactory;
     private static PublicationFactory publicationFactory;
     private static NewsletterViewCountFactory newsletterViewCountFactory;
@@ -43,6 +44,7 @@ public class DAOFactory {
 		if(dataSource==null)
 			throw new IOException("Problem setting up / reading database DataSource");
 
+        newsletterArticleFactory=new NewsletterArticleFactory(dataSource);
         topicFactory=new TopicFactory(dataSource);
         publicationFactory=new PublicationFactory(dataSource);
         newsletterViewCountFactory=new NewsletterViewCountFactory(dataSource);
@@ -53,6 +55,7 @@ public class DAOFactory {
         searchIndexFactory=new SearchIndexFactory(dataSource);
         newsletterFactory=new NewsletterFactory(dataSource);
 
+        newsletterArticleFactory.setup();
         topicFactory.setup();
         publicationFactory.setup();
         newsletterViewCountFactory.setup();
@@ -63,6 +66,7 @@ public class DAOFactory {
         searchIndexFactory.setup();
         newsletterFactory.setup();
 
+        newsletterArticleFactory.postSetup();
         topicFactory.postSetup();
         publicationFactory.postSetup();
         newsletterViewCountFactory.postSetup();
@@ -89,6 +93,13 @@ public class DAOFactory {
 			executeCommand("create fulltext index si_search on search_index (field_value);");
 		} catch(IOException e) { e.printStackTrace(); }
 
+    }
+
+    public static NewsletterArticleFactory getNewsletterArticleFactory() throws IOException {
+        if(newsletterArticleFactory==null) {
+            setup();
+        }
+        return newsletterArticleFactory;
     }
 
     public static TopicFactory getTopicFactory() throws IOException {

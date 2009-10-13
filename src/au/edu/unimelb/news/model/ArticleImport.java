@@ -30,6 +30,7 @@ import au.edu.unimelb.news.dao.ArticleTopic;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.Article;
 import au.edu.unimelb.news.dao.Newsletter;
+import au.edu.unimelb.news.dao.NewsletterArticle;
 import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.dao.Topic;
 import au.edu.unimelb.news.model.Topics;
@@ -66,7 +67,7 @@ public class ArticleImport {
 
 		LogHelper.log("System","Import",user.getPersonId(),"Created import folder: "+workingFolder,user.getIP());
 
-		processZipfile(in, user);		
+		processZipfile(in, user);
 		processDataFiles(user);
 
 		try {
@@ -151,7 +152,7 @@ public class ArticleImport {
 			doc.getDocumentElement().normalize();
 
 			Element root = doc.getDocumentElement();
-			
+
 			if(root.getNodeName().equalsIgnoreCase("articles"))
 				loadArticles(doc.getElementsByTagName("article"),user);
 			else if(root.getNodeName().equalsIgnoreCase("newsletters"))
@@ -164,17 +165,17 @@ public class ArticleImport {
 			messages.add(error);
 			LogHelper.log("System","Import",user.getPersonId(),error,user.getIP());
 			return;
-		}catch (SAXException e) {
+		} catch (SAXException e) {
 			Exception x = e.getException();
 			((x == null) ? e : x).printStackTrace();
 			LogHelper.log("System","Import",user.getPersonId(),"Index parsing problem: line=" + ((x == null) ? e : x).getMessage(),user.getIP());
 			messages.add("Index parsing problem: line=" + ((x == null) ? e : x).getMessage());
 			return;
-		}catch (IOException t) {
+		} catch (IOException t) {
 			messages.add("Database problem occured while processing the data file: "+t.getMessage());
 			LogHelper.log("System","Import",user.getPersonId(),"Database problem occured while processing the data file: "+t.getMessage(),user.getIP());
 			return;
-		}catch (Throwable t) {
+		} catch (Throwable t) {
 			messages.add("Problem occured while processing the data file: "+t.getMessage());
 			LogHelper.log("System","Import",user.getPersonId(),"Unexpected problem occured while processing the data file: "+t.getMessage(),user.getIP());
 			t.printStackTrace();
@@ -205,7 +206,6 @@ public class ArticleImport {
 		return value.trim();
 	}
 
-	/*
 	private NodeList getChildNodeNamed(Node parent, String string) {
 		NodeList nodes = parent.getChildNodes();
 		for(int s=0; s<nodes.getLength() ; s++) {
@@ -215,6 +215,7 @@ public class ArticleImport {
 		return null;
 	}
 
+	/*
 	private NodeList getChildNodeNamed(NodeList parent, String string) {
 		for(int s=0; s<parent.getLength() ; s++) {
 			if(parent.item(s).getNodeName().equalsIgnoreCase(string))
@@ -290,7 +291,7 @@ public class ArticleImport {
 					continue;
 				}
 				article.setLastUpdatePersonId(people.get(0).getId());
-				
+
 				article = DAOFactory.getArticleFactory().insert(article);
 
 				for(String item : topics.split(" *, *")) {
@@ -348,20 +349,24 @@ public class ArticleImport {
 
 				newsletter = DAOFactory.getNewsletterFactory().insert(newsletter);
 
-				/*
-				for(String item : topics.split(" *, *")) {
-					if(item.length()==0) continue;
-					Topic topic = Topics.get(item);
-					if(topic == null) {
-						messages.add("Article referring to an unknown topic: "+item);
-						continue;
+				NodeList articles = this.getChildNodeNamed(node, "articles");
+				for(int t=0; t<articles.getLength() ; t++) {
+					if(articles.item(t).getNodeName().equalsIgnoreCase("article")) {
+						NodeList article = articles.item(t).getChildNodes();
+						String type = getElementTagString((Element)article,"type");
+						String articleId = getElementTagString((Element)article,"article_id");
+						String sortOrder = getElementTagString((Element)article,"sort_order");
+						String picture = getElementTagString((Element)article,"picture");
+						NewsletterArticle item = new NewsletterArticle();
+						item.setNewsletterId(newsletter.getId());
+						item.setArticleId(Long.parseLong(articleId));
+						item.setSortOrder(Long.parseLong(sortOrder));
+						item.setType(type);
+						item.setPicture(picture);
+						DAOFactory.getNewsletterArticleFactory().insert(item);
 					}
-					ArticleTopic at = new ArticleTopic();
-					at.setArticleId(article.getId());
-					at.setTopicId(topic.getId());
-					DAOFactory.getArticleTopicFactory().insert(at);
 				}
-				*/
+
 			}
 		}
 
