@@ -52,31 +52,35 @@ public class UrlFilter implements Filter {
 	 * Obtain user from current session and invoke a singleton AuthorizationManager to determine if
 	 * user is authorised for the requested resource. If not, forward them to a standard error page.
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) 
-	throws ServletException, IOException { 
+	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain)
+	throws ServletException, IOException {
 
 		String uri = ((HttpServletRequest)request).getRequestURI().substring(Settings.baseUrl.length()+1);
 
 		String[] parts=uri.split("/");
 		if(parts[0].equals("topic") && parts.length > 1) {
 			request.getRequestDispatcher("/topic.jsp?topic="+parts[1]).forward(request,response);
-			return;					
+			return;
 		}
 		if(parts[0].equals("article") && parts.length > 1) {
 			request.getRequestDispatcher("/article.jsp?article_id="+parts[1]).forward(request,response);
-			return;					
+			return;
 		}
 		if(parts[0].equals("publication") && parts.length > 1) {
 			request.getRequestDispatcher("/publication.jsp?name="+parts[1]).forward(request,response);
-			return;					
+			return;
+		}
+		if(parts[0].equals("newsletter") && parts.length > 1) {
+			request.getRequestDispatcher("/newsletter.jsp?newsletter_id="+parts[1]).forward(request,response);
+			return;
 		}
 		if(parts[0].toLowerCase().startsWith("uom")) {
 			request.getRequestDispatcher("/document.jsp?number="+parts[0]).forward(request,response);
-			return;					
+			return;
 		}
 		if(parts[0].equals("browse") && parts.length > 1) {
 			request.getRequestDispatcher("/browse.jsp?section="+parts[1]).forward(request,response);
-			return;					
+			return;
 		}
 
 		chain.doFilter(request,response);

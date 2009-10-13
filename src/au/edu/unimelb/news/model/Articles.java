@@ -14,42 +14,31 @@ import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.dao.SearchResult;
 
 public class Articles {
-	
-	private static Map<String,Publication> publicationMap = new Hashtable<String, Publication>();
-	private static Map<Long,Publication> publicationIdMap = new Hashtable<Long,Publication>();
-	
-	static {
-		try {
-			for(Publication publication : DAOFactory.getPublicationFactory().getAll(0, 500)) {
-				publicationMap.put(publication.getName(),publication);
-				publicationIdMap.put(publication.getId(),publication);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
 
+/*
 	public static boolean contains(String name) {
 		return publicationMap.containsKey(name);
 	}
 
-	public static Publication get(String name) {
+	public static Article get(String name) {
 		return publicationMap.get(name);
 	}
+*/
 
-	public static Publication get(long id) {
-		return publicationIdMap.get(id);
+	public static Article get(long id) throws IOException {
+		return DAOFactory.getArticleFactory().get(id);
 	}
 
-	public static int count() {
-		return publicationMap.size();
+
+	public static long count() throws IOException {
+		return DAOFactory.getArticleFactory().countAll();
 	}
-	
+
+	/*
 	public static void add(String name) throws IOException {
 		if(publicationMap.containsKey(name)) return;
 
-		PublicationFactory publicationDao = DAOFactory.getPublicationFactory();
+		ArticleFactory publicationDao = DAOFactory.getArticleFactory();
 			if(publicationDao.getByName(name, 0, 1).size()==0) {
 				Publication publication = new Publication();
 				publication.setName(name);
@@ -58,12 +47,13 @@ public class Articles {
 				publicationIdMap.put(publication.getId(), publication);
 			}
 	}
+*/
 
 	/**
 	 * Return a subject entry based upon information in the http servlet request. If a category_id
 	 * exists, it is loaded from the data store. If category field values are POST'ed then we load
 	 * these over the category fields.
-	 * 
+	 *
 	 * @param request Web request details
 	 * @return Glossary entry
 	 */
