@@ -1,4 +1,4 @@
-/* @override 
+/* @override
 	http://policy-test.unimelb.edu.au/styles/custom.css
 	file:///styles/custom.css
 */
@@ -66,7 +66,7 @@ div#glossary_edit #glossary_definition {
 div#glossary_edit #glossary_name {
 	display: inline;
 	width: 100%;
-	font-size: 1.5em;	
+	font-size: 1.5em;
 	font-weight: bold;
 }
 
@@ -229,8 +229,8 @@ a.manage_publications {
 /* @group sidebar */
 
 .policy_sidebar {
-	width: 25%;
-	float: right;
+	width: 20em;
+	float: left;
 	margin: 0 0 0 18px;
 	padding: 12px;
 	background-color: #eee;
@@ -546,7 +546,7 @@ span.policy-category {
 }
 
 span.faded {
-	color: grey;	
+	color: grey;
 }
 
 /* @end */
@@ -724,11 +724,11 @@ div#section_edit #section_number {
 	display: inline;
 	width: 12%;
 	font-size: 2em;
-	font-weight: bold;	
+	font-weight: bold;
 }
 div#section_edit #section_name {
 	display: inline;
 	width: 83%;
-	font-size: 2em;	
+	font-size: 2em;
 	font-weight: bold;
 }

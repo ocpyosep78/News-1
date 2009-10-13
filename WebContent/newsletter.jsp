@@ -36,7 +36,7 @@ for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsl
 	}
 %>
 
-<a href="<%=Articles.asLink(article)%>"><%= StringHelper.escapeHtml(article.getName()) %></a><br/>
+<a href="../<%=Articles.asLink(article)%>"><%= StringHelper.escapeHtml(article.getName()) %></a><br/>
 
 <p><%= article.getIntroduction() %></p>
 

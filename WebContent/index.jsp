@@ -19,6 +19,8 @@
 	University News
 </div>
 
+<jsp:include page="public_sidebar.jsp" />
+
 <div id="content" class="content-wide">
 <% SessionFeedback.display(session,out); %>
 
@@ -37,22 +39,8 @@
 <p>University News contains news and publications for various university publications.
 </p>
 </div>
-<p class="jumpto">
-<a href="http://www.policy.unimelb.edu.au/">More about policies »</a>
-</p>
 </div>
 
-<div id="search">
-<form method="post" action="search.jsp" id="policysearch">
-<h2>Search news</h2>
-<label for="keywords" class="offstage">Keywords</label>
-<input type="text" name="keywords" id="keywords" value="<%=keywords%>" size="40" maxlength="100"/>
-<input type="submit" value="Go" />
-</form>
-<script type="text/javascript">
-    document.getElementById('keywords').focus();
-</script>
-</div>
 
 <div class="clearboth"></div>
 
