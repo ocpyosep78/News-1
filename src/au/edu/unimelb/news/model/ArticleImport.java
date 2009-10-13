@@ -288,27 +288,31 @@ public class ArticleImport {
 				article.setPublished(true);
 				article.setStatus("Published");
 				article.setDeleted(false);
+				if(publishedDate.startsWith("0000")) publishedDate = lastUpdated;
 				try {
 					article.setCreatedDate(format.parse(createdDate));
 				} catch (ParseException e) {
+					messages.add("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
 					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
 				}
 				try {
 					article.setPublishedDate(format.parse(publishedDate));
 				} catch (ParseException e) {
+					messages.add("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
 					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
 				}
 				try {
 					article.setLastUpdate(format.parse(lastUpdated));
 				} catch (ParseException e) {
+					messages.add("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
 					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
 				}
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);
 				if(people.size()==0) {
-					messages.add("Article referring to an unknown person with username: "+username);
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown person. Name="+name+" Username="+username,user.getIP());
+					messages.add("Article "+id+" referring to an unknown person with username: "+username);
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article "+id+" referring to an unknown person. Name="+name+" Username="+username,user.getIP());
 					continue;
 				}
 				article.setLastUpdatePersonId(people.get(0).getId());
