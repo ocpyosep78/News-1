@@ -746,3 +746,12 @@ div#section_edit #section_name {
 	font-size: 2em;
 	font-weight: bold;
 }
+
+div#article h2 {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+div#article .source {
+	margin-top: 0;
+	padding-top: 0;
+}

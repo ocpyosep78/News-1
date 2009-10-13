@@ -34,7 +34,7 @@ if(newsletter!=null) {
 		}
 %>
 
-<li><a href="../<%=Articles.asLink(article)%>"><%= StringHelper.escapeHtml(article.getName()) %></a></li>
+<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>"><%= StringHelper.escapeHtml(article.getName()) %></a></li>
 
 <% }
 }%>
