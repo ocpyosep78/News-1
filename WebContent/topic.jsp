@@ -21,6 +21,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 <% SessionFeedback.display(session,out); %>
@@ -30,7 +31,7 @@
 
 <ul class='browse-policy-list'>
 <%
-for(ArticleInfo document : DAOFactory.queryArticleByTopic(topic.getId(),0,100)) { 
+for(ArticleInfo document : DAOFactory.queryArticleByTopic(topic.getId(),0,100)) {
 	//if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
 	//if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 %>

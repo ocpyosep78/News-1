@@ -14,7 +14,7 @@ public class NewsletterArticle implements Comparable<NewsletterArticle> {
 	private long newsletterId;
 	private long articleId;
 	private long sortOrder;
-	private String type = "";
+	private String section = "";
 	private String picture = "";
 
 	public long getId() {
@@ -33,8 +33,8 @@ public class NewsletterArticle implements Comparable<NewsletterArticle> {
 		return sortOrder;
 	}
 
-	public String getType() {
-		return type;
+	public String getSection() {
+		return section;
 	}
 
 	public String getPicture() {
@@ -57,8 +57,8 @@ public class NewsletterArticle implements Comparable<NewsletterArticle> {
 		 this.sortOrder = sortOrder;
 	}
 
-	public void setType(String type) {
-		 this.type = type;
+	public void setSection(String section) {
+		 this.section = section;
 	}
 
 	public void setPicture(String picture) {
@@ -75,8 +75,8 @@ public class NewsletterArticle implements Comparable<NewsletterArticle> {
 		if(sortOrder!=o.getSortOrder()) {
 			if(this.sortOrder < o.getSortOrder()) return -1; else return 1;
 		}
-		if(type.compareTo(o.getType())!=0) {
-			return type.compareTo(o.getType());
+		if(section.compareTo(o.getSection())!=0) {
+			return section.compareTo(o.getSection());
 		}
 		if(picture.compareTo(o.getPicture())!=0) {
 			return picture.compareTo(o.getPicture());

@@ -31,9 +31,9 @@ newsletter.version rule maxlength 100
 newsletter_article.newsletter_id : integer
 newsletter_article.article_id : integer
 newsletter_article.sort_order : integer
-newsletter_article.type : String
+newsletter_article.section : String
 newsletter_article.picture : String
-newsletter_article.type rule maxlength 50
+newsletter_article.section rule maxlength 50
 newsletter_article.picture rule maxlength 50
 newsletter_article display order newsletter_id+sort_order
 

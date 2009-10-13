@@ -20,6 +20,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 <% SessionFeedback.display(session,out); %>
@@ -30,8 +31,10 @@
 String storyType = "";
 for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsletterId(newsletter.getId(),0,100)) {
 	Article article = Articles.get(item.getArticleId());
-	if(!item.getType().equalsIgnoreCase(storyType)) {
-		storyType = item.getType();
+	if(!item.getSection().equalsIgnoreCase(storyType)) {
+		if(storyType.length()>0&&item.getSection().length()==0)
+			out.println("<h3>More news</h3>");
+		storyType = item.getSection();
 		out.println("<h3>"+storyType+"</h3>");
 	}
 %>

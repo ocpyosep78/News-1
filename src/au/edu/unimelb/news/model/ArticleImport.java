@@ -353,7 +353,7 @@ public class ArticleImport {
 				for(int t=0; t<articles.getLength() ; t++) {
 					if(articles.item(t).getNodeName().equalsIgnoreCase("article")) {
 						NodeList article = articles.item(t).getChildNodes();
-						String type = getElementTagString((Element)article,"type");
+						String section = getElementTagString((Element)article,"section");
 						String articleId = getElementTagString((Element)article,"article_id");
 						String sortOrder = getElementTagString((Element)article,"sort_order");
 						String picture = getElementTagString((Element)article,"picture");
@@ -361,7 +361,7 @@ public class ArticleImport {
 						item.setNewsletterId(newsletter.getId());
 						item.setArticleId(Long.parseLong(articleId));
 						item.setSortOrder(Long.parseLong(sortOrder));
-						item.setType(type);
+						item.setSection(section);
 						item.setPicture(picture);
 						DAOFactory.getNewsletterArticleFactory().insert(item);
 					}

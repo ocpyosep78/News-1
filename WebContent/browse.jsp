@@ -22,6 +22,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 
@@ -69,7 +70,7 @@
 	if(i==0)
 	  out.println("<li class=\"empty_browse_list\">There are currently no articles starting with '"+StringHelper.escapeHtml(section)+"'</li>");
 	out.println("</ul>");
-	
+
   }
 %>
 

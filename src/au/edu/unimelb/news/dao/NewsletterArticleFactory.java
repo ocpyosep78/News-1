@@ -41,7 +41,7 @@ public class NewsletterArticleFactory {
                 "newsletter_id bigint,"+
                 "article_id bigint,"+
                 "sort_order bigint,"+
-                "type varchar(50),"+
+                "section varchar(50),"+
                 "picture varchar(50)"+
 				")DEFAULT CHARSET=utf8 ENGINE=innodb");
             s.execute();
@@ -77,7 +77,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id,newsletter_id,article_id,sort_order,type,picture "+
+                "select id,newsletter_id,article_id,sort_order,section,picture "+
                 "from newsletter_article " +
                 "where id=?");
             s.setLong(1,id);
@@ -88,7 +88,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
             }
             results.close();
@@ -119,7 +119,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "order by id " +
                 "limit "+index+","+limit
@@ -131,7 +131,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -216,7 +216,7 @@ public class NewsletterArticleFactory {
                     "newsletter_id, "+
                     "article_id, "+
                     "sort_order, "+
-                    "type, "+
+                    "section, "+
                     "picture) "+
                 "values("+(item.getId()>0?"?,":"")+"?,?,?,?,?)");
 			if(item.getId()>0) {
@@ -224,13 +224,13 @@ public class NewsletterArticleFactory {
             s.setLong(2,item.getNewsletterId());
             s.setLong(3,item.getArticleId());
             s.setLong(4,item.getSortOrder());
-            s.setString(5,item.getType());
+            s.setString(5,item.getSection());
             s.setString(6,item.getPicture());
 			} else {
             s.setLong(1,item.getNewsletterId());
             s.setLong(2,item.getArticleId());
             s.setLong(3,item.getSortOrder());
-            s.setString(4,item.getType());
+            s.setString(4,item.getSection());
             s.setString(5,item.getPicture());
 			}
             s.execute();
@@ -252,7 +252,7 @@ public class NewsletterArticleFactory {
                 "newsletter_id="+item.getNewsletterId()+", "+ 
                 "article_id="+item.getArticleId()+", "+ 
                 "sort_order="+item.getSortOrder()+", "+ 
-                "type="+item.getType()+", "+ 
+                "section="+item.getSection()+", "+ 
                 "picture="+item.getPicture()+", "+ 
         "");
             throw new IOException(e.toString());
@@ -272,12 +272,12 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "update newsletter_article set newsletter_id=?, article_id=?, sort_order=?, type=?, picture=? "+
+                "update newsletter_article set newsletter_id=?, article_id=?, sort_order=?, section=?, picture=? "+
                 "where id=?");
             s.setLong(1,item.getNewsletterId());
             s.setLong(2,item.getArticleId());
             s.setLong(3,item.getSortOrder());
-            s.setString(4,item.getType());
+            s.setString(4,item.getSection());
             s.setString(5,item.getPicture());
             s.setLong(6,item.getId());
             s.execute();
@@ -344,7 +344,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where newsletter_id=? " +
                 "order by id " +
@@ -358,7 +358,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -465,7 +465,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where article_id=? " +
                 "order by id " +
@@ -479,7 +479,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -586,7 +586,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where sort_order=? " +
                 "order by id " +
@@ -600,7 +600,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -692,13 +692,13 @@ public class NewsletterArticleFactory {
 
     /**
      * Retrieve a set from the Newsletter Article data source
-     * matching on type. 
+     * matching on section. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<NewsletterArticle> getByType(String type,  long index, long limit) throws IOException {
+    public List<NewsletterArticle> getBySection(String section,  long index, long limit) throws IOException {
         List<NewsletterArticle> list=new ArrayList<NewsletterArticle>();
         Connection c=null;
         PreparedStatement s=null;
@@ -707,13 +707,13 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
-                "where type=? " +
+                "where section=? " +
                 "order by id " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,type);
+            s.setString(1,section);
             results=s.executeQuery();
             while(results.next()) {
                 item=new NewsletterArticle();
@@ -721,7 +721,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -743,11 +743,11 @@ public class NewsletterArticleFactory {
 
     /**
      * Count number of items in the <i>Newsletter Article</i> data source
-     * matching on Type. 
+     * matching on Section. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      */
-    public long countByType(String type) throws IOException {
+    public long countBySection(String section) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -757,9 +757,9 @@ public class NewsletterArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from newsletter_article " +
-                "where type=? " +
+                "where section=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             results=s.executeQuery();
             if(results.next()) {
                 total=results.getLong(1);
@@ -782,11 +782,11 @@ public class NewsletterArticleFactory {
 
     /**
      * Delete of item(s) in the Newsletter Article data source
-     * matching on Type. 
+     * matching on Section. 
      *
-     * @param Type Value to match on Type.
+     * @param Section Value to match on Section.
      */
-    public long deleteByType(String type) throws IOException {
+    public long deleteBySection(String section) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -794,9 +794,9 @@ public class NewsletterArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from newsletter_article " +
-                "where type=? " +
+                "where section=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.executeUpdate();
             s.close();
             s=null;
@@ -828,7 +828,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where picture=? " +
                 "order by id " +
@@ -842,7 +842,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -950,7 +950,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where newsletter_id=? and article_id=? " +
                 "order by id " +
@@ -965,7 +965,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1077,7 +1077,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where newsletter_id=? and sort_order=? " +
                 "order by id " +
@@ -1092,7 +1092,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1188,14 +1188,14 @@ public class NewsletterArticleFactory {
 
     /**
      * Retrieve a set from the Newsletter Article data source
-     * matching on type newsletterId. 
+     * matching on section newsletterId. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param newsletterId Value to match on Newsletter Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<NewsletterArticle> getByTypeNewsletterId(String type, Long newsletterId,  long index, long limit) throws IOException {
+    public List<NewsletterArticle> getBySectionNewsletterId(String section, Long newsletterId,  long index, long limit) throws IOException {
         List<NewsletterArticle> list=new ArrayList<NewsletterArticle>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1204,13 +1204,13 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
-                "where type=? and newsletter_id=? " +
+                "where section=? and newsletter_id=? " +
                 "order by id " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,newsletterId);
             results=s.executeQuery();
             while(results.next()) {
@@ -1219,7 +1219,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1241,12 +1241,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Count number of items in the <i>Newsletter Article</i> data source
-     * matching on Type Newsletter Id. 
+     * matching on Section Newsletter Id. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param newsletterId Value to match on Newsletter Id.
      */
-    public long countByTypeNewsletterId(String type, Long newsletterId) throws IOException {
+    public long countBySectionNewsletterId(String section, Long newsletterId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1256,9 +1256,9 @@ public class NewsletterArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from newsletter_article " +
-                "where type=? and newsletter_id=? " +
+                "where section=? and newsletter_id=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,newsletterId);
             results=s.executeQuery();
             if(results.next()) {
@@ -1282,12 +1282,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Delete of item(s) in the Newsletter Article data source
-     * matching on Type Newsletter Id. 
+     * matching on Section Newsletter Id. 
      *
-     * @param Type Value to match on Type.
+     * @param Section Value to match on Section.
      * @param NewsletterId Value to match on Newsletter Id.
      */
-    public long deleteByTypeNewsletterId(String type, Long newsletterId) throws IOException {
+    public long deleteBySectionNewsletterId(String section, Long newsletterId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1295,9 +1295,9 @@ public class NewsletterArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from newsletter_article " +
-                "where type=? and newsletter_id=? " +
+                "where section=? and newsletter_id=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,newsletterId);
             s.executeUpdate();
             s.close();
@@ -1331,7 +1331,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where picture=? and newsletter_id=? " +
                 "order by id " +
@@ -1346,7 +1346,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1458,7 +1458,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where article_id=? and sort_order=? " +
                 "order by id " +
@@ -1473,7 +1473,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1569,14 +1569,14 @@ public class NewsletterArticleFactory {
 
     /**
      * Retrieve a set from the Newsletter Article data source
-     * matching on type articleId. 
+     * matching on section articleId. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param articleId Value to match on Article Id.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<NewsletterArticle> getByTypeArticleId(String type, Long articleId,  long index, long limit) throws IOException {
+    public List<NewsletterArticle> getBySectionArticleId(String section, Long articleId,  long index, long limit) throws IOException {
         List<NewsletterArticle> list=new ArrayList<NewsletterArticle>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1585,13 +1585,13 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
-                "where type=? and article_id=? " +
+                "where section=? and article_id=? " +
                 "order by id " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,articleId);
             results=s.executeQuery();
             while(results.next()) {
@@ -1600,7 +1600,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1622,12 +1622,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Count number of items in the <i>Newsletter Article</i> data source
-     * matching on Type Article Id. 
+     * matching on Section Article Id. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param articleId Value to match on Article Id.
      */
-    public long countByTypeArticleId(String type, Long articleId) throws IOException {
+    public long countBySectionArticleId(String section, Long articleId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1637,9 +1637,9 @@ public class NewsletterArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from newsletter_article " +
-                "where type=? and article_id=? " +
+                "where section=? and article_id=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,articleId);
             results=s.executeQuery();
             if(results.next()) {
@@ -1663,12 +1663,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Delete of item(s) in the Newsletter Article data source
-     * matching on Type Article Id. 
+     * matching on Section Article Id. 
      *
-     * @param Type Value to match on Type.
+     * @param Section Value to match on Section.
      * @param ArticleId Value to match on Article Id.
      */
-    public long deleteByTypeArticleId(String type, Long articleId) throws IOException {
+    public long deleteBySectionArticleId(String section, Long articleId) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1676,9 +1676,9 @@ public class NewsletterArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from newsletter_article " +
-                "where type=? and article_id=? " +
+                "where section=? and article_id=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,articleId);
             s.executeUpdate();
             s.close();
@@ -1712,7 +1712,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where picture=? and article_id=? " +
                 "order by id " +
@@ -1727,7 +1727,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1823,14 +1823,14 @@ public class NewsletterArticleFactory {
 
     /**
      * Retrieve a set from the Newsletter Article data source
-     * matching on type sortOrder. 
+     * matching on section sortOrder. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param sortOrder Value to match on Sort Order.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<NewsletterArticle> getByTypeSortOrder(String type, Long sortOrder,  long index, long limit) throws IOException {
+    public List<NewsletterArticle> getBySectionSortOrder(String section, Long sortOrder,  long index, long limit) throws IOException {
         List<NewsletterArticle> list=new ArrayList<NewsletterArticle>();
         Connection c=null;
         PreparedStatement s=null;
@@ -1839,13 +1839,13 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
-                "where type=? and sort_order=? " +
+                "where section=? and sort_order=? " +
                 "order by id " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,sortOrder);
             results=s.executeQuery();
             while(results.next()) {
@@ -1854,7 +1854,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -1876,12 +1876,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Count number of items in the <i>Newsletter Article</i> data source
-     * matching on Type Sort Order. 
+     * matching on Section Sort Order. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param sortOrder Value to match on Sort Order.
      */
-    public long countByTypeSortOrder(String type, Long sortOrder) throws IOException {
+    public long countBySectionSortOrder(String section, Long sortOrder) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1891,9 +1891,9 @@ public class NewsletterArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from newsletter_article " +
-                "where type=? and sort_order=? " +
+                "where section=? and sort_order=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,sortOrder);
             results=s.executeQuery();
             if(results.next()) {
@@ -1917,12 +1917,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Delete of item(s) in the Newsletter Article data source
-     * matching on Type Sort Order. 
+     * matching on Section Sort Order. 
      *
-     * @param Type Value to match on Type.
+     * @param Section Value to match on Section.
      * @param SortOrder Value to match on Sort Order.
      */
-    public long deleteByTypeSortOrder(String type, Long sortOrder) throws IOException {
+    public long deleteBySectionSortOrder(String section, Long sortOrder) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -1930,9 +1930,9 @@ public class NewsletterArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from newsletter_article " +
-                "where type=? and sort_order=? " +
+                "where section=? and sort_order=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setLong(2,sortOrder);
             s.executeUpdate();
             s.close();
@@ -1966,7 +1966,7 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
                 "where picture=? and sort_order=? " +
                 "order by id " +
@@ -1981,7 +1981,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -2077,14 +2077,14 @@ public class NewsletterArticleFactory {
 
     /**
      * Retrieve a set from the Newsletter Article data source
-     * matching on type picture. 
+     * matching on section picture. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param picture Value to match on Picture.
      * @param index Search results should start from this item.
      * @param limit Search results should return at most this many items.
      */
-    public List<NewsletterArticle> getByTypePicture(String type, String picture,  long index, long limit) throws IOException {
+    public List<NewsletterArticle> getBySectionPicture(String section, String picture,  long index, long limit) throws IOException {
         List<NewsletterArticle> list=new ArrayList<NewsletterArticle>();
         Connection c=null;
         PreparedStatement s=null;
@@ -2093,13 +2093,13 @@ public class NewsletterArticleFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select id, newsletter_id, article_id, sort_order, type, picture "+
+                "select id, newsletter_id, article_id, sort_order, section, picture "+
                 "from newsletter_article " +
-                "where type=? and picture=? " +
+                "where section=? and picture=? " +
                 "order by id " +
                 "limit "+index+","+limit
                 );
-            s.setString(1,type);
+            s.setString(1,section);
             s.setString(2,picture);
             results=s.executeQuery();
             while(results.next()) {
@@ -2108,7 +2108,7 @@ public class NewsletterArticleFactory {
                 item.setNewsletterId(results.getLong(2));
                 item.setArticleId(results.getLong(3));
                 item.setSortOrder(results.getLong(4));
-                item.setType(results.getString(5));
+                item.setSection(results.getString(5));
                 item.setPicture(results.getString(6));
                 list.add(item);
             }
@@ -2130,12 +2130,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Count number of items in the <i>Newsletter Article</i> data source
-     * matching on Type Picture. 
+     * matching on Section Picture. 
      *
-     * @param type Value to match on Type.
+     * @param section Value to match on Section.
      * @param picture Value to match on Picture.
      */
-    public long countByTypePicture(String type, String picture) throws IOException {
+    public long countBySectionPicture(String section, String picture) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2145,9 +2145,9 @@ public class NewsletterArticleFactory {
             s=c.prepareStatement(
                 "select count(*)"+
                 "from newsletter_article " +
-                "where type=? and picture=? " +
+                "where section=? and picture=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setString(2,picture);
             results=s.executeQuery();
             if(results.next()) {
@@ -2171,12 +2171,12 @@ public class NewsletterArticleFactory {
 
     /**
      * Delete of item(s) in the Newsletter Article data source
-     * matching on Type Picture. 
+     * matching on Section Picture. 
      *
-     * @param Type Value to match on Type.
+     * @param Section Value to match on Section.
      * @param Picture Value to match on Picture.
      */
-    public long deleteByTypePicture(String type, String picture) throws IOException {
+    public long deleteBySectionPicture(String section, String picture) throws IOException {
         long total=0;
         Connection c=null;
         PreparedStatement s=null;
@@ -2184,9 +2184,9 @@ public class NewsletterArticleFactory {
             c=dataSource.getConnection();
             s=c.prepareStatement(
                 "delete from newsletter_article " +
-                "where type=? and picture=? " +
+                "where section=? and picture=? " +
                 "");
-            s.setString(1,type);
+            s.setString(1,section);
             s.setString(2,picture);
             s.executeUpdate();
             s.close();

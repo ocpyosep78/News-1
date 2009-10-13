@@ -225,6 +225,20 @@ a.manage_publications {
 
 /* @end */
 
+.voice_sidebar {
+	width: 20em;
+	float: right;
+	margin: 0 0 0 18px;
+	padding: 12px;
+	background-color: #eee;
+	border-top-left-radius:1em;
+	-moz-border-radius-topleft:1em;
+	-webkit-border-top-left-radius:1em;
+	border-bottom-left-radius:1em;
+	-moz-border-radius-bottomleft:1em;
+	-webkit-border-bottom-left-radius:1em;
+}
+
 
 /* @group sidebar */
 

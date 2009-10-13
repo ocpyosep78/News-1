@@ -20,6 +20,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 
@@ -42,7 +43,7 @@
 <% for(Publication publication : DAOFactory.getPublicationFactory().getAll(0,100)) {
 	if(user.can("Publication","ViewPublished",publication.getId()) || user.can("Publication","ViewUnpublished",publication.getId()) || user.can("Publication","ViewArchived",publication.getId()) || user.can("Publication","Add",publication.getId())) {
 %>
-	<li><a href="category/<%=StringHelper.urlEscape(publication.getName())%>"><%=StringHelper.escapeHtml(publication.getName())%></a></li>
+	<li><a href="publication/<%=StringHelper.urlEscape(publication.getName())%>"><%=StringHelper.escapeHtml(publication.getName())%></a></li>
 <% }
 } %>
 </ul>

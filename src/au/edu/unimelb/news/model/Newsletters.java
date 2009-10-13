@@ -9,7 +9,7 @@ import au.edu.unimelb.news.dao.NewsletterInfo;
 import au.edu.unimelb.news.dao.DAOFactory;
 
 public class Newsletters {
-	
+
 	public static boolean contains(String name) {
 		return false;
 	}
@@ -18,14 +18,14 @@ public class Newsletters {
 		return null;
 	}
 
-	public static Newsletter get(long id) {
-		return null;
+	public static Newsletter get(long id) throws IOException {
+		return DAOFactory.getNewsletterFactory().get(id);
 	}
 
 	public static int count() {
 		return -1;
 	}
-	
+
 	public static void add(Newsletter newsletter) throws IOException {
 		/*
 		if(contains(name)) return;
@@ -43,7 +43,7 @@ public class Newsletters {
 	 * Return a subject entry based upon information in the http servlet request. If a category_id
 	 * exists, it is loaded from the data store. If category field values are POST'ed then we load
 	 * these over the category fields.
-	 * 
+	 *
 	 * @param request Web request details
 	 * @return Glossary entry
 	 */

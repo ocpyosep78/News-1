@@ -26,6 +26,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 
 <div id="content">

@@ -20,6 +20,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 <% SessionFeedback.display(session,out); %>
@@ -30,7 +31,7 @@
 <ul class='browse-policy-list'>
 <%
 int i=0;
-for(ArticleInfo document : DAOFactory.queryArticleMostPopular(0,100)) { 
+for(ArticleInfo document : DAOFactory.queryArticleMostPopular(0,100)) {
 	//if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
 	//if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 	if(++i > 20) break;

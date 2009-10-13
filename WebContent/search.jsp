@@ -24,6 +24,7 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 <% SessionFeedback.display(session,out); %>
@@ -63,7 +64,7 @@
 			%>
 			<div class="info">No documents could be found matching those keywords.</div>
 		<%
-			
+
 		} else {
 %>
 <div class="search results" style="">
@@ -76,7 +77,7 @@
 		SearchResult document = results.get(_page*ArticleSearch.PAGESIZE+i);
 %>
 <li><a href="<%=Articles.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=Articles.asLink(document)%>)</span><br/>
-<%=document.getStatus() %> 
+<%=document.getStatus() %>
 
 <% } %>
 

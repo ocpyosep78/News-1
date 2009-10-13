@@ -32,24 +32,27 @@
  %>
 
 <div class="most_viewed_box">
-<h3>Most viewed articles</h3>
+<h3>Publications</h3>
 <div class="box_contents">
 <ul>
-<%
-int i=0;
-for(ArticleInfo document : DAOFactory.queryArticleMostPopular(0,30)) {
-    //if(document.isPublished() && !user.can("Publication","ViewPublished",document.getPublicationId())) continue;
-    //if(!document.isPublished() && !user.can("Publication","ViewUnpublished",document.getPublicationId())) continue;
-    if(++i > 5) break;
+<% for(Publication publication : DAOFactory.getPublicationFactory().getAll(0,100)) {
+	if(user.can("Publication","ViewPublished",publication.getId()) || user.can("Publication","ViewUnpublished",publication.getId()) || user.can("Publication","ViewArchived",publication.getId())) {
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Articles.asLink(document)%>" title="<%=StringHelper.escapeHtml(document.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(document.getName(),30))%></a> <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(document.getPublicationId()).getName())%>)</span></li>
+	<li><a href="<%=Settings.baseUrl%>/publication/<%=StringHelper.urlEscape(publication.getName())%>"><%=StringHelper.escapeHtml(publication.getName())%></a></li>
+<%   } %>
 <% } %>
+
 </ul>
 </div>
-<p class="jumpto">
-<a href="<%=Settings.baseUrl%>/mostused.jsp">Most viewed articles »</a>
-</p>
 </div>
+
+<br/>
+<ul>
+<li><a href="http://newsroom.melbourne.edu/">Media</a></li>
+<li><a href="http://www.research.unimelb.edu.au/mediacontact/">Find an Expert</a></li>
+<li><a href="http://www.marcom.unimelb.edu.au/">Marketing and Communications</a></li>
+<li><a href="http://www.marcom.unimelb.edu.au/public/story">Got a story?</a></li>
+</ul>
 
 <% } %>
 

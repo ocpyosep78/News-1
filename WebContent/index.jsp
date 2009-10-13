@@ -20,8 +20,9 @@
 </div>
 
 <jsp:include page="public_sidebar.jsp" />
+<jsp:include page="voice_sidebar.jsp" />
 
-<div id="content" class="content-wide">
+<div id="content">
 <% SessionFeedback.display(session,out); %>
 
 <%
@@ -31,20 +32,10 @@
 %>
 
 
-<div id="start">
 
-<div class="about_box">
 <h2>University News</h2>
-<div class="about_contents">
 <p>University News contains news and publications for various university publications.
 </p>
-</div>
-</div>
-
-
-<div class="clearboth"></div>
-
-</div>
 
 <div id="browse">
 
@@ -79,65 +70,6 @@
 
 </div>
 
-<div id="browse-activity">
-
-<%
-  int updateListLength = 13;
-  if(user.isAuthenticated()) {
-	  updateListLength = 5;
- %>
-
-
-<div class="most_viewed_box">
-<h3>Most viewed articles</h3>
-<div class="curved_box_contents">
-<ul>
-<%
-int i=0;
-for(ArticleInfo article : DAOFactory.queryArticleMostPopular(0,30)) {
-	//if(article.isPublished() && !user.can("Category","ViewPublished",article.getCategoryId())) continue;
-	//if(!article.isPublished() && !user.can("Category","ViewUnpublished",article.getCategoryId())) continue;
-	if(++i > 5) break;
-%>
-<li>
-    <a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>" title="<%=StringHelper.escapeHtml(article.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(article.getName(),45))%></a>
-    <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(article.getPublicationId()).getName())%>)</span>
-</li>
-<% } %>
-</ul>
-</div>
-<p class="jumpto">
-<a href="<%=Settings.baseUrl%>/mostused.jsp">Most used policy documents</a>
-</p>
-</div>
-
-<% } %>
-
-<div class="recently_updated_box">
-<h3>New or updated articles</h3>
-<div class="curved_box_contents">
-<ul>
-<%
-int i=0;
-for(ArticleInfo article : DAOFactory.queryArticleRecentlyUpdated(0,updateListLength*3)) {
-	//if(article.isPublished() && !user.can("Category","ViewPublished",article.getCategoryId())) continue;
-	//if(!article.isPublished() && !user.can("Category","ViewUnpublished",article.getCategoryId())) continue;
-	if(++i > updateListLength) break;
-%>
-<li>
-    <a href="<%=Settings.baseUrl%>/<%=Articles.asLink(article)%>" title="<%=StringHelper.escapeHtml(article.getName())%>"><%=StringHelper.escapeHtml(StringHelper.maxLength(article.getName(),45))%></a>
-    <span class="policy-number">(<%=StringHelper.escapeHtml(Publications.get(article.getPublicationId()).getName())%>)</span>
-</li>
-<% } %>
-</ul>
-</div>
-<p class="jumpto">
-<a href="<%=Settings.baseUrl%>/recentlyupdated.jsp">New or updated articles</a>
-</p>
-</div>
-
-</div>
-<!-- -->
 
 </div>
 
