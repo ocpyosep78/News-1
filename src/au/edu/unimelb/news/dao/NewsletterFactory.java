@@ -133,7 +133,7 @@ public class NewsletterFactory {
             s=c.prepareStatement(
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             results=s.executeQuery();
@@ -395,7 +395,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -522,7 +522,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -649,7 +649,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -776,7 +776,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setBoolean(1,published);
@@ -903,7 +903,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setBoolean(1,archived);
@@ -1030,7 +1030,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(lastUpdate.getTime()));
@@ -1157,7 +1157,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -1284,7 +1284,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(startDate.getTime()));
@@ -1411,7 +1411,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(endDate.getTime()));
@@ -1539,7 +1539,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and publication_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -1672,7 +1672,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and publication_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -1805,7 +1805,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and version=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -1938,7 +1938,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2071,7 +2071,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2204,7 +2204,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2337,7 +2337,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and last_update=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2470,7 +2470,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and last_update_person_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2603,7 +2603,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2736,7 +2736,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where publication_id=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,publicationId);
@@ -2869,7 +2869,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and status=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3002,7 +3002,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and version=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3135,7 +3135,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3268,7 +3268,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3401,7 +3401,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3534,7 +3534,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and last_update=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3667,7 +3667,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and last_update_person_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3800,7 +3800,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -3933,7 +3933,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -4066,7 +4066,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and version=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4199,7 +4199,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4332,7 +4332,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4465,7 +4465,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4598,7 +4598,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and last_update=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4731,7 +4731,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and last_update_person_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4864,7 +4864,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -4997,7 +4997,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where status=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,status);
@@ -5130,7 +5130,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -5263,7 +5263,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -5396,7 +5396,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -5529,7 +5529,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and last_update=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -5662,7 +5662,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and last_update_person_id=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -5795,7 +5795,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -5928,7 +5928,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where version=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,version);
@@ -6061,7 +6061,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where published=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setBoolean(1,published);
@@ -6194,7 +6194,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where published=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setBoolean(1,published);
@@ -6327,7 +6327,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(lastUpdate.getTime()));
@@ -6460,7 +6460,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -6593,7 +6593,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where start_date=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(startDate.getTime()));
@@ -6726,7 +6726,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where end_date=? and published=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(endDate.getTime()));
@@ -6859,7 +6859,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where deleted=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setBoolean(1,deleted);
@@ -6992,7 +6992,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(lastUpdate.getTime()));
@@ -7125,7 +7125,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -7258,7 +7258,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where start_date=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(startDate.getTime()));
@@ -7391,7 +7391,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where end_date=? and deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(endDate.getTime()));
@@ -7524,7 +7524,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(lastUpdate.getTime()));
@@ -7657,7 +7657,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -7790,7 +7790,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where start_date=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(startDate.getTime()));
@@ -7923,7 +7923,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where end_date=? and archived=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(endDate.getTime()));
@@ -8056,7 +8056,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? and last_update=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -8189,7 +8189,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update=? and start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(lastUpdate.getTime()));
@@ -8322,7 +8322,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(lastUpdate.getTime()));
@@ -8455,7 +8455,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? and start_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -8588,7 +8588,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where last_update_person_id=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setLong(1,lastUpdatePersonId);
@@ -8721,7 +8721,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where start_date=? and end_date=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setTimestamp(1,new java.sql.Timestamp(startDate.getTime()));
@@ -8853,7 +8853,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where name=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setString(1,name);
@@ -8980,7 +8980,7 @@ public class NewsletterFactory {
                 "select id, publication_id, name, status, version, published, deleted, archived, last_update, last_update_person_id, start_date, end_date "+
                 "from newsletter " +
                 "where deleted=? " +
-                "order by name " +
+                "order by start_date " +
                 "limit "+index+","+limit
                 );
             s.setBoolean(1,deleted);

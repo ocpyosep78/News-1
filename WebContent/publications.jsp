@@ -40,7 +40,7 @@
 
 <p>Below are the current publications available within University News. Some subject areas are only visible once you have signed in to the system.</p>
 <ul>
-<% for(Publication publication : DAOFactory.getPublicationFactory().getAll(0,100)) {
+<% for(Publication publication : DAOFactory.getPublicationFactory().getAll(0,2000)) {
 	if(user.can("Publication","ViewPublished",publication.getId()) || user.can("Publication","ViewUnpublished",publication.getId()) || user.can("Publication","ViewArchived",publication.getId()) || user.can("Publication","Add",publication.getId())) {
 %>
 	<li><a href="publication/<%=StringHelper.urlEscape(publication.getName())%>"><%=StringHelper.escapeHtml(publication.getName())%></a></li>

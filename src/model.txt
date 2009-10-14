@@ -22,7 +22,7 @@ newsletter.last_update : Date
 newsletter.last_update_person_id : integer
 newsletter.start_date : Date
 newsletter.end_date : Date
-newsletter display order name
+newsletter display order start_date
 newsletter key name
 newsletter key deleted
 newsletter foreign key last_update_person_id=person.id
@@ -123,7 +123,7 @@ newsletter_info.start_date : Date
 newsletter_info.end_date : Date
 newsletter_info queryonly
 
-NewsletterByPublication query "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.name,n.last_update"
+NewsletterByPublication query "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.start_date desc,n.name"
 NewsletterByPublication parameter publication_id : integer
 NewsletterByPublication returns newsletter_info
 

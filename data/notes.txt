@@ -5,5 +5,6 @@ delete from article;
 delete from article_topic;
 delete from search_index;
 delete from newsletter;
+delete from newsletter_article;
 
 

@@ -47,10 +47,23 @@ if(!locationFound) {
 	DateFormat format = new SimpleDateFormat("EEEE d MMMM yyyy");
 	out.println("<p class=\"source\">"+Publications.get(article.getPublicationId()).getName()+", "+format.format(article.getLastUpdate())+"</p>");
 }
+
+if(article.getName().startsWith("No ")) {
+
+	List<Article> articles = StaffNewsParser.parse(article.getDetails());
+	for(Article i : articles) {
+		out.println("<hr/>");
+		out.println("<h3>"+i.getName()+"</h3>");
+		out.println(i.getDetails());
+	}
+
+} else {
 %>
 <p><b><%= StringHelper.escapeHtml(article.getIntroduction()) %></b></p>
 
 <p><%= article.getDetails() %></p>
+
+<% } %>
 
 </div>
 

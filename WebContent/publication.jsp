@@ -35,8 +35,12 @@
 
 <%
 List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
+DateFormat year = new SimpleDateFormat("yyyy");
 DateFormat f1 = new SimpleDateFormat("d MMMM");
 DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
+String currentYear = "";
+String lastYear = "";
+boolean wantHeadings = newsletters.size()>14;
 %>
 
 <h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
@@ -46,6 +50,16 @@ DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
 <% for(NewsletterInfo document : newsletters) {
 //	if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
 //	if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
+	if(wantHeadings) {
+		currentYear = year.format(document.getStartDate());
+		if(!currentYear.equals(lastYear)) {
+			if(lastYear.length()!=0)
+				out.println("</ul>");
+			out.println("<h3>"+currentYear+"</h3>");
+			out.println("<ul class=\"newsletter_list\">");
+		}
+		lastYear = currentYear;
+	}
 %>
 <li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a><br/>
 <span class="faded">

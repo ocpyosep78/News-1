@@ -371,7 +371,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.name,n.last_update"
+                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.start_date desc,n.name"
               );
             s.setLong(1,publicationId);
             results=s.executeQuery();
@@ -410,7 +410,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.name,n.last_update " +
+                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.start_date desc,n.name " +
                 "limit "+index+","+limit
               );
             s.setLong(1,publicationId);

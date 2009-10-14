@@ -9,7 +9,6 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -41,31 +40,36 @@ import au.edu.unimelb.security.LogHelper;
 import au.edu.unimelb.security.dao.Person;
 import au.edu.unimelb.security.model.User;
 
+
+
 @SuppressWarnings("deprecation")
 public class ArticleImport {
 
-	private List<String> messages = new ArrayList<String>();
 	private File workingFolder = null;
+	private int staffnewsArticle = 10000;
+	private ArticleImportResponder responder;
 
-	public List<String> process(InputStream in, User user) {
+	public ArticleImport(ArticleImportResponder responder) {
+		this.responder = responder;
+	}
+
+	public void process(InputStream in, User user) {
+		responder.feedback("Beginning file analysis");
+
 		try {
 			workingFolder = File.createTempFile("articletmp", Long.toString(System.nanoTime()));
 
 			if(!workingFolder.delete()) {
-				messages.add("Problem creating temporary file: "+workingFolder.getAbsolutePath());
-				LogHelper.log("System","Import",user.getPersonId(),"Problem creating temporary file: "+workingFolder.getAbsolutePath(),user.getIP());
-				return messages;
+				responder.feedback("Problem creating temporary file: "+workingFolder.getAbsolutePath());
+				return;
 			}
 
 			if(!workingFolder.mkdir()) {
-				messages.add("Temporary working folder could not be created: "+workingFolder.getAbsolutePath());
-				LogHelper.log("System","Import",user.getPersonId(),"Temporary working folder could not be created: "+workingFolder.getAbsolutePath(),user.getIP());
-				return messages;
+				responder.feedback("Temporary working folder could not be created: "+workingFolder.getAbsolutePath());
 			}
 		} catch (IOException e) {
-			messages.add("Problem creating temporary file: "+workingFolder.getAbsolutePath()+" "+e.getMessage());
-			LogHelper.log("System","Import",user.getPersonId(),"Problem creating temporary file: "+workingFolder.getAbsolutePath()+" "+e.getMessage(),user.getIP());
-			return messages;
+			responder.feedback("Problem creating temporary file: "+workingFolder.getAbsolutePath()+" "+e.getMessage());
+			return;
 		}
 
 		LogHelper.log("System","Import",user.getPersonId(),"Created import folder: "+workingFolder,user.getIP());
@@ -76,10 +80,11 @@ public class ArticleImport {
 		try {
 			(new DeleteFolder(workingFolder)).execute();
 		} catch(IOException e) {
-			LogHelper.log("System","Import",user.getPersonId(),"Problem removing temporary working folder: "+e.getMessage(),user.getIP());
+			responder.feedback("Problem removing temporary working folder: "+e.getMessage());
 		}
 
-		return messages;
+		responder.feedback("Completed file analysis");
+		return;
 	}
 
 	private void processZipfile(InputStream inputStream, User user) {
@@ -92,7 +97,7 @@ public class ArticleImport {
 			while ((ze = zin.getNextEntry()) != null) {
 				File outFile = new File(workingFolder + System.getProperty("file.separator") + ze.getName());
 				LogHelper.log("System","Import",user.getPersonId(),"Extracting file from zip file: "+outFile,user.getIP());
-				messages.add("Extracting file from zip file: "+outFile);
+				responder.feedback("Extracting file from zip file: "+outFile);
 				FileOutputStream fout = new FileOutputStream(outFile);
 
 				int bytesRead;
@@ -107,13 +112,11 @@ public class ArticleImport {
 			}
 			zin.close();
 		} catch(IOException e) {
-			LogHelper.log("System","Import",user.getPersonId(),"Problem extracting zip file contents."+e.getMessage(),user.getIP());
-			messages.add("Problem extracting zip file contents."+e.getMessage());
+			responder.feedback("Problem extracting zip file contents."+e.getMessage());
 		}
 
 		if(count==0) {
-			LogHelper.log("System","Import",user.getPersonId(),"Zip file is either invald or it has no files inside.",user.getIP());
-			messages.add("Zip file is either invald or it has no files inside.");
+			responder.feedback("Zip file is either invald or it has no files inside.");
 			return;
 		}
 
@@ -121,7 +124,6 @@ public class ArticleImport {
 	}
 
 	private void processDataFiles(User user) {
-		LogHelper.log("System","Import",user.getPersonId(),"Analysing the index file",user.getIP());
 
 		try {
 
@@ -129,16 +131,14 @@ public class ArticleImport {
 			if (children != null)
 				for (int i=0; i<children.length; i++) {
 					if(children[i].toLowerCase().endsWith(".xml")) {
-						messages.add("Processing data file: "+children[i]);
-						LogHelper.log("System","Import",user.getPersonId(),"Processing data file: "+children[i],user.getIP());
+						responder.feedback("Processing data file: "+children[i]);
 						FileInputStream in = new FileInputStream(workingFolder + System.getProperty("file.separator") + children[i]);
 						processFile(user,in);
 						in.close();
 					}
 				}
 		} catch(Exception e) {
-			messages.add("A problem occurred while reading import file contents.");
-			LogHelper.log("System","Import",user.getPersonId(),"A problem occurred while reading import file contents.",user.getIP());
+			responder.feedback("A problem occurred while reading import file contents.");
 			return;
 		}
 
@@ -160,32 +160,30 @@ public class ArticleImport {
 				loadArticles(doc.getElementsByTagName("article"),user);
 			else if(root.getNodeName().equalsIgnoreCase("newsletters"))
 				loadNewsletters(doc.getElementsByTagName("newsletter"),user);
+			else if(root.getNodeName().equalsIgnoreCase("staffnews"))
+				loadStaffnews(doc.getElementsByTagName("staffnews"),user);
 			else
-				messages.add("XML file had unknown root element name: "+root.getNodeName());
+				responder.feedback("XML file had unknown root element name: "+root.getNodeName());
 
 		} catch (SAXParseException err) {
-			String error="Import document parsing problem: line=" + err.getLineNumber() + " uri=" + err.getSystemId()+" message="+err.getMessage();
-			messages.add(error);
-			LogHelper.log("System","Import",user.getPersonId(),error,user.getIP());
+			responder.feedback("Import document parsing problem: line=" + err.getLineNumber() + " uri=" + err.getSystemId()+" message="+err.getMessage());
 			return;
 		} catch (SAXException e) {
 			Exception x = e.getException();
 			((x == null) ? e : x).printStackTrace();
-			LogHelper.log("System","Import",user.getPersonId(),"Index parsing problem: line=" + ((x == null) ? e : x).getMessage(),user.getIP());
-			messages.add("Index parsing problem: line=" + ((x == null) ? e : x).getMessage());
+			responder.feedback("Index parsing problem: line=" + ((x == null) ? e : x).getMessage());
 			return;
 		} catch (IOException t) {
-			messages.add("Database problem occured while processing the data file: "+t.getMessage());
-			LogHelper.log("System","Import",user.getPersonId(),"Database problem occured while processing the data file: "+t.getMessage(),user.getIP());
+			responder.feedback("Database problem occured while processing the data file: "+t.getMessage());
 			return;
 		} catch (Throwable t) {
-			messages.add("Problem occured while processing the data file: "+t.getMessage());
+			responder.feedback("Problem occured while processing the data file: "+t.getMessage());
 			LogHelper.log("System","Import",user.getPersonId(),"Unexpected problem occured while processing the data file: "+t.getMessage(),user.getIP());
 			t.printStackTrace();
 			return;
 		}
 
-		LogHelper.log("System","Import",user.getPersonId(),"Finished processing the import file.",user.getIP());
+		responder.feedback("Finished processing the import file.");
 	}
 
 	private String getElementTagString(Element e,String tag) {
@@ -200,6 +198,7 @@ public class ArticleImport {
 		return value.trim();
 	}
 
+	/*
 	private String getElementTagData(Element e,String tag) throws ParserConfigurationException {
 		NodeList firstNameList = e.getElementsByTagName(tag);
 		Element firstNameElement = (Element)firstNameList.item(0);
@@ -208,6 +207,7 @@ public class ArticleImport {
 		if(value==null) { return ""; }
 		return value.trim();
 	}
+	*/
 
 	private NodeList getChildNodeNamed(Node parent, String string) {
 		NodeList nodes = parent.getChildNodes();
@@ -218,7 +218,6 @@ public class ArticleImport {
 		return null;
 	}
 
-	/*
 	private NodeList getChildNodeNamed(NodeList parent, String string) {
 		for(int s=0; s<parent.getLength() ; s++) {
 			if(parent.item(s).getNodeName().equalsIgnoreCase(string))
@@ -226,7 +225,6 @@ public class ArticleImport {
 		}
 		return null;
 	}
-	*/
 
 	public String elementToString(org.w3c.dom.Node node) throws ParserConfigurationException {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -252,7 +250,7 @@ public class ArticleImport {
 
 		for(int s=0; s<articles.getLength() ; s++){
 			Node node=articles.item(s);
-			if(node.getNodeType() == Node.ELEMENT_NODE){
+			if(node.getNodeType() == Node.ELEMENT_NODE) {
 				String id = getElementTagString((Element)node,"id");
 				if(id.length()==0) continue;
 				String name = getElementTagString((Element)node,"name");
@@ -271,8 +269,7 @@ public class ArticleImport {
 
 				Publication publication = Publications.get(publicationName);
 				if(publication == null) {
-					messages.add("Article referring to an unknown publication: "+publicationName);
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown publication. Name="+publicationName,user.getIP());
+					responder.feedback("Article referring to an unknown publication. Name="+publicationName);
 					continue;
 				}
 
@@ -295,27 +292,23 @@ public class ArticleImport {
 				try {
 					article.setCreatedDate(format.parse(createdDate));
 				} catch (ParseException e) {
-					messages.add("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
+					responder.feedback("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
 				}
 				try {
 					article.setPublishedDate(format.parse(publishedDate));
 				} catch (ParseException e) {
-					messages.add("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
+					responder.feedback("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
 				}
 				try {
 					article.setLastUpdate(format.parse(lastUpdated));
 				} catch (ParseException e) {
-					messages.add("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId(),user.getIP());
+					responder.feedback("Date parsing problem for date in newsletter/articles/article element where article id = "+article.getId());
 				}
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);
 				if(people.size()==0) {
-					messages.add("Article "+id+" referring to an unknown person with username: "+username);
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article "+id+" referring to an unknown person. Name="+name+" Username="+username,user.getIP());
+					responder.feedback("Article "+id+" referring to an unknown person with username: "+username);
 					continue;
 				}
 				article.setLastUpdatePersonId(people.get(0).getId());
@@ -326,7 +319,9 @@ public class ArticleImport {
 					if(item.length()==0) continue;
 					Topic topic = Topics.get(item);
 					if(topic == null) {
-						messages.add("Article referring to an unknown topic: "+item);
+						if(item.equals("Other"))
+							continue;
+						responder.feedback("Article referring to an unknown topic: "+item);
 						continue;
 					}
 					ArticleTopic at = new ArticleTopic();
@@ -343,19 +338,17 @@ public class ArticleImport {
 
 		for(int s=0; s<newsletters.getLength() ; s++){
 			Node node=newsletters.item(s);
-			if(node.getNodeType() == Node.ELEMENT_NODE){
+			if(node.getNodeType() == Node.ELEMENT_NODE) {
 				String id = getElementTagString((Element)node,"id");
 				String heading = getElementTagString((Element)node,"heading");
 				String publicationName = getElementTagString((Element)node,"publication");
-				String dateCreated = getElementTagString((Element)node,"dateCreated");
 				String startDate = getElementTagString((Element)node,"start_date");
 				String endDate = getElementTagString((Element)node,"end_date");
 				String username = getElementTagString((Element)node,"user");
 
 				Publication publication = Publications.get(publicationName);
 				if(publication == null) {
-					messages.add("Article referring to an unknown publication: "+publicationName);
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Article referring to an unknown publication. Name="+publicationName,user.getIP());
+					responder.feedback("Article referring to an unknown publication. Name="+publicationName);
 					continue;
 				}
 
@@ -375,14 +368,12 @@ public class ArticleImport {
 				try {
 					newsletter.setStartDate(format.parse(startDate));
 				} catch (ParseException e) {
-					messages.add("Date parsing problem for date in newsletter/start_date element where newsletter id = "+newsletter.getId());
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/start_date element where article id = "+newsletter.getId(),user.getIP());
+					responder.feedback("Date parsing problem for date in newsletter/start_date element where newsletter id = "+newsletter.getId());
 				}
 				try {
 					newsletter.setEndDate(format.parse(endDate));
 				} catch (ParseException e) {
-					messages.add("Date parsing problem for date in newsletter/end_date element where newsletter id = "+newsletter.getId());
-					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/end_date element where article id = "+newsletter.getId(),user.getIP());
+					responder.feedback("Date parsing problem for date in newsletter/end_date element where newsletter id = "+newsletter.getId());
 				}
 
 				List<Person> people;
@@ -417,4 +408,81 @@ public class ArticleImport {
 		}
 
 	}
+
+	private void loadStaffnews(NodeList nodelist,User user) throws IOException {
+
+		NodeList newsletters = this.getChildNodeNamed(nodelist, "staffnews");
+
+		for(int s=0; s<newsletters.getLength() ; s++){
+			Node node=newsletters.item(s);
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				String heading = getElementTagString((Element)node,"heading");
+				String publicationName = getElementTagString((Element)node,"publication");
+				String date = getElementTagString((Element)node,"start_date");
+				String username = getElementTagString((Element)node,"user");
+				String text = getElementTagString((Element)node,"article");
+
+				Publication publication = Publications.get(publicationName);
+				if(publication == null) {
+					responder.feedback("Article referring to an unknown publication. Name="+publicationName);
+					continue;
+				}
+
+				Newsletter newsletter=new Newsletter();
+				newsletter.setPublicationId(publication.getId());
+				newsletter.setName(heading);
+				newsletter.setPublished(true);
+				newsletter.setStatus("Published");
+				newsletter.setArchived(false);
+				newsletter.setDeleted(false);
+
+				DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+
+				try {
+					newsletter.setStartDate(format.parse(date));
+				} catch (ParseException e) {
+					responder.feedback("Date parsing problem for date in newsletter/start_date element where newsletter id = "+newsletter.getId());
+				}
+				newsletter.setEndDate(newsletter.getStartDate());
+				newsletter.setLastUpdate(newsletter.getStartDate());
+
+				List<Person> people;
+				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);
+				if(people.size()==0) {
+					newsletter.setLastUpdatePersonId(user.getPersonId());
+				} else {
+					newsletter.setLastUpdatePersonId(people.get(0).getId());
+				}
+
+				newsletter = DAOFactory.getNewsletterFactory().insert(newsletter);
+
+				List<Article> articles = StaffNewsParser.parse(text);
+				int sortOrder = 0;
+				for(Article article : articles) {
+					sortOrder++;
+					article.setId(staffnewsArticle++);
+					article.setDeleted(false);
+					article.setPublished(false);
+					article.setPublicationId(publication.getId());
+					article.setLastUpdate(newsletter.getStartDate());
+					article.setCreatedDate(newsletter.getStartDate());
+					article.setPublishedDate(newsletter.getStartDate());
+					article.setLastUpdatePersonId(newsletter.getLastUpdatePersonId());
+					article = DAOFactory.getArticleFactory().insert(article);
+
+					NewsletterArticle item = new NewsletterArticle();
+					item.setNewsletterId(newsletter.getId());
+					item.setArticleId(article.getId());
+					item.setSortOrder(sortOrder);
+					item.setSection("");
+					item.setPicture("");
+					DAOFactory.getNewsletterArticleFactory().insert(item);
+				}
+
+			}
+		}
+
+	}
+
+
 }

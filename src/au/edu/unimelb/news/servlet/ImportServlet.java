@@ -31,9 +31,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import au.edu.unimelb.helper.StringHelper;
 import au.edu.unimelb.news.Configuration;
 import au.edu.unimelb.news.model.ArticleImport;
+import au.edu.unimelb.news.model.ArticleImportResponder;
 import au.edu.unimelb.security.UserHelper;
 import au.edu.unimelb.security.model.User;
 import au.edu.unimelb.template.LayoutHelper;
@@ -67,9 +67,11 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 
 		out.println("<div id=\"breadcrumbs\">");
 		out.println("<a href=\"http://www.unimelb.edu.au\">University home</a> &gt;");
-		out.println("<a href=\""+Configuration.appPrefix+"/\">University news</a> &gt;");
+		out.println("<a href=\""+Configuration.appPrefix+"/\">University News</a> &gt;");
 		out.println("Document Import");
 		out.println("</div>");
+
+		out.flush();
 
 		out.println("<div id=\"content\">");
 		out.println("<h2>Importing</h2>");
@@ -92,7 +94,7 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 		 * Use the Jakarta Commons Fileupload component to read the
 		 * field variables.
 		 */
-		List<String> messages = null;
+		out.println("<ul>");
 		String filename="";
 		for(FileItem field : items) {
 			if (!field.isFormField()) {
@@ -102,18 +104,10 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 				int no=random.nextInt();
 				if(no<1) no=-no;
 				if(filename.length()>0 && field.getSize()>0 && field.getFieldName().equals("import_file")) {
-					ArticleImport helper = new ArticleImport();
-					messages=helper.process(field.getInputStream(), user);
+					ArticleImport helper = new ArticleImport(new ArticleImportResponder(user,out));
+					helper.process(field.getInputStream(), user);
 				}
 			}
-		}
-
-		out.println("<ul>");
-		if(messages == null) {
-			out.println("<li>Nothing to import.</li>");
-		} else {
-			for(String message : messages)
-				out.println("<li>"+StringHelper.escapeHtml(message)+"</li>");
 		}
 		out.println("</ul>");
 
