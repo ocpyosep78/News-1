@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!--
-includes/searchbox.php:	<option value="1"@isSelected($publicationType,1) >Media Releases</option>
-includes/searchbox.php:	<option value="2" @isSelected($publicationType,2) >The Voice (previously UniNews)</option>
-includes/searchbox.php:	<option value="3" @isSelected($publicationType,3) >Melbourne Update</option>
-includes/searchbox.php:	<option value="4" @isSelected($publicationType,4) >Staff News</option>
-includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Research Review</option>
-
-          $editionRant['un'] = "A fortnightly review of news, scholarship and events at the University of Melbourne";
-^M
-          $editionRant['unn'] = "Issues, views, debate, University news and events, fortnightly";
-^M
-          $editionRant['ch'] = "News, scholarship and events at the University of Melbourne, as published in 21st Century newspaper, China. For further University news <a href=\"http://uninews.unimelb.edu.au\">uninews.unimelb.edu.au</a>";^M
-          $editionRant['in'] = "News, scholarship and events at the University of Melbourne, as published in Outlook magazine, India. For further University news <a href=\"http://uninews.unimelb.edu.au\">uninews.unimelb.edu.au</a>";^M
-          $editionRant['gv'] = "News, scholarship and events from the Goulburn Valley campus of the University of Melbourne, as published in Shepparton News. For further University news <a href=\"http://uninews.unimelb.edu.au\">uninews.unimelb.edu.au</a>";^M
-          $editionRant['mc'] = "News, scholarship and events from the McMillan campus of the University of Melbourne, as published in the Gippsland media. For further University news <a href=\"http://uninews.unimelb.edu.au\">uninews.unimelb.edu.au</a>";^M
-
--->
-
 <newsletters>
 	<newsletter>
 		<publication>Research Review</publication>
 		<heading>Research Review 0906</heading>
 		<status>Published</status>
-		<startdate>1 Sep 2006</startdate>
-		<enddate>28 Feb 2007</enddate>
+		<start_date>20060901000000</start_date>
+		<end_date>20070228000000</end_date>
 		<articles>
 		<article>
 			<type>Overview</type>
@@ -205,8 +187,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>Research Review</publication>
 		<heading>Research Review 0307</heading>
 		<status>Published</status>
-		<startdate>1 Mar 2007</startdate>
-		<enddate>31 Aug 2007</enddate>
+		<start_date>20070301000000</start_date>
+		<end_date>20070831000000</end_date>
 		<articles>
 		<article>
 			<type>Overview</type>
@@ -430,8 +412,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>Research Review</publication>
 		<heading>Research Review 0808</heading>
 		<status>Published</status>
-		<startdate>1 Aug 2008</startdate>
-		<enddate>1 Apr 2009</enddate>
+		<start_date>20080801000000</start_date>
+		<end_date>20090401000000</end_date>
 		<articles>
 		<article>
 			<type>Overview</type>
@@ -619,8 +601,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>Research Review</publication>
 		<heading>Research Review 0809</heading>
 		<status>Published</status>
-		<startdate>16 Aug 2009</startdate>
-		<enddate>15 Aug 2010</enddate>
+		<start_date>20090816000000</start_date>
+		<end_date>20100815000000</end_date>
 		<articles>
 		<article>
 			<type>Overview</type>
@@ -761,8 +743,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 2</heading>
 		<status>Published</status>
-		<startdate>24 Feb 2003</startdate>
-		<enddate>10 Mar 2003</enddate>
+		<start_date>20030224000000</start_date>
+		<end_date>20030310000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -914,8 +896,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 3</heading>
 		<status>Published</status>
-		<startdate>10 Mar 2003</startdate>
-		<enddate>24 Mar 2003</enddate>
+		<start_date>20030310000000</start_date>
+		<end_date>20030324000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1073,8 +1055,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 4</heading>
 		<status>Published</status>
-		<startdate>24 Mar 2003</startdate>
-		<enddate>7 Apr 2003</enddate>
+		<start_date>20030324000000</start_date>
+		<end_date>20030407000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1214,8 +1196,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 5</heading>
 		<status>Published</status>
-		<startdate>7 Apr 2003</startdate>
-		<enddate>21 Apr 2003</enddate>
+		<start_date>20030407000000</start_date>
+		<end_date>20030421000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1355,8 +1337,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 6</heading>
 		<status>Published</status>
-		<startdate>21 Apr 2003</startdate>
-		<enddate>5 May 2003</enddate>
+		<start_date>20030421000000</start_date>
+		<end_date>20030505000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1508,8 +1490,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 7</heading>
 		<status>Published</status>
-		<startdate>5 May 2003</startdate>
-		<enddate>19 May 2003</enddate>
+		<start_date>20030505000000</start_date>
+		<end_date>20030519000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1697,8 +1679,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 8</heading>
 		<status>Published</status>
-		<startdate>19 May 2003</startdate>
-		<enddate>2 Jun 2003</enddate>
+		<start_date>20030519000000</start_date>
+		<end_date>20030602000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1802,8 +1784,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 9</heading>
 		<status>Published</status>
-		<startdate>2 Jun 2003</startdate>
-		<enddate>16 Jun 2003</enddate>
+		<start_date>20030602000000</start_date>
+		<end_date>20030616000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -1937,8 +1919,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 10</heading>
 		<status>Published</status>
-		<startdate>16 Jun 2003</startdate>
-		<enddate>30 Jun 2003</enddate>
+		<start_date>20030616000000</start_date>
+		<end_date>20030630000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2090,8 +2072,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 11</heading>
 		<status>Published</status>
-		<startdate>30 Jun 2003</startdate>
-		<enddate>14 Jul 2003</enddate>
+		<start_date>20030630000000</start_date>
+		<end_date>20030714000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2225,8 +2207,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 12</heading>
 		<status>Published</status>
-		<startdate>14 Jul 2003</startdate>
-		<enddate>28 Jul 2003</enddate>
+		<start_date>20030714000000</start_date>
+		<end_date>20030728000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2366,8 +2348,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 13</heading>
 		<status>Published</status>
-		<startdate>28 Jul 2003</startdate>
-		<enddate>11 Aug 2003</enddate>
+		<start_date>20030728000000</start_date>
+		<end_date>20030811000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2489,8 +2471,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 14</heading>
 		<status>Published</status>
-		<startdate>11 Aug 2003</startdate>
-		<enddate>25 Aug 2003</enddate>
+		<start_date>20030811000000</start_date>
+		<end_date>20030825000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2630,8 +2612,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 15</heading>
 		<status>Published</status>
-		<startdate>25 Aug 2003</startdate>
-		<enddate>8 Sep 2003</enddate>
+		<start_date>20030825000000</start_date>
+		<end_date>20030908000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2759,8 +2741,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 16</heading>
 		<status>Published</status>
-		<startdate>8 Sep 2003</startdate>
-		<enddate>22 Sep 2003</enddate>
+		<start_date>20030908000000</start_date>
+		<end_date>20030922000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -2882,8 +2864,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 17</heading>
 		<status>Published</status>
-		<startdate>22 Sep 2003</startdate>
-		<enddate>6 Oct 2003</enddate>
+		<start_date>20030922000000</start_date>
+		<end_date>20031006000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3017,8 +2999,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 18</heading>
 		<status>Published</status>
-		<startdate>6 Oct 2003</startdate>
-		<enddate>20 Oct 2003</enddate>
+		<start_date>20031006000000</start_date>
+		<end_date>20031020000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3140,8 +3122,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 19</heading>
 		<status>Published</status>
-		<startdate>20 Oct 2003</startdate>
-		<enddate>3 Nov 2003</enddate>
+		<start_date>20031020000000</start_date>
+		<end_date>20031103000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3257,8 +3239,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 20</heading>
 		<status>Published</status>
-		<startdate>3 Nov 2003</startdate>
-		<enddate>17 Nov 2003</enddate>
+		<start_date>20031103000000</start_date>
+		<end_date>20031117000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3398,8 +3380,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 21</heading>
 		<status>Published</status>
-		<startdate>17 Nov 2003</startdate>
-		<enddate>1 Dec 2003</enddate>
+		<start_date>20031117000000</start_date>
+		<end_date>20031201000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3545,8 +3527,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 22</heading>
 		<status>Published</status>
-		<startdate>1 Dec 2003</startdate>
-		<enddate>15 Dec 2003</enddate>
+		<start_date>20031201000000</start_date>
+		<end_date>20031215000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3698,8 +3680,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 12, No. 23</heading>
 		<status>Published</status>
-		<startdate>15 Dec 2003</startdate>
-		<enddate>29 Dec 2003</enddate>
+		<start_date>20031215000000</start_date>
+		<end_date>20031229000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3851,8 +3833,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 1</heading>
 		<status>Published</status>
-		<startdate>9 Feb 2004</startdate>
-		<enddate>23 Feb 2004</enddate>
+		<start_date>20040209000000</start_date>
+		<end_date>20040223000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -3998,8 +3980,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 2</heading>
 		<status>Published</status>
-		<startdate>23 Feb 2004</startdate>
-		<enddate>8 Mar 2004</enddate>
+		<start_date>20040223000000</start_date>
+		<end_date>20040308000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4139,8 +4121,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 3</heading>
 		<status>Published</status>
-		<startdate>8 Mar 2004</startdate>
-		<enddate>22 Mar 2004</enddate>
+		<start_date>20040308000000</start_date>
+		<end_date>20040322000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4268,8 +4250,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 4</heading>
 		<status>Published</status>
-		<startdate>22 Mar 2004</startdate>
-		<enddate>5 Apr 2004</enddate>
+		<start_date>20040322000000</start_date>
+		<end_date>20040405000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4397,8 +4379,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 5</heading>
 		<status>Published</status>
-		<startdate>5 Apr 2004</startdate>
-		<enddate>19 Apr 2004</enddate>
+		<start_date>20040405000000</start_date>
+		<end_date>20040419000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4538,8 +4520,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 6</heading>
 		<status>Published</status>
-		<startdate>19 Apr 2004</startdate>
-		<enddate>3 May 2004</enddate>
+		<start_date>20040419000000</start_date>
+		<end_date>20040503000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4667,8 +4649,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 7</heading>
 		<status>Published</status>
-		<startdate>3 May 2004</startdate>
-		<enddate>17 May 2004</enddate>
+		<start_date>20040503000000</start_date>
+		<end_date>20040517000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4820,8 +4802,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 8</heading>
 		<status>Published</status>
-		<startdate>17 May 2004</startdate>
-		<enddate>31 May 2004</enddate>
+		<start_date>20040517000000</start_date>
+		<end_date>20040531000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -4937,8 +4919,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 9</heading>
 		<status>Published</status>
-		<startdate>31 May 2004</startdate>
-		<enddate>14 Jun 2004</enddate>
+		<start_date>20040531000000</start_date>
+		<end_date>20040614000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5078,8 +5060,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 10</heading>
 		<status>Published</status>
-		<startdate>14 Jun 2004</startdate>
-		<enddate>28 Jun 2004</enddate>
+		<start_date>20040614000000</start_date>
+		<end_date>20040628000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5213,8 +5195,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 11</heading>
 		<status>Published</status>
-		<startdate>28 Jun 2004</startdate>
-		<enddate>12 Jul 2004</enddate>
+		<start_date>20040628000000</start_date>
+		<end_date>20040712000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5354,8 +5336,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 12</heading>
 		<status>Published</status>
-		<startdate>12 Jul 2004</startdate>
-		<enddate>26 Jul 2004</enddate>
+		<start_date>20040712000000</start_date>
+		<end_date>20040726000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5501,8 +5483,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 13</heading>
 		<status>Published</status>
-		<startdate>26 Jul 2004</startdate>
-		<enddate>9 Aug 2004</enddate>
+		<start_date>20040726000000</start_date>
+		<end_date>20040809000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5642,8 +5624,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 14</heading>
 		<status>Published</status>
-		<startdate>9 Aug 2004</startdate>
-		<enddate>23 Aug 2004</enddate>
+		<start_date>20040809000000</start_date>
+		<end_date>20040823000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5795,8 +5777,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 15</heading>
 		<status>Published</status>
-		<startdate>23 Aug 2004</startdate>
-		<enddate>6 Sep 2004</enddate>
+		<start_date>20040823000000</start_date>
+		<end_date>20040906000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -5948,8 +5930,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 16</heading>
 		<status>Published</status>
-		<startdate>6 Sep 2004</startdate>
-		<enddate>20 Sep 2004</enddate>
+		<start_date>20040906000000</start_date>
+		<end_date>20040920000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6083,8 +6065,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 17</heading>
 		<status>Published</status>
-		<startdate>20 Sep 2004</startdate>
-		<enddate>4 Oct 2004</enddate>
+		<start_date>20040920000000</start_date>
+		<end_date>20041004000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6242,8 +6224,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 18</heading>
 		<status>Published</status>
-		<startdate>4 Oct 2004</startdate>
-		<enddate>18 Oct 2004</enddate>
+		<start_date>20041004000000</start_date>
+		<end_date>20041018000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6383,8 +6365,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 19</heading>
 		<status>Published</status>
-		<startdate>18 Oct 2004</startdate>
-		<enddate>1 Nov 2004</enddate>
+		<start_date>20041018000000</start_date>
+		<end_date>20041101000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6518,8 +6500,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 20</heading>
 		<status>Published</status>
-		<startdate>1 Nov 2004</startdate>
-		<enddate>15 Nov 2004</enddate>
+		<start_date>20041101000000</start_date>
+		<end_date>20041115000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6647,8 +6629,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 21</heading>
 		<status>Published</status>
-		<startdate>15 Nov 2004</startdate>
-		<enddate>29 Nov 2004</enddate>
+		<start_date>20041115000000</start_date>
+		<end_date>20041129000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6776,8 +6758,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 22</heading>
 		<status>Published</status>
-		<startdate>29 Nov 2004</startdate>
-		<enddate>13 Dec 2004</enddate>
+		<start_date>20041129000000</start_date>
+		<end_date>20041213000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -6905,8 +6887,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 13, No. 23</heading>
 		<status>Published</status>
-		<startdate>13 Dec 2004</startdate>
-		<enddate>27 Dec 2004</enddate>
+		<start_date>20041213000000</start_date>
+		<end_date>20041227000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -7046,8 +7028,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 1</heading>
 		<status>Published</status>
-		<startdate>7 Feb 2005</startdate>
-		<enddate>21 Feb 2005</enddate>
+		<start_date>20050207000000</start_date>
+		<end_date>20050221000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -7193,8 +7175,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 2</heading>
 		<status>Published</status>
-		<startdate>21 Feb 2005</startdate>
-		<enddate>7 Mar 2005</enddate>
+		<start_date>20050221000000</start_date>
+		<end_date>20050307000000</end_date>
 		<articles>
 		<article>
 			<section></section>
@@ -7352,8 +7334,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 3</heading>
 		<status>Published</status>
-		<startdate>3 Mar 2005</startdate>
-		<enddate>16 Mar 2005</enddate>
+		<start_date>20050303000000</start_date>
+		<end_date>20050316000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -7505,8 +7487,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 4</heading>
 		<status>Published</status>
-		<startdate>21 Mar 2005</startdate>
-		<enddate>4 Apr 2005</enddate>
+		<start_date>20050321000000</start_date>
+		<end_date>20050404000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -7658,8 +7640,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 5</heading>
 		<status>Published</status>
-		<startdate>4 Apr 2005</startdate>
-		<enddate>18 Apr 2005</enddate>
+		<start_date>20050404000000</start_date>
+		<end_date>20050418000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -7799,8 +7781,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 6</heading>
 		<status>Published</status>
-		<startdate>18 Apr 2005</startdate>
-		<enddate>2 May 2005</enddate>
+		<start_date>20050418000000</start_date>
+		<end_date>20050502000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -7958,8 +7940,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 7</heading>
 		<status>Published</status>
-		<startdate>2 May 2005</startdate>
-		<enddate>16 May 2005</enddate>
+		<start_date>20050502000000</start_date>
+		<end_date>20050516000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -8105,8 +8087,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 8</heading>
 		<status>Published</status>
-		<startdate>16 May 2005</startdate>
-		<enddate>30 May 2005</enddate>
+		<start_date>20050516000000</start_date>
+		<end_date>20050530000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -8258,8 +8240,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 9</heading>
 		<status>Published</status>
-		<startdate>30 May 2005</startdate>
-		<enddate>13 Jun 2005</enddate>
+		<start_date>20050530000000</start_date>
+		<end_date>20050613000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -8417,8 +8399,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 10</heading>
 		<status>Published</status>
-		<startdate>13 Jun 2005</startdate>
-		<enddate>27 Jun 2005</enddate>
+		<start_date>20050613000000</start_date>
+		<end_date>20050627000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -8564,8 +8546,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 11</heading>
 		<status>Published</status>
-		<startdate>27 Jun 2005</startdate>
-		<enddate>11 Jul 2005</enddate>
+		<start_date>20050627000000</start_date>
+		<end_date>20050711000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -8723,8 +8705,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 12</heading>
 		<status>Published</status>
-		<startdate>11 Jul 2005</startdate>
-		<enddate>25 Jul 2005</enddate>
+		<start_date>20050711000000</start_date>
+		<end_date>20050725000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -8876,8 +8858,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 13</heading>
 		<status>Published</status>
-		<startdate>25 Jul 2005</startdate>
-		<enddate>8 Aug 2005</enddate>
+		<start_date>20050725000000</start_date>
+		<end_date>20050808000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9035,8 +9017,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 14</heading>
 		<status>Published</status>
-		<startdate>8 Aug 2005</startdate>
-		<enddate>22 Aug 2005</enddate>
+		<start_date>20050808000000</start_date>
+		<end_date>20050822000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9176,8 +9158,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 15</heading>
 		<status>Published</status>
-		<startdate>22 Aug 2005</startdate>
-		<enddate>5 Sep 2005</enddate>
+		<start_date>20050822000000</start_date>
+		<end_date>20050905000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9323,8 +9305,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 16</heading>
 		<status>Published</status>
-		<startdate>5 Sep 2005</startdate>
-		<enddate>19 Sep 2005</enddate>
+		<start_date>20050905000000</start_date>
+		<end_date>20050919000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9464,8 +9446,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 17</heading>
 		<status>Published</status>
-		<startdate>19 Sep 2005</startdate>
-		<enddate>3 Oct 2005</enddate>
+		<start_date>20050919000000</start_date>
+		<end_date>20051003000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9623,8 +9605,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 18</heading>
 		<status>Published</status>
-		<startdate>3 Oct 2005</startdate>
-		<enddate>17 Oct 2005</enddate>
+		<start_date>20051003000000</start_date>
+		<end_date>20051017000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9788,8 +9770,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 19</heading>
 		<status>Published</status>
-		<startdate>17 Oct 2005</startdate>
-		<enddate>31 Oct 2005</enddate>
+		<start_date>20051017000000</start_date>
+		<end_date>20051031000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -9953,8 +9935,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 20</heading>
 		<status>Published</status>
-		<startdate>31 Oct 2005</startdate>
-		<enddate>14 Nov 2005</enddate>
+		<start_date>20051031000000</start_date>
+		<end_date>20051114000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -10112,8 +10094,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 21</heading>
 		<status>Published</status>
-		<startdate>14 Nov 2005</startdate>
-		<enddate>28 Nov 2005</enddate>
+		<start_date>20051114000000</start_date>
+		<end_date>20051128000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -10289,8 +10271,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 22</heading>
 		<status>Published</status>
-		<startdate>28 Nov 2005</startdate>
-		<enddate>12 Dec 2005</enddate>
+		<start_date>20051128000000</start_date>
+		<end_date>20051212000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -10460,8 +10442,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 14, No. 23</heading>
 		<status>Published</status>
-		<startdate>15 Dec 2005</startdate>
-		<enddate>29 Dec 2005</enddate>
+		<start_date>20051215000000</start_date>
+		<end_date>20051229000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -10613,8 +10595,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 1</heading>
 		<status>Published</status>
-		<startdate>6 Feb 2006</startdate>
-		<enddate>20 Feb 2006</enddate>
+		<start_date>20060206000000</start_date>
+		<end_date>20060220000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -10790,8 +10772,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 2</heading>
 		<status>Published</status>
-		<startdate>20 Feb 2006</startdate>
-		<enddate>6 Mar 2006</enddate>
+		<start_date>20060220000000</start_date>
+		<end_date>20060306000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -10949,8 +10931,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 3</heading>
 		<status>Published</status>
-		<startdate>6 Mar 2006</startdate>
-		<enddate>20 Mar 2006</enddate>
+		<start_date>20060306000000</start_date>
+		<end_date>20060320000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -11102,8 +11084,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 4</heading>
 		<status>Published</status>
-		<startdate>20 Mar 2006</startdate>
-		<enddate>3 Apr 2006</enddate>
+		<start_date>20060320000000</start_date>
+		<end_date>20060403000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -11261,8 +11243,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 5</heading>
 		<status>Published</status>
-		<startdate>3 Apr 2006</startdate>
-		<enddate>17 Apr 2006</enddate>
+		<start_date>20060403000000</start_date>
+		<end_date>20060417000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -11402,8 +11384,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 6</heading>
 		<status>Published</status>
-		<startdate>17 Apr 2006</startdate>
-		<enddate>1 May 2006</enddate>
+		<start_date>20060417000000</start_date>
+		<end_date>20060501000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -11561,8 +11543,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 7</heading>
 		<status>Published</status>
-		<startdate>1 May 2006</startdate>
-		<enddate>15 May 2006</enddate>
+		<start_date>20060501000000</start_date>
+		<end_date>20060515000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -11708,8 +11690,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 8</heading>
 		<status>Published</status>
-		<startdate>15 May 2006</startdate>
-		<enddate>29 May 2006</enddate>
+		<start_date>20060515000000</start_date>
+		<end_date>20060529000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -11867,8 +11849,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 9</heading>
 		<status>Published</status>
-		<startdate>29 May 2006</startdate>
-		<enddate>12 Jun 2006</enddate>
+		<start_date>20060529000000</start_date>
+		<end_date>20060612000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12002,8 +11984,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 10</heading>
 		<status>Published</status>
-		<startdate>12 Jun 2006</startdate>
-		<enddate>26 Jun 2006</enddate>
+		<start_date>20060612000000</start_date>
+		<end_date>20060626000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12155,8 +12137,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 11</heading>
 		<status>Published</status>
-		<startdate>26 Jun 2006</startdate>
-		<enddate>10 Jul 2006</enddate>
+		<start_date>20060626000000</start_date>
+		<end_date>20060710000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12332,8 +12314,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 12</heading>
 		<status>Published</status>
-		<startdate>10 Jul 2006</startdate>
-		<enddate>24 Jul 2006</enddate>
+		<start_date>20060710000000</start_date>
+		<end_date>20060724000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12467,8 +12449,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 13</heading>
 		<status>Published</status>
-		<startdate>24 Jul 2006</startdate>
-		<enddate>7 Aug 2006</enddate>
+		<start_date>20060724000000</start_date>
+		<end_date>20060807000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12614,8 +12596,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 14</heading>
 		<status>Published</status>
-		<startdate>7 Aug 2006</startdate>
-		<enddate>21 Aug 2006</enddate>
+		<start_date>20060807000000</start_date>
+		<end_date>20060821000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12749,8 +12731,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 15</heading>
 		<status>Published</status>
-		<startdate>21 Aug 2006</startdate>
-		<enddate>4 Sep 2006</enddate>
+		<start_date>20060821000000</start_date>
+		<end_date>20060904000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -12902,8 +12884,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 16</heading>
 		<status>Published</status>
-		<startdate>4 Sep 2006</startdate>
-		<enddate>18 Sep 2006</enddate>
+		<start_date>20060904000000</start_date>
+		<end_date>20060918000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13055,8 +13037,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 17</heading>
 		<status>Published</status>
-		<startdate>18 Sep 2006</startdate>
-		<enddate>2 Oct 2006</enddate>
+		<start_date>20060918000000</start_date>
+		<end_date>20061002000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13196,8 +13178,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 18</heading>
 		<status>Published</status>
-		<startdate>2 Oct 2006</startdate>
-		<enddate>16 Oct 2006</enddate>
+		<start_date>20061002000000</start_date>
+		<end_date>20061016000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13349,8 +13331,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 19</heading>
 		<status>Published</status>
-		<startdate>16 Oct 2006</startdate>
-		<enddate>30 Oct 2006</enddate>
+		<start_date>20061016000000</start_date>
+		<end_date>20061030000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13520,8 +13502,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 20</heading>
 		<status>Published</status>
-		<startdate>30 Oct 2006</startdate>
-		<enddate>13 Nov 2006</enddate>
+		<start_date>20061030000000</start_date>
+		<end_date>20061113000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13655,8 +13637,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 21</heading>
 		<status>Published</status>
-		<startdate>13 Nov 2006</startdate>
-		<enddate>27 Nov 2006</enddate>
+		<start_date>20061113000000</start_date>
+		<end_date>20061127000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13808,8 +13790,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 22</heading>
 		<status>Published</status>
-		<startdate>27 Nov 2006</startdate>
-		<enddate>11 Dec 2006</enddate>
+		<start_date>20061127000000</start_date>
+		<end_date>20061211000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -13943,8 +13925,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 15, No. 23</heading>
 		<status>Published</status>
-		<startdate>11 Dec 2006</startdate>
-		<enddate>25 Dec 2006</enddate>
+		<start_date>20061211000000</start_date>
+		<end_date>20061225000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -14108,8 +14090,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 16, No. 1</heading>
 		<status>Published</status>
-		<startdate>5 Feb 2007</startdate>
-		<enddate>19 Feb 2007</enddate>
+		<start_date>20070205000000</start_date>
+		<end_date>20070219000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -14255,8 +14237,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 16, No. 2</heading>
 		<status>Published</status>
-		<startdate>19 Feb 2007</startdate>
-		<enddate>5 Mar 2007</enddate>
+		<start_date>20070219000000</start_date>
+		<end_date>20070305000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -14408,8 +14390,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne News. Vol. 16, No. 3</heading>
 		<status>Published</status>
-		<startdate>5 Mar 2007</startdate>
-		<enddate>19 Mar 2007</enddate>
+		<start_date>20070305000000</start_date>
+		<end_date>20070319000000</end_date>
 		<articles>
 		<article>
 			<section>Top stories</section>
@@ -14585,8 +14567,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 1</heading>
 		<status>Published</status>
-		<startdate>19 Mar 2007</startdate>
-		<enddate>2 Apr 2007</enddate>
+		<start_date>20070319000000</start_date>
+		<end_date>20070402000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -14708,8 +14690,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 2</heading>
 		<status>Published</status>
-		<startdate>2 Apr 2007</startdate>
-		<enddate>16 Apr 2007</enddate>
+		<start_date>20070402000000</start_date>
+		<end_date>20070416000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -14837,8 +14819,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 3</heading>
 		<status>Published</status>
-		<startdate>16 Apr 2007</startdate>
-		<enddate>30 Apr 2007</enddate>
+		<start_date>20070416000000</start_date>
+		<end_date>20070430000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -14972,8 +14954,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 4</heading>
 		<status>Published</status>
-		<startdate>30 Apr 2007</startdate>
-		<enddate>14 May 2007</enddate>
+		<start_date>20070430000000</start_date>
+		<end_date>20070514000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15101,8 +15083,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 5</heading>
 		<status>Published</status>
-		<startdate>14 May 2007</startdate>
-		<enddate>28 May 2007</enddate>
+		<start_date>20070514000000</start_date>
+		<end_date>20070528000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15242,8 +15224,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 6</heading>
 		<status>Published</status>
-		<startdate>28 May 2007</startdate>
-		<enddate>11 Jun 2007</enddate>
+		<start_date>20070528000000</start_date>
+		<end_date>20070611000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15371,8 +15353,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 7</heading>
 		<status>Published</status>
-		<startdate>11 Jun 2007</startdate>
-		<enddate>25 Jun 2007</enddate>
+		<start_date>20070611000000</start_date>
+		<end_date>20070625000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15518,8 +15500,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 8</heading>
 		<status>Published</status>
-		<startdate>25 Jun 2007</startdate>
-		<enddate>9 Jul 2007</enddate>
+		<start_date>20070625000000</start_date>
+		<end_date>20070709000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15653,8 +15635,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 9</heading>
 		<status>Published</status>
-		<startdate>9 Jul 2007</startdate>
-		<enddate>23 Jul 2007</enddate>
+		<start_date>20070709000000</start_date>
+		<end_date>20070723000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15782,8 +15764,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 10</heading>
 		<status>Published</status>
-		<startdate>23 Jul 2007</startdate>
-		<enddate>6 Aug 2007</enddate>
+		<start_date>20070723000000</start_date>
+		<end_date>20070806000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -15935,8 +15917,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 11</heading>
 		<status>Published</status>
-		<startdate>6 Aug 2007</startdate>
-		<enddate>20 Aug 2007</enddate>
+		<start_date>20070806000000</start_date>
+		<end_date>20070820000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16076,8 +16058,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 12</heading>
 		<status>Published</status>
-		<startdate>19 Aug 2007</startdate>
-		<enddate>3 Sep 2007</enddate>
+		<start_date>20070819000000</start_date>
+		<end_date>20070903000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16217,8 +16199,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 13</heading>
 		<status>Published</status>
-		<startdate>3 Sep 2007</startdate>
-		<enddate>17 Sep 2007</enddate>
+		<start_date>20070903000000</start_date>
+		<end_date>20070917000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16334,8 +16316,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 14</heading>
 		<status>Published</status>
-		<startdate>17 Sep 2007</startdate>
-		<enddate>1 Oct 2007</enddate>
+		<start_date>20070917000000</start_date>
+		<end_date>20071001000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16439,8 +16421,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 15</heading>
 		<status>Published</status>
-		<startdate>1 Oct 2007</startdate>
-		<enddate>15 Oct 2007</enddate>
+		<start_date>20071001000000</start_date>
+		<end_date>20071015000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16532,8 +16514,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 16</heading>
 		<status>Published</status>
-		<startdate>15 Oct 2007</startdate>
-		<enddate>29 Oct 2007</enddate>
+		<start_date>20071015000000</start_date>
+		<end_date>20071029000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16673,8 +16655,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 17</heading>
 		<status>Published</status>
-		<startdate>29 Oct 2007</startdate>
-		<enddate>12 Nov 2007</enddate>
+		<start_date>20071029000000</start_date>
+		<end_date>20071112000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16838,8 +16820,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 18</heading>
 		<status>Published</status>
-		<startdate>12 Nov 2007</startdate>
-		<enddate>26 Nov 2007</enddate>
+		<start_date>20071112000000</start_date>
+		<end_date>20071126000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -16973,8 +16955,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 19</heading>
 		<status>Published</status>
-		<startdate>26 Nov 2007</startdate>
-		<enddate>10 Dec 2007</enddate>
+		<start_date>20071126000000</start_date>
+		<end_date>20071210000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -17102,8 +17084,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 1, No. 20</heading>
 		<status>Published</status>
-		<startdate>10 Dec 2007</startdate>
-		<enddate>4 Feb 2008</enddate>
+		<start_date>20071210000000</start_date>
+		<end_date>20080204000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -17225,8 +17207,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 2, No. 1</heading>
 		<status>Published</status>
-		<startdate>4 Feb 2008</startdate>
-		<enddate>18 Feb 2008</enddate>
+		<start_date>20080204000000</start_date>
+		<end_date>20080218000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -17468,8 +17450,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 2, No. 2</heading>
 		<status>Published</status>
-		<startdate>18 Feb 2008</startdate>
-		<enddate>3 Mar 2008</enddate>
+		<start_date>20080218000000</start_date>
+		<end_date>20080303000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -17669,8 +17651,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 2, No. 3</heading>
 		<status>Published</status>
-		<startdate>3 Mar 2008</startdate>
-		<enddate>17 Mar 2008</enddate>
+		<start_date>20080303000000</start_date>
+		<end_date>20080317000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -17894,8 +17876,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 2, No. 4</heading>
 		<status>Published</status>
-		<startdate>17 Mar 2008</startdate>
-		<enddate>14 Apr 2008</enddate>
+		<start_date>20080317000000</start_date>
+		<end_date>20080414000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -18083,8 +18065,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 1</heading>
 		<status>Published</status>
-		<startdate>14 Apr 2008</startdate>
-		<enddate>12 May 2008</enddate>
+		<start_date>20080414000000</start_date>
+		<end_date>20080512000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -18338,8 +18320,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 2</heading>
 		<status>Published</status>
-		<startdate>12 May 2008</startdate>
-		<enddate>9 Jun 2008</enddate>
+		<start_date>20080512000000</start_date>
+		<end_date>20080609000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -18509,8 +18491,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 3</heading>
 		<status>Published</status>
-		<startdate>9 Jun 2008</startdate>
-		<enddate>13 Jul 2008</enddate>
+		<start_date>20080609000000</start_date>
+		<end_date>20080713000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -18656,8 +18638,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 5</heading>
 		<status>Published</status>
-		<startdate>14 Jul 2008</startdate>
-		<enddate>10 Aug 2008</enddate>
+		<start_date>20080714000000</start_date>
+		<end_date>20080810000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -18809,8 +18791,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 6</heading>
 		<status>Published</status>
-		<startdate>11 Aug 2008</startdate>
-		<enddate>8 Sep 2008</enddate>
+		<start_date>20080811000000</start_date>
+		<end_date>20080908000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -18950,8 +18932,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 7</heading>
 		<status>Published</status>
-		<startdate>8 Sep 2008</startdate>
-		<enddate>13 Oct 2008</enddate>
+		<start_date>20080908000000</start_date>
+		<end_date>20081013000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19091,8 +19073,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 8</heading>
 		<status>Published</status>
-		<startdate>13 Oct 2008</startdate>
-		<enddate>10 Nov 2008</enddate>
+		<start_date>20081013000000</start_date>
+		<end_date>20081110000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19244,8 +19226,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 9</heading>
 		<status>Published</status>
-		<startdate>10 Nov 2008</startdate>
-		<enddate>8 Dec 2008</enddate>
+		<start_date>20081110000000</start_date>
+		<end_date>20081208000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19391,8 +19373,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 3, No. 10</heading>
 		<status>Published</status>
-		<startdate>8 Dec 2008</startdate>
-		<enddate>12 Jan 2009</enddate>
+		<start_date>20081208000000</start_date>
+		<end_date>20090112000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19532,8 +19514,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 4, No. 1</heading>
 		<status>Pending</status>
-		<startdate>12 Jan 2009</startdate>
-		<enddate>8 Feb 2009</enddate>
+		<start_date>20090112000000</start_date>
+		<end_date>20090208000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19595,8 +19577,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 4, No. 3</heading>
 		<status>Published</status>
-		<startdate>9 Mar 2009</startdate>
-		<enddate>25 Mar 2009</enddate>
+		<start_date>20090309000000</start_date>
+		<end_date>20090325000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19742,8 +19724,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 5, No. 1</heading>
 		<status>Published</status>
-		<startdate>13 Apr 2009</startdate>
-		<enddate>10 May 2009</enddate>
+		<start_date>20090413000000</start_date>
+		<end_date>20090510000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -19877,8 +19859,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 5, No. 2</heading>
 		<status>Published</status>
-		<startdate>11 May 2009</startdate>
-		<enddate>8 Jun 2009</enddate>
+		<start_date>20090511000000</start_date>
+		<end_date>20090608000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -20018,8 +20000,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 5, No. 3</heading>
 		<status>Published</status>
-		<startdate>8 Jun 2009</startdate>
-		<enddate>12 Jul 2009</enddate>
+		<start_date>20090608000000</start_date>
+		<end_date>20090712000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -20129,8 +20111,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 5, No. 5</heading>
 		<status>Published</status>
-		<startdate>10 Aug 2009</startdate>
-		<enddate>13 Sep 2009</enddate>
+		<start_date>20090810000000</start_date>
+		<end_date>20090913000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -20234,8 +20216,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 5, No. 6</heading>
 		<status>Published</status>
-		<startdate>14 Sep 2009</startdate>
-		<enddate>11 Oct 2009</enddate>
+		<start_date>20090914000000</start_date>
+		<end_date>20091011000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>
@@ -20351,8 +20333,8 @@ includes/searchbox.php:	<option value="5" @isSelected($publicationType,5) >Resea
 		<publication>The Voice</publication>
 		<heading>The University of Melbourne Voice. Vol. 5, No. 7</heading>
 		<status>Published</status>
-		<startdate>12 Oct 2009</startdate>
-		<enddate>8 Nov 2009</enddate>
+		<start_date>20091012000000</start_date>
+		<end_date>20091108000000</end_date>
 		<articles>
 		<article>
 			<section>Cover story</section>

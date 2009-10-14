@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import='java.util.*' %>
+<%@ page import='java.text.*' %>
 <%@ page import='au.edu.unimelb.news.*' %>
 <%@ page import='au.edu.unimelb.news.model.*' %>
 <%@ page import='au.edu.unimelb.helper.*' %>
@@ -25,9 +26,18 @@
 <div id="content">
 <% SessionFeedback.display(session,out); %>
 
-<h2><%= StringHelper.escapeHtml(newsletter.getName()) %></h2>
+<div class="newsletter">
 
+<h2><%= StringHelper.escapeHtml(newsletter.getName()) %></h2>
 <%
+DateFormat f1 = new SimpleDateFormat("d MMMM");
+DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
+out.print("<p class=\"newsletter_date\">");
+out.print(f1.format(newsletter.getStartDate()));
+if(newsletter.getStartDate().getTime() != newsletter.getEndDate().getTime())
+	out.print(" - " + f2.format(newsletter.getEndDate()));
+out.print("</p>");
+
 String storyType = "";
 for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsletterId(newsletter.getId(),0,100)) {
 	Article article = Articles.get(item.getArticleId());
@@ -50,6 +60,7 @@ for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsl
 		out.println("<p>Article "+item.getArticleId()+" does not exist.</p>");
 	}
 } %>
+</div>
 
 </div>
 <% LayoutHelper.footer(out); %>

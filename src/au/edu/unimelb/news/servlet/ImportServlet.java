@@ -48,11 +48,11 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 
 	public ImportServlet() {
 		super();
-	}   	
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request,response);
-	}  	
+	}
 
 	/**
 	 * Reads all user input related to creating a new agenda item and creates the agenda item.
@@ -66,8 +66,8 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 		LayoutHelper.menubar(out,user);
 
 		out.println("<div id=\"breadcrumbs\">");
-		out.println("<a href=\"http://www.unimelb.edu.au\">Home</a> &gt;");
-		out.println("<a href=\""+Configuration.appPrefix+"/\">Policy Library</a> &gt;");
+		out.println("<a href=\"http://www.unimelb.edu.au\">University home</a> &gt;");
+		out.println("<a href=\""+Configuration.appPrefix+"/\">University news</a> &gt;");
 		out.println("Document Import");
 		out.println("</div>");
 
@@ -116,10 +116,10 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 				out.println("<li>"+StringHelper.escapeHtml(message)+"</li>");
 		}
 		out.println("</ul>");
-		
+
 		out.println("</div>");
 		LayoutHelper.footer(out);
-		
+
 		out.flush();
 		out.close();
 	}

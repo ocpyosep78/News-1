@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import='java.util.*' %>
+<%@ page import='java.text.*' %>
 <%@ page import='au.edu.unimelb.news.*' %>
 <%@ page import='au.edu.unimelb.news.model.*' %>
 <%@ page import='au.edu.unimelb.helper.*' %>
@@ -32,17 +33,28 @@
 
 <% SessionFeedback.display(session,out); %>
 
-<% List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId()); %>
+<%
+List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
+DateFormat f1 = new SimpleDateFormat("d MMMM");
+DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
+%>
 
 <h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
 <p>Most recent newsletters for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
 
-<ul>
+<ul class="newsletter_list">
 <% for(NewsletterInfo document : newsletters) {
 //	if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
 //	if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=Newsletters.asLink(document)%>)</span></li>
+<li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a><br/>
+<span class="faded">
+<%
+out.print(f1.format(document.getStartDate()));
+if(document.getStartDate().getTime() != document.getEndDate().getTime())
+	out.print(" - " + f2.format(document.getEndDate()));
+%>
+</span></li>
 <% } %>
 </ul>
 

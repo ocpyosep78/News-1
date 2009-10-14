@@ -371,7 +371,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.publication_id,n.published from newsletter n where publication_id = ? order by n.name,n.last_update"
+                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.name,n.last_update"
               );
             s.setLong(1,publicationId);
             results=s.executeQuery();
@@ -382,6 +382,8 @@ public class DAOFactory {
                 item.setStatus(results.getString(3));
                 item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
+                item.setStartDate(results.getTimestamp(6));
+                item.setEndDate(results.getTimestamp(7));
                 list.add(item);
             }
             results.close();
@@ -408,7 +410,7 @@ public class DAOFactory {
         try {
             c=dataSource.getConnection();
             s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.publication_id,n.published from newsletter n where publication_id = ? order by n.name,n.last_update " +
+                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.name,n.last_update " +
                 "limit "+index+","+limit
               );
             s.setLong(1,publicationId);
@@ -420,6 +422,8 @@ public class DAOFactory {
                 item.setStatus(results.getString(3));
                 item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
+                item.setStartDate(results.getTimestamp(6));
+                item.setEndDate(results.getTimestamp(7));
                 list.add(item);
             }
             results.close();
@@ -568,6 +572,73 @@ public class DAOFactory {
                 item.setStatus(results.getString(3));
                 item.setPublicationId(results.getLong(4));
                 item.setPublished(results.getBoolean(5));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+		return list;
+	}
+
+	public static List<IntegerResult> queryMostRecentNewsletter(Long publicationId) throws IOException {
+		List<IntegerResult> list = new ArrayList<IntegerResult>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select max(n.id) from newsletter n where n.publication_id=? and n.published=1"
+              );
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                IntegerResult item=new IntegerResult();
+                item.setNumber(results.getLong(1));
+                list.add(item);
+            }
+            results.close();
+            results=null;
+            s.close();
+            s=null;
+            c.close();
+            c=null;
+        } catch(SQLException e) {
+            if(results!=null) { try { results.close(); } catch(Exception f){} }
+            if(s!=null) { try { s.close(); } catch(Exception f){} }
+            if(c!=null) { try { c.close(); } catch(Exception f){} }
+            throw new IOException(e.toString());
+        }
+
+		return list;
+	}
+
+	public static List<IntegerResult> queryMostRecentNewsletter(Long publicationId, int index, int limit) throws IOException {
+		List<IntegerResult> list = new ArrayList<IntegerResult>();
+        Connection c=null;
+        PreparedStatement s=null;
+        ResultSet results=null;
+        try {
+            c=dataSource.getConnection();
+            s=c.prepareStatement(
+                "select max(n.id) from newsletter n where n.publication_id=? and n.published=1 " +
+                "limit "+index+","+limit
+              );
+            s.setLong(1,publicationId);
+            results=s.executeQuery();
+            while(results.next()) {
+                IntegerResult item=new IntegerResult();
+                item.setNumber(results.getLong(1));
                 list.add(item);
             }
             results.close();

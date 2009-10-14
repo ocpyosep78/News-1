@@ -21,6 +21,8 @@ public class Newsletter implements Comparable<Newsletter> {
 	private boolean archived;
 	private Date lastUpdate = new Date();
 	private long lastUpdatePersonId;
+	private Date startDate = new Date();
+	private Date endDate = new Date();
 
 	public long getId() {
 		return id;
@@ -60,6 +62,14 @@ public class Newsletter implements Comparable<Newsletter> {
 
 	public long getLastUpdatePersonId() {
 		return lastUpdatePersonId;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
 	}
 
 	public void setId(long id) {
@@ -102,6 +112,14 @@ public class Newsletter implements Comparable<Newsletter> {
 		 this.lastUpdatePersonId = lastUpdatePersonId;
 	}
 
+	public void setStartDate(Date startDate) {
+		 this.startDate = startDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		 this.endDate = endDate;
+	}
+
 	public int compareTo(Newsletter o) {
 		if(publicationId!=o.getPublicationId()) {
 			if(this.publicationId < o.getPublicationId()) return -1; else return 1;
@@ -129,6 +147,12 @@ public class Newsletter implements Comparable<Newsletter> {
 		}
 		if(lastUpdatePersonId!=o.getLastUpdatePersonId()) {
 			if(this.lastUpdatePersonId < o.getLastUpdatePersonId()) return -1; else return 1;
+		}
+		if(startDate.compareTo(o.getStartDate())!=0) {
+			return startDate.compareTo(o.getStartDate());
+		}
+		if(endDate.compareTo(o.getEndDate())!=0) {
+			return endDate.compareTo(o.getEndDate());
 		}
 		return 0;
 	}

@@ -20,7 +20,12 @@
 <h3>The Voice</h3>
 
 <%
-Newsletter newsletter = Newsletters.get(416);
+List<IntegerResult> i = DAOFactory.queryMostRecentNewsletter(Publications.get("The Voice").getId());
+Newsletter newsletter = null;
+
+if(i!=null && i.size()>0)
+	newsletter = Newsletters.get(i.get(0).getNumber());
+
 if(newsletter!=null) {
 	String storyType = "";
 	for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsletterId(newsletter.getId(),0,100)) {

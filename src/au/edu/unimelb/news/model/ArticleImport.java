@@ -283,6 +283,9 @@ public class ArticleImport {
 				article.setPublicationId(publication.getId());
 				article.setName(name);
 				article.setByline(byline);
+
+				if(introduction.startsWith("<b>") && introduction.endsWith("</b>"))
+					introduction=introduction.substring(3,introduction.length()-6);
 				article.setIntroduction(introduction);
 				article.setDetails(details);
 				article.setPublished(true);
@@ -345,6 +348,8 @@ public class ArticleImport {
 				String heading = getElementTagString((Element)node,"heading");
 				String publicationName = getElementTagString((Element)node,"publication");
 				String dateCreated = getElementTagString((Element)node,"dateCreated");
+				String startDate = getElementTagString((Element)node,"start_date");
+				String endDate = getElementTagString((Element)node,"end_date");
 				String username = getElementTagString((Element)node,"user");
 
 				Publication publication = Publications.get(publicationName);
@@ -363,6 +368,22 @@ public class ArticleImport {
 				newsletter.setStatus("Published");
 				newsletter.setArchived(false);
 				newsletter.setDeleted(false);
+
+				DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+
+				if(endDate.startsWith("0000")) startDate = endDate;
+				try {
+					newsletter.setStartDate(format.parse(startDate));
+				} catch (ParseException e) {
+					messages.add("Date parsing problem for date in newsletter/start_date element where newsletter id = "+newsletter.getId());
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/start_date element where article id = "+newsletter.getId(),user.getIP());
+				}
+				try {
+					newsletter.setEndDate(format.parse(endDate));
+				} catch (ParseException e) {
+					messages.add("Date parsing problem for date in newsletter/end_date element where newsletter id = "+newsletter.getId());
+					LogHelper.log("Sysetm","Import",user.getPersonId(),"Date parsing problem for date in newsletter/end_date element where article id = "+newsletter.getId(),user.getIP());
+				}
 
 				List<Person> people;
 				people = au.edu.unimelb.security.dao.DAOFactory.getPersonFactory().getByUsernameDeleted(username, false, 0, 1);

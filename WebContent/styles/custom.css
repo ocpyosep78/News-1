@@ -755,3 +755,24 @@ div#article .source {
 	margin-top: 0;
 	padding-top: 0;
 }
+
+ul.newsletter_list li {
+	list-style: none;
+	padding-left: 1em;
+	margin: 0;
+}
+ul.newsletter_list {
+	padding-left: 0em;
+	margin: 0;
+}
+
+div#content div.newsletter h2 {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+div.newsletter .newsletter_date {
+	font-weight: bold;
+	margin-top: 0;
+	padding-top: 0;
+}

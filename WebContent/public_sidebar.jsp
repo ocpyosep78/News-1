@@ -27,8 +27,6 @@
 
 <%
   int updateListLength = 13;
-  if(user.isAuthenticated()) {
-	  updateListLength = 5;
  %>
 
 <div class="most_viewed_box">
@@ -53,8 +51,6 @@
 <li><a href="http://www.marcom.unimelb.edu.au/">Marketing and Communications</a></li>
 <li><a href="http://www.marcom.unimelb.edu.au/public/story">Got a story?</a></li>
 </ul>
-
-<% } %>
 
 <div class="recently_updated_box">
 <h3>New or updated articles</h3>

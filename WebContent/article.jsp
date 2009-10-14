@@ -33,7 +33,13 @@ boolean locationFound = false;
 for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByArticleId(article.getId(),0,100)) {
 	Newsletter newsletter = Newsletters.get(item.getNewsletterId());
 	if(newsletter != null) {
-		out.println("<p class=\"source\"><a href=\""+Settings.baseUrl+"/newsletter/"+newsletter.getId()+"\">"+StringHelper.escapeHtml(newsletter.getName())+"</a></p>");
+		out.print("<p class=\"source\"><a href=\""+Settings.baseUrl+"/newsletter/"+newsletter.getId()+"\">"+StringHelper.escapeHtml(newsletter.getName())+"</a>");
+		DateFormat f1 = new SimpleDateFormat("d MMMM");
+		DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
+		out.print(", " + f1.format(newsletter.getStartDate()));
+		if(newsletter.getStartDate().getTime() != newsletter.getEndDate().getTime())
+			out.print(" - " + f2.format(newsletter.getEndDate()));
+		out.println("</p>");
 		locationFound = true;
 	}
 }

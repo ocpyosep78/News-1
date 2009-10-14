@@ -7,6 +7,7 @@
 package au.edu.unimelb.news.dao;
 
 import java.lang.Comparable;
+import java.util.Date;
 
 public class NewsletterInfo implements Comparable<NewsletterInfo> {
 
@@ -15,6 +16,8 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 	private String status = "";
 	private long publicationId;
 	private boolean published;
+	private Date startDate = new Date();
+	private Date endDate = new Date();
 
 	public long getId() {
 		return id;
@@ -34,6 +37,14 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 
 	public boolean isPublished() {
 		return published;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
 	}
 
 	public void setId(long id) {
@@ -56,6 +67,14 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 		 this.published = published;
 	}
 
+	public void setStartDate(Date startDate) {
+		 this.startDate = startDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		 this.endDate = endDate;
+	}
+
 	public int compareTo(NewsletterInfo o) {
 		if(id!=o.getId()) {
 			if(this.id < o.getId()) return -1; else return 1;
@@ -71,6 +90,12 @@ public class NewsletterInfo implements Comparable<NewsletterInfo> {
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;
+		}
+		if(startDate.compareTo(o.getStartDate())!=0) {
+			return startDate.compareTo(o.getStartDate());
+		}
+		if(endDate.compareTo(o.getEndDate())!=0) {
+			return endDate.compareTo(o.getEndDate());
 		}
 		return 0;
 	}

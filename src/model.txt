@@ -20,6 +20,8 @@ newsletter.deleted : boolean
 newsletter.archived : boolean
 newsletter.last_update : Date
 newsletter.last_update_person_id : integer
+newsletter.start_date : Date
+newsletter.end_date : Date
 newsletter display order name
 newsletter key name
 newsletter key deleted
@@ -117,9 +119,11 @@ newsletter_info.name : String
 newsletter_info.status : String
 newsletter_info.publication_id : long
 newsletter_info.published : boolean
+newsletter_info.start_date : Date
+newsletter_info.end_date : Date
 newsletter_info queryonly
 
-NewsletterByPublication query "select n.id,n.name,n.status,n.publication_id,n.published from newsletter n where publication_id = ? order by n.name,n.last_update"
+NewsletterByPublication query "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.name,n.last_update"
 NewsletterByPublication parameter publication_id : integer
 NewsletterByPublication returns newsletter_info
 
@@ -144,6 +148,10 @@ integer_result queryonly
 
 #LastArticleNumber query "select max(number) from article"
 #LastArticleNumber returns string_result
+
+MostRecentNewsletter query "select max(n.id) from newsletter n where n.publication_id=? and n.published=1"
+MostRecentNewsletter parameter publication_id : long
+MostRecentNewsletter returns integer_result
 
 startupsql "create trigger si_article_ins after insert on article for each row begin insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_name', NEW.name); insert into search_index (article_id, field_name, field_value) values (NEW.id, 'article_details', NEW.details); end;"
 startupsql "create trigger si_article_upd after update on article for each row begin update search_index set field_value=NEW.name where article_id=NEW.id and field_name='article_name'; update search_index set field_value=NEW.details where article_id=NEW.id and field_name='article_details'; end;"
