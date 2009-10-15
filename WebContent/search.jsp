@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import='java.util.*' %>
+<%@ page import='java.text.*' %>
 <%@ page import='au.edu.unimelb.news.*' %>
 <%@ page import='au.edu.unimelb.news.model.*' %>
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
@@ -69,21 +70,28 @@
 %>
 <div class="search results" style="">
 
-<%search.pageBar(out,_page,keywords);%>
+<%
+Pager pager = new Pager();
+pager.setLink(Settings.baseUrl+"/search.jsp?keywords="+keywords+"&amp;page=");
+pager.setPage(_page);
+pager.setPageCount((results.size()/ArticleSearch.PAGESIZE)+1);
+pager.display(out);
+%>
 
 <ul>
 <%
+	DateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy");
 	for(int i=0;i<ArticleSearch.PAGESIZE&&(_page*ArticleSearch.PAGESIZE+i<results.size());i++) {
 		SearchResult document = results.get(_page*ArticleSearch.PAGESIZE+i);
 %>
-<li><a href="<%=Articles.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=Articles.asLink(document)%>)</span><br/>
-<%=document.getStatus() %>
+<li><a href="<%=Articles.asLink(document)%>"><%=document.getName()%></a> <span class="faded">(<%=dateFormat.format(document.getPublishedDate())%>)</span><br/>
+<%=document.getIntroduction() %>
 
 <% } %>
 
 </ul>
 
-<%search.pageBar(out,_page,keywords);%>
+<%pager.display(out);%>
 
 
 </div>

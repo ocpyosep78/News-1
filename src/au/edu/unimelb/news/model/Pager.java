@@ -9,6 +9,7 @@ public class Pager {
 	int currentPage = 0;
 	int pageCount;
 	String url = "";
+	public static final int MAX_PAGE_LINKS = 16;
 
 	public void setLink(String url) {
 		this.url = url;
@@ -23,6 +24,8 @@ public class Pager {
 	}
 
 	public void display(JspWriter out) throws IOException {
+		if(pageCount<2) return;
+
 		out.println("<div class=\"pagebar\">");
 		out.println("<p class=\"indicator\">Page "+(currentPage+1)+" of "+pageCount+"</p>");
 
@@ -30,8 +33,17 @@ public class Pager {
 		if(currentPage>0)
 			out.println("<li><a href=\""+url+(currentPage-1)+"\">«</a></li>");
 
-		for(int i = 0; i<pageCount; i++) {
-			if(i-currentPage>8 || i-currentPage<-8) continue;
+		int minPageDisplayed = currentPage-(MAX_PAGE_LINKS/2);
+		if(minPageDisplayed<0) minPageDisplayed=0;
+		int maxPageDisplayed = minPageDisplayed+MAX_PAGE_LINKS;
+		if(maxPageDisplayed>pageCount) {
+			maxPageDisplayed = pageCount;
+			if(maxPageDisplayed-MAX_PAGE_LINKS>0)
+				minPageDisplayed = maxPageDisplayed-MAX_PAGE_LINKS;
+		}
+
+
+		for(int i = minPageDisplayed; i<maxPageDisplayed; i++) {
 			out.print("<li><a href=\""+url+i+"\">");
 			if(i==currentPage)
 				out.print("<b>"+(i+1)+"</b>");

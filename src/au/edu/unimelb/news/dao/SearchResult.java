@@ -7,6 +7,7 @@
 package au.edu.unimelb.news.dao;
 
 import java.lang.Comparable;
+import java.util.Date;
 
 public class SearchResult implements Comparable<SearchResult> {
 
@@ -16,6 +17,8 @@ public class SearchResult implements Comparable<SearchResult> {
 	private String introduction = "";
 	private long rank;
 	private boolean published;
+	private Date publishedDate = new Date();
+	private long publicationId;
 
 	public long getId() {
 		return id;
@@ -39,6 +42,14 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	public boolean isPublished() {
 		return published;
+	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public long getPublicationId() {
+		return publicationId;
 	}
 
 	public void setId(long id) {
@@ -65,6 +76,14 @@ public class SearchResult implements Comparable<SearchResult> {
 		 this.published = published;
 	}
 
+	public void setPublishedDate(Date publishedDate) {
+		 this.publishedDate = publishedDate;
+	}
+
+	public void setPublicationId(long publicationId) {
+		 this.publicationId = publicationId;
+	}
+
 	public int compareTo(SearchResult o) {
 		if(id!=o.getId()) {
 			if(this.id < o.getId()) return -1; else return 1;
@@ -83,6 +102,12 @@ public class SearchResult implements Comparable<SearchResult> {
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;
+		}
+		if(publishedDate.compareTo(o.getPublishedDate())!=0) {
+			return publishedDate.compareTo(o.getPublishedDate());
+		}
+		if(publicationId!=o.getPublicationId()) {
+			if(this.publicationId < o.getPublicationId()) return -1; else return 1;
 		}
 		return 0;
 	}

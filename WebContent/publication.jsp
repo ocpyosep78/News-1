@@ -47,6 +47,8 @@ String lastYear = "";
 boolean wantHeadings = newsletters.size()>14;
 %>
 
+<% if(true) { %>
+
 <h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
 <p>Most recent newsletters for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
 
@@ -101,6 +103,12 @@ if(newsletters.size()==0) {
 %>
 
 <% pager.display(out); %>
+
+<% } else { %>
+<h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
+<p>Most recent news for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
+
+<% } %>
 
 </div>
 <% LayoutHelper.footer(out); %>

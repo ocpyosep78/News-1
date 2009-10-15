@@ -12,6 +12,7 @@ public class Publication implements Comparable<Publication> {
 
 	private long id = 0;
 	private String name = "";
+	private boolean hasNewsletters;
 
 	public long getId() {
 		return id;
@@ -19,6 +20,10 @@ public class Publication implements Comparable<Publication> {
 
 	public String getName() {
 		return name;
+	}
+
+	public boolean isHasNewsletters() {
+		return hasNewsletters;
 	}
 
 	public void setId(long id) {
@@ -29,9 +34,16 @@ public class Publication implements Comparable<Publication> {
 		 this.name = name;
 	}
 
+	public void setHasNewsletters(boolean hasNewsletters) {
+		 this.hasNewsletters = hasNewsletters;
+	}
+
 	public int compareTo(Publication o) {
 		if(name.compareTo(o.getName())!=0) {
 			return name.compareTo(o.getName());
+		}
+		if(hasNewsletters!=o.hasNewsletters) {
+			if(this.hasNewsletters) return -1; else return 1;
 		}
 		return 0;
 	}

@@ -7,6 +7,7 @@ topic key name
 topic.name rule maxlength 250
 
 publication.name : String
+publication.has_newsletters : boolean
 publication display order name
 publication key name
 publication.name rule maxlength 250
@@ -133,9 +134,11 @@ search_result.status : String
 search_result.introduction : String
 search_result.rank : integer
 search_result.published : boolean
+search_result.published_date : Date
+search_result.publication_id : long
 search_result queryonly
 
-ArticleSimpleSearch query "select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
+ArticleSimpleSearch query "select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount,d.published_date,d.publication_id from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
 ArticleSimpleSearch parameter field : String
 ArticleSimpleSearch parameter keywords : String
 ArticleSimpleSearch returns search_result
