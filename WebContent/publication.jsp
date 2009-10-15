@@ -12,6 +12,11 @@
 <%
 	String newsletterName = request.getParameter("name");
 	Publication publication = Publications.get(newsletterName);
+	int pageNumber = 0;
+	int pageSize = 20;
+	try {
+		pageNumber = Integer.parseInt(request.getParameter("page"));
+	} catch(Exception e) {}
 %>
 <% LayoutHelper.headerTitled(out,StringHelper.escapeHtml(newsletterName)); %>
 <% User user = UserHelper.getUser(request); %>
@@ -27,7 +32,6 @@
 
 <jsp:include page="public_sidebar.jsp" />
 <jsp:include page="voice_sidebar.jsp" />
-
 
 <div id="content">
 
@@ -46,8 +50,23 @@ boolean wantHeadings = newsletters.size()>14;
 <h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
 <p>Most recent newsletters for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
 
+<%
+Pager pager = new Pager();
+pager.setLink(Settings.baseUrl+"/publication/"+StringHelper.escapeHtml(publication.getName())+"?page=");
+pager.setPage(pageNumber);
+pager.setPageCount((newsletters.size()/pageSize)+1);
+pager.display(out);
+%>
+
 <ul class="newsletter_list">
-<% for(NewsletterInfo document : newsletters) {
+<%
+	int pageStart=pageNumber*pageSize;
+	int pageEnd=pageStart+pageSize;
+	for(int i=0;i<newsletters.size();i++) {
+		if(i>pageEnd) break;
+		if(i<pageStart) continue;
+
+		NewsletterInfo document = newsletters.get(i);
 //	if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
 //	if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 	if(wantHeadings) {
@@ -73,15 +92,15 @@ if(document.getStartDate().getTime() != document.getEndDate().getTime())
 </ul>
 
 <%
-if(newsletters.size()==0 || !user.isAuthenticated()) {
+if(newsletters.size()==0) {
 	out.print("<div class=\"info\">");
 	if(newsletters.size()==0)
 	    out.print("This publication currently has no newsletters. ");
-	if(!user.isAuthenticated())
-		out.print("Some newsletters are only available once you <a href=\""+Settings.baseUrl+"/signin\">Sign in</a>.");
 	out.println("</div>");
 }
 %>
+
+<% pager.display(out); %>
 
 </div>
 <% LayoutHelper.footer(out); %>

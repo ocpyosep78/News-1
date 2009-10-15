@@ -776,3 +776,40 @@ div.newsletter .newsletter_date {
 	margin-top: 0;
 	padding-top: 0;
 }
+
+div.pagebar {
+	padding: 4px 4px 4px 10px;
+	background: #ddd;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+}
+
+div.pagebar .indicator {
+	float:left;
+	padding: 0 !important;
+	margin:0 !important;
+}
+
+div.pagebar ul {
+	margin:0 0 0 8em;
+	padding:0;
+	list-style:none;
+}
+div.pagebar ul li {
+	margin:0 !important;
+	padding:0 !important;
+	display:inline;
+}
+div.pagebar ul li a {
+	text-decoration:none;
+	margin: 0;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+div.pagebar ul li a:hover {
+	text-decoration:underline;
+	background-color:#eee;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+}
+
