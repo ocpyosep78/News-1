@@ -7,6 +7,7 @@
 package au.edu.unimelb.news.dao;
 
 import java.lang.Comparable;
+import java.util.Date;
 
 public class ArticleInfo implements Comparable<ArticleInfo> {
 
@@ -15,6 +16,7 @@ public class ArticleInfo implements Comparable<ArticleInfo> {
 	private String status = "";
 	private long publicationId;
 	private boolean published;
+	private Date publishedDate = new Date();
 
 	public long getId() {
 		return id;
@@ -34,6 +36,10 @@ public class ArticleInfo implements Comparable<ArticleInfo> {
 
 	public boolean isPublished() {
 		return published;
+	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
 	}
 
 	public void setId(long id) {
@@ -56,6 +62,10 @@ public class ArticleInfo implements Comparable<ArticleInfo> {
 		 this.published = published;
 	}
 
+	public void setPublishedDate(Date publishedDate) {
+		 this.publishedDate = publishedDate;
+	}
+
 	public int compareTo(ArticleInfo o) {
 		if(id!=o.getId()) {
 			if(this.id < o.getId()) return -1; else return 1;
@@ -71,6 +81,9 @@ public class ArticleInfo implements Comparable<ArticleInfo> {
 		}
 		if(published!=o.published) {
 			if(this.published) return -1; else return 1;
+		}
+		if(publishedDate.compareTo(o.getPublishedDate())!=0) {
+			return publishedDate.compareTo(o.getPublishedDate());
 		}
 		return 0;
 	}

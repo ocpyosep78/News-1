@@ -30,7 +30,6 @@
   // If a username has been remembered (using a cookie), put that in the sign-in box.
   String signinUsername=request.getParameter("signin_username");
   if(signinUsername==null || signinUsername.length()==0) signinUsername=CookieHelper.getCookie("username",request);
-
 %>
 
 

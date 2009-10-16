@@ -96,23 +96,28 @@ article_info.name : String
 article_info.status : String
 article_info.publication_id : long
 article_info.published : boolean
+article_info.published_date : Date
 article_info queryonly
 
-ArticleByBrowse query "select a.id,a.name,a.status,a.publication_id,a.published from article a where name like ? order by a.name,a.publication_id"
+ArticleByDate query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? order by published_date desc"
+ArticleByDate parameter publication_id : long
+ArticleByDate returns article_info
+
+ArticleByBrowse query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where name like ? order by a.name,a.publication_id"
 ArticleByBrowse parameter name : String
 ArticleByBrowse returns article_info
 
-ArticleByTopic query "select a.id,a.name,a.status,a.publication_id,a.published from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id"
+ArticleByTopic query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id"
 ArticleByTopic parameter topic_id : integer
 ArticleByTopic returns article_info
 
-ArticleRecentlyUpdated query "select a.id,a.name,a.status,a.publication_id,a.published from article a order by a.last_update desc"
+ArticleRecentlyUpdated query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
 ArticleRecentlyUpdated returns article_info
 
-ArticleMostPopular query "select a.id,a.name,a.status,a.publication_id,a.published from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
+ArticleMostPopular query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
 ArticleMostPopular returns article_info
 
-ArticleRecentlyPublished query "select a.id,a.name,a.status,a.publication_id,a.published from article a order by a.last_update desc"
+ArticleRecentlyPublished query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
 ArticleRecentlyPublished returns article_info
 
 newsletter_info.id : long

@@ -38,16 +38,18 @@
 <% SessionFeedback.display(session,out); %>
 
 <%
-List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
 DateFormat year = new SimpleDateFormat("yyyy");
 DateFormat f1 = new SimpleDateFormat("d MMMM");
 DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
 String currentYear = "";
 String lastYear = "";
-boolean wantHeadings = newsletters.size()>14;
 %>
 
-<% if(true) { %>
+<%
+if(publication.isHasNewsletters()) {
+	List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
+	boolean wantHeadings = newsletters.size()>14;
+%>
 
 <h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
 <p>Most recent newsletters for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
@@ -107,6 +109,46 @@ if(newsletters.size()==0) {
 <% } else { %>
 <h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
 <p>Most recent news for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
+
+<%
+List<ArticleInfo> articles = DAOFactory.queryArticleByDate(publication.getId(),pageNumber*pageSize,pageSize);
+int articleCount = (int)(DAOFactory.getArticleFactory().countByPublicationId(publication.getId())/pageSize)+1;
+year = new SimpleDateFormat("MMMM yyyy");
+
+Pager pager = new Pager();
+pager.setLink(Settings.baseUrl+"/publication/"+StringHelper.escapeHtml(publication.getName())+"?page=");
+pager.setPage(pageNumber);
+pager.setPageCount(articleCount);
+pager.display(out);
+
+out.println("<ul>");
+boolean wantHeadings = true;
+for(ArticleInfo article : articles) {
+	if(wantHeadings) {
+		currentYear = year.format(article.getPublishedDate());
+		if(!currentYear.equals(lastYear)) {
+			if(lastYear.length()!=0)
+				out.println("</ul>");
+			out.println("<h3>"+currentYear+"</h3>");
+			out.println("<ul class=\"newsletter_list\">");
+		}
+		lastYear = currentYear;
+	}
+%>
+<li><a href="<%=Settings.baseUrl+"/"+Articles.asLink(article)%>"><%=StringHelper.escapeHtml(article.getName())%></a></li>
+<%
+}
+out.println("</ul>");
+
+if(articleCount==0) {
+	out.print("<div class=\"info\">");
+	out.print("This publication currently has no news articles. ");
+	out.println("</div>");
+}
+%>
+
+<% pager.display(out); %>
+
 
 <% } %>
 
