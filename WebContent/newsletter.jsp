@@ -33,9 +33,12 @@
 DateFormat f1 = new SimpleDateFormat("d MMMM");
 DateFormat f2 = new SimpleDateFormat("d MMMM yyyy");
 out.print("<p class=\"newsletter_date\">");
-out.print(f1.format(newsletter.getStartDate()));
-if(newsletter.getStartDate().getTime() != newsletter.getEndDate().getTime())
+if(newsletter.getStartDate().getTime() != newsletter.getEndDate().getTime()) {
+	out.print(f1.format(newsletter.getStartDate()));
 	out.print(" - " + f2.format(newsletter.getEndDate()));
+} else {
+	out.print(f2.format(newsletter.getEndDate()));
+}
 out.print("</p>");
 
 String storyType = "";

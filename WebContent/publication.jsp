@@ -87,9 +87,12 @@ pager.display(out);
 <li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a><br/>
 <span class="faded">
 <%
-out.print(f1.format(document.getStartDate()));
-if(document.getStartDate().getTime() != document.getEndDate().getTime())
+if(document.getStartDate().getTime() != document.getEndDate().getTime()) {
+	out.print(f1.format(document.getStartDate()));
 	out.print(" - " + f2.format(document.getEndDate()));
+} else {
+	out.print(f2.format(document.getEndDate()));
+}
 %>
 </span></li>
 <% } %>
