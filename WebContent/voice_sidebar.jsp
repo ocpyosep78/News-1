@@ -20,11 +20,14 @@
 <h3>The Voice</h3>
 
 <%
-List<IntegerResult> i = DAOFactory.queryMostRecentNewsletter(Publications.get("The Voice").getId());
 Newsletter newsletter = null;
 
-if(i!=null && i.size()>0)
-	newsletter = Newsletters.get(i.get(0).getNumber());
+try {
+	List<IntegerResult> i = DAOFactory.queryMostRecentNewsletter(Publications.get("The Voice").getId());
+	if(i!=null && i.size()>0)
+		newsletter = Newsletters.get(i.get(0).getNumber());
+} catch(Exception e) { }
+
 
 if(newsletter!=null) {
 	String storyType = "";
