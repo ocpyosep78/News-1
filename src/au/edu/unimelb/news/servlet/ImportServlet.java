@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -71,10 +70,10 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 		out.println("Document Import");
 		out.println("</div>");
 
-		out.flush();
-
 		out.println("<div id=\"content\">");
 		out.println("<h2>Importing</h2>");
+
+		out.flush();
 
 		/*
 		 *  This chunk calls the Jakarta Commons Fileupload component to
@@ -82,34 +81,50 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 		 */
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		List<FileItem> items;
+		List<FileItem> items = null;
 		try {
 			items = upload.parseRequest(request);
-		} catch (FileUploadException e1) {
-			e1.printStackTrace();
-			throw new IOException(e1.getMessage());
+		} catch (Exception e) {
+			out.println("Fatal error: " + e.getMessage());
+			out.println("</div>");
+			LayoutHelper.footer(out);
+
+			out.flush();
+			out.close();
 		}
 
 		/*
 		 * Use the Jakarta Commons Fileupload component to read the
 		 * field variables.
 		 */
-		out.println("<ul>");
-		String filename="";
-		for(FileItem field : items) {
-			if (!field.isFormField()) {
-				filename=field.getName();
-				if(filename.contains("/")) filename=filename.substring(filename.lastIndexOf('/')+1);
-				if(filename.contains("\\")) filename=filename.substring(filename.lastIndexOf('\\')+1);
-				int no=random.nextInt();
-				if(no<1) no=-no;
-				if(filename.length()>0 && field.getSize()>0 && field.getFieldName().equals("import_file")) {
-					ArticleImport helper = new ArticleImport(new ArticleImportResponder(user,out));
-					helper.process(field.getInputStream(), user);
+		try {
+			out.println("<ul>");
+			String filename="";
+			for(FileItem field : items) {
+				if (!field.isFormField()) {
+					filename=field.getName();
+					if(filename.contains("/")) filename=filename.substring(filename.lastIndexOf('/')+1);
+					if(filename.contains("\\")) filename=filename.substring(filename.lastIndexOf('\\')+1);
+					int no=random.nextInt();
+					if(no<1) no=-no;
+					if(filename.length()>0 && field.getSize()>0 && field.getFieldName().equals("import_file")) {
+						ArticleImport helper = new ArticleImport(new ArticleImportResponder(user,out));
+						helper.process(field.getInputStream(), user);
+					}
 				}
 			}
+			out.println("</ul>");
+		} catch (Exception e) {
+			out.println("Fatal error: " + e.getMessage());
+			out.println("</div>");
+			LayoutHelper.footer(out);
+
+			out.flush();
+			out.close();
 		}
-		out.println("</ul>");
+
+
+		out.println("File upload processing complete.");
 
 		out.println("</div>");
 		LayoutHelper.footer(out);
