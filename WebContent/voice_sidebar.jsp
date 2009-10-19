@@ -33,6 +33,7 @@ if(newsletter!=null) {
 	String storyType = "";
 	for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsletterId(newsletter.getId(),0,100)) {
 		Article article = Articles.get(item.getArticleId());
+		if(article == null) continue;
 		if(!item.getSection().equalsIgnoreCase(storyType)) {
 			if(storyType != "")
 				out.println("</ul>");
