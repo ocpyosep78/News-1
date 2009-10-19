@@ -22,7 +22,7 @@ public class ArticleImportResponder {
 		System.out.println("IMPORT: "+message);
 		LogHelper.log("Sysetm","Import",user.getPersonId(),message,user.getIP());
 		out.println("<li>"+message+"</li>");
-		out.flush();
+		//out.flush();
 	}
 
 }

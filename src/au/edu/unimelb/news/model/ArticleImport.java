@@ -278,13 +278,13 @@ public class ArticleImport {
 				Article article=new Article();
 				article.setId(Long.parseLong(id));
 				article.setPublicationId(publication.getId());
-				article.setName(name);
-				article.setByline(byline);
+				article.setName(unescapeCrap(name));
+				article.setByline(unescapeCrap(byline));
 
 				if(introduction.startsWith("<b>") && introduction.endsWith("</b>"))
 					introduction=introduction.substring(3,introduction.length()-6);
-				article.setIntroduction(introduction);
-				article.setDetails(details);
+				article.setIntroduction(unescapeCrap(introduction));
+				article.setDetails(unescapeCrap(details));
 				article.setPublished(true);
 				article.setStatus("Published");
 				article.setDeleted(false);
@@ -356,7 +356,7 @@ public class ArticleImport {
 				if(id.length()>0)
 					newsletter.setId(Long.parseLong(id));
 				newsletter.setPublicationId(publication.getId());
-				newsletter.setName(heading);
+				newsletter.setName(unescapeCrap(heading));
 				newsletter.setPublished(true);
 				newsletter.setStatus("Published");
 				newsletter.setArchived(false);
@@ -430,7 +430,7 @@ public class ArticleImport {
 
 				Newsletter newsletter=new Newsletter();
 				newsletter.setPublicationId(publication.getId());
-				newsletter.setName(heading);
+				newsletter.setName(unescapeCrap(heading));
 				newsletter.setPublished(true);
 				newsletter.setStatus("Published");
 				newsletter.setArchived(false);
@@ -460,6 +460,10 @@ public class ArticleImport {
 				int sortOrder = 0;
 				for(Article article : articles) {
 					sortOrder++;
+					article.setName(unescapeCrap(article.getName()));
+					article.setByline(unescapeCrap(article.getByline()));
+					article.setDetails(unescapeCrap(article.getDetails()));
+					article.setIntroduction(unescapeCrap(article.getIntroduction()));
 					article.setId(staffnewsArticle++);
 					article.setDeleted(false);
 					article.setPublished(false);
@@ -484,5 +488,23 @@ public class ArticleImport {
 
 	}
 
+	/**
+	 * Remove all of the pointlessly escaped html characters due to legacy character encoding issues.
+	 * @return
+	 */
+	private static String unescapeCrap(String string) {
+
+		string = string.replace("&amp;", "&");
+		string = string.replace("&lsquo;", "‘");
+		string = string.replace("&rsquo;", "’");
+		string = string.replace("&ldquo;", "“");
+		string = string.replace("&rdquo;", "”");
+		string = string.replace("&mdash;", "—");
+		string = string.replace("&ndash;", "—");
+		string = string.replace("&mdash;", "“");
+		string = string.replace("&mdash;", "”");
+
+		return string;
+	}
 
 }

@@ -54,14 +54,23 @@ if(article.getName().startsWith("No ")) {
 	for(Article i : articles) {
 		out.println("<hr/>");
 		out.println("<h3>"+i.getName()+"</h3>");
-		out.println(i.getDetails());
+		String details = i.getDetails();
+		details = details.replace("\r\n","<br/>");
+		details = details.replace("\n","<br/>");
+		details = details.replace("\r","<br/>");
+		out.println(details);
 	}
 
 } else {
+	String details = article.getDetails();
+	details = details.replace("\r\n","<br/>");
+	details = details.replace("\n","<br/>");
+	details = details.replace("\r","<br/>");
+
 %>
 <p><b><%= StringHelper.escapeHtml(article.getIntroduction()) %></b></p>
 
-<p><%= article.getDetails() %></p>
+<p><%=details%></p>
 
 <% } %>
 

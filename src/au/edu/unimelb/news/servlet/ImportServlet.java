@@ -73,7 +73,7 @@ public class ImportServlet extends javax.servlet.http.HttpServlet implements jav
 		out.println("<div id=\"content\">");
 		out.println("<h2>Importing</h2>");
 
-		out.flush();
+		//out.flush();
 
 		/*
 		 *  This chunk calls the Jakarta Commons Fileupload component to
