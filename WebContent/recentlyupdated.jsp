@@ -45,7 +45,7 @@ for(ArticleInfo document : DAOFactory.queryArticleRecentlyUpdated(0,100)) {
 <% } %>
 </ul>
 
-<a href="<%=Settings.baseUrl%>/rss/recentupdates.rss" class="rssfeed">Recent updated article RSS feed</a>
+<a href="<%=Settings.baseUrl%>/feed/News" class="rssfeed">Recent updated news</a>
 
 </div>
 <% LayoutHelper.footer(out); %>

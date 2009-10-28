@@ -26,6 +26,10 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
+import au.edu.unimelb.feed.Feed;
+import au.edu.unimelb.feed.FeedManager;
+import au.edu.unimelb.news.feed.NewsFeed;
+import au.edu.unimelb.news.feed.NewsletterFeed;
 import au.edu.unimelb.news.model.Topics;
 import au.edu.unimelb.news.resource.PublicationResourceManager;
 import au.edu.unimelb.security.AdministrationMenu;
@@ -59,6 +63,7 @@ public class LifecycleListener implements ServletContextListener {
 		loadDatabaseId();
 		initialiseLayoutHelper();
 		initialiseDatabaseContents();
+		initialiseFeeds();
 
 		ResourceFactory.addResourceManager(new PublicationResourceManager());
 	}
@@ -192,5 +197,12 @@ public class LifecycleListener implements ServletContextListener {
 
 	}
 
+	private void initialiseFeeds() {
+		Feed newsletterFeed = new NewsletterFeed(Configuration.appPrefix);
+		Feed newsFeed = new NewsFeed(Configuration.appPrefix);
+
+		FeedManager.registerFeed(newsletterFeed);
+		FeedManager.registerFeed(newsFeed);
+	}
 
 }
