@@ -85,6 +85,9 @@ public class LifecycleListener implements ServletContextListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Configuration.setSmtpServer(sce.getServletContext().getInitParameter("smtp.host"));
+		Configuration.setSmtpPort(sce.getServletContext().getInitParameter("smtp.port"));
+		Configuration.setApplicationUrl(sce.getServletContext().getInitParameter("application.url"));
 
 		// Detect the tomcat home folder
 		String catalinaHome = null;
@@ -198,8 +201,8 @@ public class LifecycleListener implements ServletContextListener {
 	}
 
 	private void initialiseFeeds() {
-		Feed newsletterFeed = new NewsletterFeed(Configuration.appPrefix);
-		Feed newsFeed = new NewsFeed(Configuration.appPrefix);
+		Feed newsletterFeed = new NewsletterFeed(Configuration.fullUrl);
+		Feed newsFeed = new NewsFeed(Configuration.fullUrl);
 
 		FeedManager.registerFeed(newsletterFeed);
 		FeedManager.registerFeed(newsFeed);

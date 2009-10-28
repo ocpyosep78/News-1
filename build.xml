@@ -28,7 +28,7 @@
 				<pathelement location="lib/commons-fileupload-1.2.1.jar"/>
 				<pathelement location="lib/xercesImpl.jar"/>
 				<pathelement location="lib/UptecsEmail.jar"/>
-				<pathelement location="lib/UnimelbSecurity-0.1.jar"/>
+				<pathelement location="lib/UnimelbSecurity-0.9.jar"/>
 				<pathelement location="lib/UnimelbTemplate-1.2.jar"/>
 				<pathelement location="lib/UnimelbAuthentication-1.0.jar"/>
 				<pathelement location="lib/Unimelb-Validator.jar"/>
@@ -62,6 +62,9 @@
 					<token key="database.name" value="${production.database.name}"/>
 					<token key="database.username" value="${production.database.username}"/>
 					<token key="database.password" value="${production.database.password}"/>
+					<token key="application.url" value="${production.url}"/>
+					<token key="smtp.host" value="${production.smtp.host}"/>
+					<token key="smtp.port" value="${production.smtp.port}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -93,6 +96,9 @@
 					<token key="database.name" value="${uat.database.name}"/>
 					<token key="database.username" value="${uat.database.username}"/>
 					<token key="database.password" value="${uat.database.password}"/>
+					<token key="application.url" value="${uat.url}"/>
+					<token key="smtp.host" value="${uat.smtp.host}"/>
+					<token key="smtp.port" value="${uat.smtp.port}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -124,6 +130,9 @@
 					<token key="database.name" value="${test.database.name}"/>
 					<token key="database.username" value="${test.database.username}"/>
 					<token key="database.password" value="${test.database.password}"/>
+					<token key="application.url" value="${test.url}"/>
+					<token key="smtp.host" value="${test.smtp.host}"/>
+					<token key="smtp.port" value="${test.smtp.port}"/>
 				</replacetokens>
 			</filterchain>
 		</copy>

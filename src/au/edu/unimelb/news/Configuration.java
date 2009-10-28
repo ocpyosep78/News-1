@@ -28,23 +28,30 @@ import au.edu.unimelb.validator.Validator;
  * All global configuration information is stored within this class. Some of
  * the configurable information is loaded from the context.xml file by the
  * LifecycleHandler class.
- * 
+ *
  * @see LifecycleListener
  */
 public class Configuration {
 
-	public static String appPrefix="";
-	private static String attachmentFolder="/tmp";
-	private static String pdfFolder="/tmp";
-	private static String smtpServer="smtp.unimelb.edu.au";
+	public static String appPrefix = "";
+	public static String fullUrl = "";
+	private static String attachmentFolder = "/tmp";
+	private static String pdfFolder = "/tmp";
+	private static String smtpServer ="smtp.unimelb.edu.au";
+	private static int smtpPort = 25;
 	private static String databaseId = "Unknown";
 
 	private static String ldapServer = "centaur.unimelb.edu.au";
 	private static String ldapContext = "ou=people,o=unimelb";
-	public static Validator validator=null;
+	public static Validator validator = null;
 
-	private static Hashtable<String,String> testUsers=null;
-	private static final String buildString="0.1";
+	private static Hashtable<String,String> testUsers = null;
+	private static final String buildString = "0.2";
+
+	public static void setApplicationUrl(String url) {
+		if(!url.endsWith("/")) url = url + "/";
+		Configuration.fullUrl = url;
+	}
 
 	public static String getAttachmentFolder() {
 		return attachmentFolder;
@@ -70,6 +77,18 @@ public class Configuration {
 		Configuration.databaseId = databaseId;
 	}
 
+	public static int getSmtpPort() {
+		return Configuration.smtpPort;
+	}
+
+	public static void setSmtpPort(String newPort) {
+		int port = 0;
+		try {
+			port = Integer.parseInt(newPort);
+		} catch(Exception e) {}
+		if(port>0)
+			Configuration.smtpPort = port;
+	}
 	public static String getSmtpServer() {
 		return Configuration.smtpServer;
 	}
@@ -93,7 +112,7 @@ public class Configuration {
 	/***
 	 * Initializes the testUsers table using the list of usernames and password passed in.
 	 * @param initString This is the list of usernames and passwords. A username/password pair
-	 * is concatenated using the forward slash character '/'. Each username/password pair is 
+	 * is concatenated using the forward slash character '/'. Each username/password pair is
 	 * separated from another pair by the space character. A password can have a forward slash in it
 	 * but not a space character.
 	 */
@@ -117,7 +136,7 @@ public class Configuration {
 	public static boolean authenticateTestUser(String username, String password) {
 		if (testUsers==null)
 			return false;
-		
+
 		if (testUsers.containsKey(username)) {
 			return (testUsers.get(username).equals(password));
 		} else

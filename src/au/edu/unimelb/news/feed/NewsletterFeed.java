@@ -7,12 +7,12 @@ import java.util.List;
 import au.edu.unimelb.feed.Feed;
 import au.edu.unimelb.feed.FeedEntry;
 import au.edu.unimelb.helper.StringHelper;
+import au.edu.unimelb.news.Configuration;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.dao.NewsletterInfo;
 import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.model.Newsletters;
 import au.edu.unimelb.news.model.Publications;
-import au.edu.unimelb.security.Settings;
 
 public class NewsletterFeed extends Feed {
 
@@ -36,7 +36,7 @@ public class NewsletterFeed extends Feed {
 			entry.title=newsletter.getName();
 			entry.updated=newsletter.getStartDate();
 			entry.content = "";
-			entry.link = Settings.baseUrl+"/"+Newsletters.asLink(newsletter);
+			entry.link = Configuration.fullUrl+Newsletters.asLink(newsletter);
 			entry.id = entry.link;
 			entries.add(entry);
 		}

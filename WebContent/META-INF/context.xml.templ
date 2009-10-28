@@ -25,7 +25,9 @@
     type="javax.sql.DataSource"
     />
 
-  <Parameter name="smtp.server" value="smtp.unimelb.edu.au" override="false"/>
+  <Parameter name="application.url" value="@application.url@" override="false"/>
+  <Parameter name="smtp.server" value="@smtp.host@" override="false"/>
+  <Parameter name="smtp.port" value="@smtp.port@" override="false"/>
   <Parameter name="temporary.folder" value="/tmp" override="false"/>
 
-</Context> 
+</Context>

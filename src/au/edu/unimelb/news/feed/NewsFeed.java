@@ -6,10 +6,10 @@ import java.util.List;
 
 import au.edu.unimelb.feed.Feed;
 import au.edu.unimelb.feed.FeedEntry;
+import au.edu.unimelb.news.Configuration;
 import au.edu.unimelb.news.dao.ArticleInfo;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.model.Articles;
-import au.edu.unimelb.security.Settings;
 import au.edu.unimelb.security.UserHelper;
 import au.edu.unimelb.security.model.User;
 
@@ -35,7 +35,7 @@ public class NewsFeed extends Feed {
 				entry.title = document.getName();
 				entry.content = "";
 				entry.updated = document.getPublishedDate();
-				entry.link = Settings.baseUrl+"/"+Articles.asLink(document);
+				entry.link = Configuration.fullUrl+Articles.asLink(document);
 				entry.id = entry.link;
 				entries.add(entry);
 			}
