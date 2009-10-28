@@ -22,7 +22,7 @@ public class NewsFeed extends Feed {
 		this.setLinkName("News");
 	}
 
-	protected List<FeedEntry> readEntries() {
+	protected List<FeedEntry> readEntries(String parameters) {
 		List<FeedEntry> entries = new ArrayList<FeedEntry>();
 
 		try {
