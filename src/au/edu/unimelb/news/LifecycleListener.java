@@ -85,7 +85,7 @@ public class LifecycleListener implements ServletContextListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Configuration.setSmtpServer(sce.getServletContext().getInitParameter("smtp.host"));
+		Configuration.setSmtpServer(sce.getServletContext().getInitParameter("smtp.server"));
 		Configuration.setSmtpPort(sce.getServletContext().getInitParameter("smtp.port"));
 		Configuration.setApplicationUrl(sce.getServletContext().getInitParameter("application.url"));
 

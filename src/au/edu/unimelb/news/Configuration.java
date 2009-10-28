@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import au.edu.unimelb.security.Settings;
 import au.edu.unimelb.validator.Validator;
 
 /**
@@ -51,6 +52,7 @@ public class Configuration {
 	public static void setApplicationUrl(String url) {
 		if(!url.endsWith("/")) url = url + "/";
 		Configuration.fullUrl = url;
+		Settings.fullUrl  = url;
 	}
 
 	public static String getAttachmentFolder() {
@@ -86,17 +88,20 @@ public class Configuration {
 		try {
 			port = Integer.parseInt(newPort);
 		} catch(Exception e) {}
-		if(port>0)
+		if(port>0) {
 			Configuration.smtpPort = port;
+			Settings.smtpPort = port;
+		}
 	}
 	public static String getSmtpServer() {
 		return Configuration.smtpServer;
 	}
 
 	public static void setSmtpServer(String smtp) {
-		if(smtp!=null && smtp.length()>5)
+		if(smtp!=null && smtp.length()>5) {
 			Configuration.smtpServer=smtp;
-		else {
+			Settings.smtpServer=smtp;
+		} else {
 			System.err.println("Misconfiguration: Please specify a valid smtp server");
 		}
 	}
