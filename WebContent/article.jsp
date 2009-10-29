@@ -9,7 +9,7 @@
 <%@ page import='au.edu.unimelb.security.model.User' %>
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
-<% LayoutHelper.headerTitled(out,"Sign in"); %>
+<% LayoutHelper.headerTitled(out,"News"); %>
 <% User user = UserHelper.getUser(request); %>
 <% LayoutHelper.menubar(out,user); %>
 <% ResourceBundle messages = ResourceBundle.getBundle("messages"); %>
@@ -24,8 +24,17 @@
 <jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
-<% SessionFeedback.display(session,out); %>
+<% SessionFeedback.display(session,out);
 
+if((article.isPublished() && !user.can("Publication","ViewPublished",article.getPublicationId()) ||
+	(!article.isPublished() && !user.can("Publication","ViewUnpublished")))) {
+%>
+<h2>Permission denied</h2>
+<p>You do not have permission to view this particular article because
+<%=article.isPublished()?" this article belongs to a publication you do not have permission to read.":"this article has not been published yet." %>
+<%
+} else {
+%>
 <div id="article">
 <h2><%= StringHelper.escapeHtml(article.getName()) %></h2>
 <%
@@ -75,6 +84,8 @@ if(article.getName().startsWith("No ")) {
 <% } %>
 
 </div>
+
+<% } %>
 
 </div>
 <% LayoutHelper.footer(out); %>

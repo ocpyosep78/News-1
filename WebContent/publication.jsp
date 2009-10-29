@@ -47,7 +47,12 @@ String lastYear = "";
 
 <%
 if(publication.isHasNewsletters()) {
-	List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
+	List<NewsletterInfo> newsletters;
+	if(user.can("Publication","ViewUnpublished",publication.getId())) {
+		newsletters = DAOFactory.queryNewsletterByPublicationAll(publication.getId());
+	} else {
+		newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
+	}
 	boolean wantHeadings = newsletters.size()>14;
 %>
 
@@ -71,8 +76,6 @@ pager.display(out);
 		if(i<pageStart) continue;
 
 		NewsletterInfo document = newsletters.get(i);
-//	if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
-//	if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
 	if(wantHeadings) {
 		currentYear = year.format(document.getStartDate());
 		if(!currentYear.equals(lastYear)) {
@@ -84,7 +87,7 @@ pager.display(out);
 		lastYear = currentYear;
 	}
 %>
-<li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a><br/>
+<li <%=document.isPublished()?"":"class=\"unpublished\""%>><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a> <%=document.isPublished()?"":"<span class=\"faded\">(Unpublished)</span>" %><br/>
 <span class="faded">
 <%
 if(document.getStartDate().getTime() != document.getEndDate().getTime()) {
@@ -114,8 +117,11 @@ if(newsletters.size()==0) {
 <p>Most recent news for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
 
 <%
-List<ArticleInfo> articles = DAOFactory.queryArticleByDate(publication.getId(),pageNumber*pageSize,pageSize);
-int articleCount = (int)(DAOFactory.getArticleFactory().countByPublicationId(publication.getId())/pageSize)+1;
+List<ArticleInfo> articles;
+int articleCount = 0;
+
+articles = DAOFactory.queryArticleByDate(publication.getId(),pageNumber*pageSize,pageSize);
+articleCount = (int)(DAOFactory.getArticleFactory().countByPublicationId(publication.getId())/pageSize)+1;
 year = new SimpleDateFormat("MMMM yyyy");
 
 Pager pager = new Pager();
@@ -138,7 +144,7 @@ for(ArticleInfo article : articles) {
 		lastYear = currentYear;
 	}
 %>
-<li><a href="<%=Settings.baseUrl+"/"+Articles.asLink(article)%>"><%=StringHelper.escapeHtml(article.getName())%></a></li>
+<li <%=article.isPublished()?"":"class=\"unpublished\""%>><a href="<%=Settings.baseUrl+"/"+Articles.asLink(article)%>"><%=StringHelper.escapeHtml(article.getName())%></a></li>
 <%
 }
 out.println("</ul>");

@@ -120,6 +120,9 @@ ArticleMostPopular returns article_info
 ArticleRecentlyPublished query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
 ArticleRecentlyPublished returns article_info
 
+ArticleListByDate query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by published_date desc"
+ArticleListByDate returns article_info
+
 newsletter_info.id : long
 newsletter_info.name : String
 newsletter_info.status : String
@@ -129,9 +132,13 @@ newsletter_info.start_date : Date
 newsletter_info.end_date : Date
 newsletter_info queryonly
 
-NewsletterByPublication query "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.start_date desc,n.name"
+NewsletterByPublication query "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? and n.published!=0 order by n.start_date desc,n.name"
 NewsletterByPublication parameter publication_id : integer
 NewsletterByPublication returns newsletter_info
+
+NewsletterByPublicationAll query "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.published, n.start_date desc,n.name"
+NewsletterByPublicationAll parameter publication_id : integer
+NewsletterByPublicationAll returns newsletter_info
 
 search_result.id : long
 search_result.name : String

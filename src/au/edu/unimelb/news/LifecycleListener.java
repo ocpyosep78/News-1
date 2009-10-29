@@ -165,6 +165,8 @@ public class LifecycleListener implements ServletContextListener {
 
 		LayoutHelper.addMenuItem("Browse", "browse/ABC", false, false, 10);
 		LayoutHelper.addMenuItem("Browse", "browse/ABC", false, true, 10);
+		LayoutHelper.addMenuItem("Create news item", "new_article.jsp", true, true, -30);
+		LayoutHelper.addMenuItem("News", "articles.jsp", true, true, -20);
 
 		LayoutHelper.addMenuItem("Faculties", "http://www.unimelb.edu.au/az/faculties.html", false, false, 60);
 		LayoutHelper.addMenuItem("A-Z Directory", "http://www.unimelb.edu.au/az/index.html", false, false, 64);

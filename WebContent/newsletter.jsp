@@ -24,7 +24,16 @@
 <jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
-<% SessionFeedback.display(session,out); %>
+<% SessionFeedback.display(session,out);
+if((newsletter.isPublished() && !user.can("Publication","ViewPublished",newsletter.getPublicationId()) ||
+	(!newsletter.isPublished() && !user.can("Publication","ViewUnpublished")))) {
+%>
+<h2>Permission denied</h2>
+<p>You do not have permission to view this particular article because
+<%=newsletter.isPublished()?" this article belongs to a publication you do not have permission to read.":" this newsletter has not been published yet." %>
+<%
+} else {
+%>
 
 <div class="newsletter">
 
@@ -64,6 +73,8 @@ for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByNewsl
 	}
 } %>
 </div>
+
+<% } %>
 
 </div>
 <% LayoutHelper.footer(out); %>

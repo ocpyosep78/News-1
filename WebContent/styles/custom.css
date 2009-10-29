@@ -813,3 +813,7 @@ div.pagebar ul li a:hover {
 	-webkit-border-radius:3px;
 }
 
+
+#content li.unpublished a {
+	color: #666;
+}

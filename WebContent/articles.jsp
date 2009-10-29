@@ -10,28 +10,22 @@
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
 <%
-	String newsletterName = request.getParameter("name");
-	Publication publication = Publications.get(newsletterName);
 	int pageNumber = 0;
 	int pageSize = 20;
 	try {
 		pageNumber = Integer.parseInt(request.getParameter("page"));
 	} catch(Exception e) {}
 %>
-<% LayoutHelper.headerTitled(out,StringHelper.escapeHtml(newsletterName)); %>
+<% LayoutHelper.headerTitled(out,"News articles"); %>
 <% User user = UserHelper.getUser(request); %>
 <% LayoutHelper.menubar(out,user); %>
 <% ResourceBundle messages = ResourceBundle.getBundle("messages"); %>
 
-
 <div id="breadcrumbs">
 	<a href="http://www.unimelb.edu.au">University Home</a> &gt;
 	<a href="<%=Settings.baseUrl%>/">University News</a> &gt;
-	<%= StringHelper.escapeHtml(newsletterName) %>
+	News articles
 </div>
-
-<jsp:include page="public_sidebar.jsp" />
-<jsp:include page="voice_sidebar.jsp" />
 
 <div id="content">
 
@@ -45,103 +39,30 @@ String currentYear = "";
 String lastYear = "";
 %>
 
-<%
-if(publication.isHasNewsletters()) {
-	List<NewsletterInfo> newsletters = DAOFactory.queryNewsletterByPublication(publication.getId());
-	boolean wantHeadings = newsletters.size()>14;
-%>
-
-<h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
-<p>Most recent newsletters for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
+<h2>News articles</h2>
 
 <%
-Pager pager = new Pager();
-pager.setLink(Settings.baseUrl+"/publication/"+StringHelper.escapeHtml(publication.getName())+"?page=");
-pager.setPage(pageNumber);
-pager.setPageCount((newsletters.size()/pageSize)+1);
-pager.display(out);
-%>
-
-<ul class="newsletter_list">
-<%
-	int pageStart=pageNumber*pageSize;
-	int pageEnd=pageStart+pageSize;
-	for(int i=0;i<newsletters.size();i++) {
-		if(i>pageEnd) break;
-		if(i<pageStart) continue;
-
-		NewsletterInfo document = newsletters.get(i);
-//	if(document.isPublished() && !user.can("Category","ViewPublished",document.getCategoryId())) continue;
-//	if(!document.isPublished() && !user.can("Category","ViewUnpublished",document.getCategoryId())) continue;
-	if(wantHeadings) {
-		currentYear = year.format(document.getStartDate());
-		if(!currentYear.equals(lastYear)) {
-			if(lastYear.length()!=0)
-				out.println("</ul>");
-			out.println("<h3>"+currentYear+"</h3>");
-			out.println("<ul class=\"newsletter_list\">");
-		}
-		lastYear = currentYear;
-	}
-%>
-<li><a href="<%=Settings.baseUrl%>/<%=Newsletters.asLink(document)%>"><%=document.getName()%></a><br/>
-<span class="faded">
-<%
-if(document.getStartDate().getTime() != document.getEndDate().getTime()) {
-	out.print(f1.format(document.getStartDate()));
-	out.print(" - " + f2.format(document.getEndDate()));
-} else {
-	out.print(f2.format(document.getEndDate()));
-}
-%>
-</span></li>
-<% } %>
-</ul>
-
-<%
-if(newsletters.size()==0) {
-	out.print("<div class=\"info\">");
-	if(newsletters.size()==0)
-	    out.print("This publication currently has no newsletters. ");
-	out.println("</div>");
-}
-%>
-
-<% pager.display(out); %>
-
-<% } else { %>
-<h2><%= StringHelper.escapeHtml(publication.getName()) %></h2>
-<p>Most recent news for <i><%= StringHelper.escapeHtml(publication.getName()) %></i>.
-
-<%
-List<ArticleInfo> articles = DAOFactory.queryArticleByDate(publication.getId(),pageNumber*pageSize,pageSize);
-int articleCount = (int)(DAOFactory.getArticleFactory().countByPublicationId(publication.getId())/pageSize)+1;
+int articleCount = (int)(DAOFactory.getArticleFactory().countAll()/pageSize)+1;
 year = new SimpleDateFormat("MMMM yyyy");
 
 Pager pager = new Pager();
-pager.setLink(Settings.baseUrl+"/publication/"+StringHelper.escapeHtml(publication.getName())+"?page=");
+pager.setLink(Settings.baseUrl+"/articles.jsp?page=");
 pager.setPage(pageNumber);
 pager.setPageCount(articleCount);
 pager.display(out);
 
-out.println("<ul>");
-boolean wantHeadings = true;
-for(ArticleInfo article : articles) {
-	if(wantHeadings) {
-		currentYear = year.format(article.getPublishedDate());
-		if(!currentYear.equals(lastYear)) {
-			if(lastYear.length()!=0)
-				out.println("</ul>");
-			out.println("<h3>"+currentYear+"</h3>");
-			out.println("<ul class=\"newsletter_list\">");
-		}
-		lastYear = currentYear;
-	}
+out.println("<table width=\"100%\">");
+for(ArticleInfo article : DAOFactory.queryArticleListByDate(pageNumber*pageSize,pageSize)) {
 %>
-<li><a href="<%=Settings.baseUrl+"/"+Articles.asLink(article)%>"><%=StringHelper.escapeHtml(article.getName())%></a></li>
+<tr>
+<td><%=article.isPublished()?article.getPublishedDate():"Unpublished" %></td>
+<td><a href="<%=Settings.baseUrl+"/"+Articles.asLink(article)%>"><%=StringHelper.maxLength(StringHelper.escapeHtml(article.getName()),60)%></a></td>
+<td><%=Publications.get(article.getPublicationId()).getName()%></td>
+<td>Edit Delete</td>
+</tr>
 <%
 }
-out.println("</ul>");
+out.println("</table>");
 
 if(articleCount==0) {
 	out.print("<div class=\"info\">");
@@ -153,7 +74,6 @@ if(articleCount==0) {
 <% pager.display(out); %>
 
 
-<% } %>
 
 </div>
 <% LayoutHelper.footer(out); %>
