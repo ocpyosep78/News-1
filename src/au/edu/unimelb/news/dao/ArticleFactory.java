@@ -18,58 +18,58 @@ import java.util.Date;
 
 public class ArticleFactory {
 
-    private DataSource dataSource=null;
+	private DataSource dataSource=null;
 
-    public ArticleFactory(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-    /**
-     * Setup is called during factory initialization to 
-     * allow any initialization to be done before this 
-     * factory object is used.
-     */
-    public void setup() throws IOException {
+	public ArticleFactory(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+	/**
+	 * Setup is called during factory initialization to 
+	 * allow any initialization to be done before this 
+	 * factory object is used.
+	 */
+	public void setup() throws IOException {
 
-        //Create the database table if it does not exist.
-        Connection c=null;
-        PreparedStatement s=null;
+		//Create the database table if it does not exist.
+		Connection c=null;
+		PreparedStatement s=null;
 		try {
 			c=dataSource.getConnection();
 			s=c.prepareStatement(
 				"create table if not exists article (" +
 				"id bigint auto_increment primary key,"+
-                "publication_id bigint,"+
-                "name varchar(250),"+
-                "byline varchar(250),"+
-                "introduction varchar(2000),"+
-                "details varchar(18000),"+
-                "status varchar(100),"+
-                "deleted boolean,"+
-                "published boolean,"+
-                "published_date timestamp,"+
-                "created_date timestamp,"+
-                "last_update timestamp,"+
-                "last_update_person_id bigint"+
+				"publication_id bigint,"+
+				"name varchar(250),"+
+				"byline varchar(250),"+
+				"introduction varchar(2000),"+
+				"details varchar(18000),"+
+				"status varchar(100),"+
+				"deleted boolean,"+
+				"published boolean,"+
+				"published_date datetime,"+
+				"created_date datetime,"+
+				"last_update datetime,"+
+				"last_update_person_id bigint"+
 				")DEFAULT CHARSET=utf8 ENGINE=innodb");
-            s.execute();
-            s.close();
-            s=null;
-        } catch(SQLException e) {
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(!e.toString().contains("ORA-00955")) {
-                if(c!=null) { try { c.close(); } catch(Exception f){} }
-                throw new IOException(e.toString());
-            }
-        }
+			s.execute();
+			s.close();
+			s=null;
+		} catch(SQLException e) {
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(!e.toString().contains("ORA-00955")) {
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+				throw new IOException(e.toString());
+			}
+		}
 
-        if(c!=null) { try { c.close(); } catch(Exception f){} }
-    }
+		if(c!=null) { try { c.close(); } catch(Exception f){} }
+	}
 
-    /**
-     * Post-setup is called when the DAO layer has completed 
-     * initalisation of all DAO objects. 
-     */
-    public void postSetup() throws IOException {
+	/**
+	 * Post-setup is called when the DAO layer has completed 
+	 * initalisation of all DAO objects. 
+	 */
+	public void postSetup() throws IOException {
 
     }
 
@@ -349,39 +349,39 @@ public class ArticleFactory {
 
     }
 
-    /**
-     * Count the number of objects from the <i>Article</i>
-     * data source. 
-     */
-    public long countAll() throws IOException {
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        long count=0;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select count(1) "+
-                "from article "
-                );
-            results=s.executeQuery();
-            if(results.next())
-                count=results.getLong(1);
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+	/**
+	 * Count the number of objects from the <i>Article</i>
+	 * data source. 
+	 */
+	public long countAll() throws IOException {
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		long count=0;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select count(1) "+
+				"from article "
+				);
+			results=s.executeQuery();
+			if(results.next())
+				count=results.getLong(1);
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
-        return count;
-    }
+		return count;
+	}
 
     /**
      * Retrieve a set from the Article data source
@@ -419,9 +419,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -547,9 +547,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -675,9 +675,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -803,9 +803,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -931,9 +931,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1059,9 +1059,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1187,9 +1187,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1315,9 +1315,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1443,9 +1443,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1573,9 +1573,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1707,9 +1707,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1841,9 +1841,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -1975,9 +1975,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2109,9 +2109,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2243,9 +2243,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2377,9 +2377,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2511,9 +2511,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2645,9 +2645,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2779,9 +2779,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -2913,9 +2913,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3047,9 +3047,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3181,9 +3181,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3315,9 +3315,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3449,9 +3449,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3583,9 +3583,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3717,9 +3717,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3851,9 +3851,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -3985,9 +3985,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4119,9 +4119,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4253,9 +4253,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4387,9 +4387,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4521,9 +4521,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4655,9 +4655,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4789,9 +4789,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -4923,9 +4923,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5057,9 +5057,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5191,9 +5191,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5325,9 +5325,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5459,9 +5459,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5593,9 +5593,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5727,9 +5727,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5861,9 +5861,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -5995,9 +5995,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6129,9 +6129,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6263,9 +6263,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6397,9 +6397,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6531,9 +6531,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6665,9 +6665,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6799,9 +6799,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -6933,9 +6933,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7067,9 +7067,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7201,9 +7201,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7335,9 +7335,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7469,9 +7469,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7603,9 +7603,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7737,9 +7737,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -7871,9 +7871,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8005,9 +8005,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8139,9 +8139,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8273,9 +8273,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8407,9 +8407,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8541,9 +8541,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8675,9 +8675,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8809,9 +8809,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -8943,9 +8943,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9077,9 +9077,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9211,9 +9211,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9345,9 +9345,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9479,9 +9479,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9613,9 +9613,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9747,9 +9747,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -9881,9 +9881,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -10015,9 +10015,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -10149,9 +10149,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -10283,9 +10283,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -10415,9 +10415,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -10543,9 +10543,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }
@@ -10671,9 +10671,9 @@ public class ArticleFactory {
                 item.setStatus(results.getString(7));
                 item.setDeleted(results.getBoolean(8));
                 item.setPublished(results.getBoolean(9));
-                item.setPublishedDate(results.getDate(10));
-                item.setCreatedDate(results.getDate(11));
-                item.setLastUpdate(results.getDate(12));
+                item.setPublishedDate(results.getTimestamp(10));
+                item.setCreatedDate(results.getTimestamp(11));
+                item.setLastUpdate(results.getTimestamp(12));
                 item.setLastUpdatePersonId(results.getLong(13));
                 list.add(item);
             }

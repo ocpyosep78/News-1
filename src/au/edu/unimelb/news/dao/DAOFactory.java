@@ -217,685 +217,839 @@ public class DAOFactory {
 
 	public static List<SearchResult> queryArticleSimpleSearch(String field, String keywords) throws IOException {
 		List<SearchResult> list = new ArrayList<SearchResult>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount,d.published_date,d.publication_id from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
-              );
-            s.setString(1,field);
-            s.setString(2,keywords);
-            results=s.executeQuery();
-            while(results.next()) {
-                SearchResult item=new SearchResult();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setIntroduction(results.getString(4));
-                item.setRank(results.getLong(5));
-                item.setPublished(results.getBoolean(6));
-                item.setPublishedDate(results.getTimestamp(7));
-                item.setPublicationId(results.getLong(8));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount,d.published_date,d.publication_id from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc"
+				);
+			s.setString(1,field);
+			s.setString(2,keywords);
+			results=s.executeQuery();
+			while(results.next()) {
+				SearchResult item=new SearchResult();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setIntroduction(results.getString(4));
+				item.setRank(results.getLong(5));
+				item.setPublished(results.getBoolean(6));
+				item.setPublishedDate(results.getTimestamp(7));
+				item.setPublicationId(results.getLong(8));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<SearchResult> queryArticleSimpleSearch(String field, String keywords, int index, int limit) throws IOException {
 		List<SearchResult> list = new ArrayList<SearchResult>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount,d.published_date,d.publication_id from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc " +
-                "limit "+index+","+limit
-              );
-            s.setString(1,field);
-            s.setString(2,keywords);
-            results=s.executeQuery();
-            while(results.next()) {
-                SearchResult item=new SearchResult();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setIntroduction(results.getString(4));
-                item.setRank(results.getLong(5));
-                item.setPublished(results.getBoolean(6));
-                item.setPublishedDate(results.getTimestamp(7));
-                item.setPublicationId(results.getLong(8));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select d.id,d.name,d.status,d.introduction,count(d.id),d.published as headingcount,d.published_date,d.publication_id from search_index si join article d on (si.article_id=d.id) where field_name=? and field_value like ? group by article_id order by headingcount desc " +
+				"limit "+index+","+limit
+				);
+			s.setString(1,field);
+			s.setString(2,keywords);
+			results=s.executeQuery();
+			while(results.next()) {
+				SearchResult item=new SearchResult();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setIntroduction(results.getString(4));
+				item.setRank(results.getLong(5));
+				item.setPublished(results.getBoolean(6));
+				item.setPublishedDate(results.getTimestamp(7));
+				item.setPublicationId(results.getLong(8));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleRecentlyUpdated() throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
-              );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleRecentlyUpdated(int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc " +
-                "limit "+index+","+limit
-              );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc " +
+				"limit "+index+","+limit
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleMostPopular() throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
-              );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc"
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleMostPopular(int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc " +
-                "limit "+index+","+limit
-              );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_view_count avc on (a.id=avc.article_id) order by avc.views desc " +
+				"limit "+index+","+limit
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleRecentlyPublished() throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
-              );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc"
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleRecentlyPublished(int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc " +
-                "limit "+index+","+limit
-              );
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by a.last_update desc " +
+				"limit "+index+","+limit
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<NewsletterInfo> queryNewsletterByPublication(Long publicationId) throws IOException {
 		List<NewsletterInfo> list = new ArrayList<NewsletterInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.start_date desc,n.name"
-              );
-            s.setLong(1,publicationId);
-            results=s.executeQuery();
-            while(results.next()) {
-                NewsletterInfo item=new NewsletterInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setStartDate(results.getTimestamp(6));
-                item.setEndDate(results.getTimestamp(7));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? and n.published!=0 order by n.start_date desc,n.name"
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				NewsletterInfo item=new NewsletterInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setStartDate(results.getTimestamp(6));
+				item.setEndDate(results.getTimestamp(7));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<NewsletterInfo> queryNewsletterByPublication(Long publicationId, int index, int limit) throws IOException {
 		List<NewsletterInfo> list = new ArrayList<NewsletterInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.start_date desc,n.name " +
-                "limit "+index+","+limit
-              );
-            s.setLong(1,publicationId);
-            results=s.executeQuery();
-            while(results.next()) {
-                NewsletterInfo item=new NewsletterInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setStartDate(results.getTimestamp(6));
-                item.setEndDate(results.getTimestamp(7));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? and n.published!=0 order by n.start_date desc,n.name " +
+				"limit "+index+","+limit
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				NewsletterInfo item=new NewsletterInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setStartDate(results.getTimestamp(6));
+				item.setEndDate(results.getTimestamp(7));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
+
+		return list;
+	}
+
+	public static List<ArticleInfo> queryArticleListByDate() throws IOException {
+		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by published_date desc"
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
+
+		return list;
+	}
+
+	public static List<ArticleInfo> queryArticleListByDate(int index, int limit) throws IOException {
+		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a order by published_date desc " +
+				"limit "+index+","+limit
+				);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
+
+		return list;
+	}
+
+	public static List<NewsletterInfo> queryNewsletterByPublicationAll(Long publicationId) throws IOException {
+		List<NewsletterInfo> list = new ArrayList<NewsletterInfo>();
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.published, n.start_date desc,n.name"
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				NewsletterInfo item=new NewsletterInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setStartDate(results.getTimestamp(6));
+				item.setEndDate(results.getTimestamp(7));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
+
+		return list;
+	}
+
+	public static List<NewsletterInfo> queryNewsletterByPublicationAll(Long publicationId, int index, int limit) throws IOException {
+		List<NewsletterInfo> list = new ArrayList<NewsletterInfo>();
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select n.id,n.name,n.status,n.publication_id,n.published,n.start_date,n.end_date from newsletter n where publication_id = ? order by n.published, n.start_date desc,n.name " +
+				"limit "+index+","+limit
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				NewsletterInfo item=new NewsletterInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setStartDate(results.getTimestamp(6));
+				item.setEndDate(results.getTimestamp(7));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleByTopic(Long topicId) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id"
-              );
-            s.setLong(1,topicId);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id"
+				);
+			s.setLong(1,topicId);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleByTopic(Long topicId, int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id " +
-                "limit "+index+","+limit
-              );
-            s.setLong(1,topicId);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a join article_topic at on (a.id=at.article_id and at.topic_id=?) order by a.name,a.publication_id " +
+				"limit "+index+","+limit
+				);
+			s.setLong(1,topicId);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleByBrowse(String name) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where name like ? order by a.name,a.publication_id"
-              );
-            s.setString(1,name);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where name like ? order by a.name,a.publication_id"
+				);
+			s.setString(1,name);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleByBrowse(String name, int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where name like ? order by a.name,a.publication_id " +
-                "limit "+index+","+limit
-              );
-            s.setString(1,name);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where name like ? order by a.name,a.publication_id " +
+				"limit "+index+","+limit
+				);
+			s.setString(1,name);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleByDate(Long publicationId) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? order by published_date desc"
-              );
-            s.setLong(1,publicationId);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? order by published_date desc"
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<ArticleInfo> queryArticleByDate(Long publicationId, int index, int limit) throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? order by published_date desc " +
-                "limit "+index+","+limit
-              );
-            s.setLong(1,publicationId);
-            results=s.executeQuery();
-            while(results.next()) {
-                ArticleInfo item=new ArticleInfo();
-                item.setId(results.getLong(1));
-                item.setName(results.getString(2));
-                item.setStatus(results.getString(3));
-                item.setPublicationId(results.getLong(4));
-                item.setPublished(results.getBoolean(5));
-                item.setPublishedDate(results.getTimestamp(6));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? order by published_date desc " +
+				"limit "+index+","+limit
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<IntegerResult> queryMostRecentNewsletter(Long publicationId) throws IOException {
 		List<IntegerResult> list = new ArrayList<IntegerResult>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select max(n.id) from newsletter n where n.publication_id=? and n.published=1"
-              );
-            s.setLong(1,publicationId);
-            results=s.executeQuery();
-            while(results.next()) {
-                IntegerResult item=new IntegerResult();
-                item.setNumber(results.getLong(1));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select max(n.id) from newsletter n where n.publication_id=? and n.published=1"
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				IntegerResult item=new IntegerResult();
+				item.setNumber(results.getLong(1));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}
 
 	public static List<IntegerResult> queryMostRecentNewsletter(Long publicationId, int index, int limit) throws IOException {
 		List<IntegerResult> list = new ArrayList<IntegerResult>();
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select max(n.id) from newsletter n where n.publication_id=? and n.published=1 " +
-                "limit "+index+","+limit
-              );
-            s.setLong(1,publicationId);
-            results=s.executeQuery();
-            while(results.next()) {
-                IntegerResult item=new IntegerResult();
-                item.setNumber(results.getLong(1));
-                list.add(item);
-            }
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select max(n.id) from newsletter n where n.publication_id=? and n.published=1 " +
+				"limit "+index+","+limit
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				IntegerResult item=new IntegerResult();
+				item.setNumber(results.getLong(1));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
 		return list;
 	}

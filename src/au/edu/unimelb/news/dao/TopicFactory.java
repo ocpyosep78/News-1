@@ -18,47 +18,47 @@ import java.util.Date;
 
 public class TopicFactory {
 
-    private DataSource dataSource=null;
+	private DataSource dataSource=null;
 
-    public TopicFactory(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-    /**
-     * Setup is called during factory initialization to 
-     * allow any initialization to be done before this 
-     * factory object is used.
-     */
-    public void setup() throws IOException {
+	public TopicFactory(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+	/**
+	 * Setup is called during factory initialization to 
+	 * allow any initialization to be done before this 
+	 * factory object is used.
+	 */
+	public void setup() throws IOException {
 
-        //Create the database table if it does not exist.
-        Connection c=null;
-        PreparedStatement s=null;
+		//Create the database table if it does not exist.
+		Connection c=null;
+		PreparedStatement s=null;
 		try {
 			c=dataSource.getConnection();
 			s=c.prepareStatement(
 				"create table if not exists topic (" +
 				"id bigint auto_increment primary key,"+
-                "name varchar(250)"+
+				"name varchar(250)"+
 				")DEFAULT CHARSET=utf8 ENGINE=innodb");
-            s.execute();
-            s.close();
-            s=null;
-        } catch(SQLException e) {
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(!e.toString().contains("ORA-00955")) {
-                if(c!=null) { try { c.close(); } catch(Exception f){} }
-                throw new IOException(e.toString());
-            }
-        }
+			s.execute();
+			s.close();
+			s=null;
+		} catch(SQLException e) {
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(!e.toString().contains("ORA-00955")) {
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+				throw new IOException(e.toString());
+			}
+		}
 
-        if(c!=null) { try { c.close(); } catch(Exception f){} }
-    }
+		if(c!=null) { try { c.close(); } catch(Exception f){} }
+	}
 
-    /**
-     * Post-setup is called when the DAO layer has completed 
-     * initalisation of all DAO objects. 
-     */
-    public void postSetup() throws IOException {
+	/**
+	 * Post-setup is called when the DAO layer has completed 
+	 * initalisation of all DAO objects. 
+	 */
+	public void postSetup() throws IOException {
 
     }
 
@@ -261,39 +261,39 @@ public class TopicFactory {
 
     }
 
-    /**
-     * Count the number of objects from the <i>Topic</i>
-     * data source. 
-     */
-    public long countAll() throws IOException {
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        long count=0;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select count(1) "+
-                "from topic "
-                );
-            results=s.executeQuery();
-            if(results.next())
-                count=results.getLong(1);
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+	/**
+	 * Count the number of objects from the <i>Topic</i>
+	 * data source. 
+	 */
+	public long countAll() throws IOException {
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		long count=0;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select count(1) "+
+				"from topic "
+				);
+			results=s.executeQuery();
+			if(results.next())
+				count=results.getLong(1);
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
-        return count;
-    }
+		return count;
+	}
 
     /**
      * Retrieve a set from the Topic data source

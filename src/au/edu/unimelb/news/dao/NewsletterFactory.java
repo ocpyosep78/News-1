@@ -18,57 +18,57 @@ import java.util.Date;
 
 public class NewsletterFactory {
 
-    private DataSource dataSource=null;
+	private DataSource dataSource=null;
 
-    public NewsletterFactory(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-    /**
-     * Setup is called during factory initialization to 
-     * allow any initialization to be done before this 
-     * factory object is used.
-     */
-    public void setup() throws IOException {
+	public NewsletterFactory(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+	/**
+	 * Setup is called during factory initialization to 
+	 * allow any initialization to be done before this 
+	 * factory object is used.
+	 */
+	public void setup() throws IOException {
 
-        //Create the database table if it does not exist.
-        Connection c=null;
-        PreparedStatement s=null;
+		//Create the database table if it does not exist.
+		Connection c=null;
+		PreparedStatement s=null;
 		try {
 			c=dataSource.getConnection();
 			s=c.prepareStatement(
 				"create table if not exists newsletter (" +
 				"id bigint auto_increment primary key,"+
-                "publication_id bigint,"+
-                "name varchar(250),"+
-                "status varchar(100),"+
-                "version bigint,"+
-                "published boolean,"+
-                "deleted boolean,"+
-                "archived boolean,"+
-                "last_update timestamp,"+
-                "last_update_person_id bigint,"+
-                "start_date timestamp,"+
-                "end_date timestamp"+
+				"publication_id bigint,"+
+				"name varchar(250),"+
+				"status varchar(100),"+
+				"version bigint,"+
+				"published boolean,"+
+				"deleted boolean,"+
+				"archived boolean,"+
+				"last_update datetime,"+
+				"last_update_person_id bigint,"+
+				"start_date datetime,"+
+				"end_date datetime"+
 				")DEFAULT CHARSET=utf8 ENGINE=innodb");
-            s.execute();
-            s.close();
-            s=null;
-        } catch(SQLException e) {
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(!e.toString().contains("ORA-00955")) {
-                if(c!=null) { try { c.close(); } catch(Exception f){} }
-                throw new IOException(e.toString());
-            }
-        }
+			s.execute();
+			s.close();
+			s=null;
+		} catch(SQLException e) {
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(!e.toString().contains("ORA-00955")) {
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+				throw new IOException(e.toString());
+			}
+		}
 
-        if(c!=null) { try { c.close(); } catch(Exception f){} }
-    }
+		if(c!=null) { try { c.close(); } catch(Exception f){} }
+	}
 
-    /**
-     * Post-setup is called when the DAO layer has completed 
-     * initalisation of all DAO objects. 
-     */
-    public void postSetup() throws IOException {
+	/**
+	 * Post-setup is called when the DAO layer has completed 
+	 * initalisation of all DAO objects. 
+	 */
+	public void postSetup() throws IOException {
 
     }
 
@@ -341,39 +341,39 @@ public class NewsletterFactory {
 
     }
 
-    /**
-     * Count the number of objects from the <i>Newsletter</i>
-     * data source. 
-     */
-    public long countAll() throws IOException {
-        Connection c=null;
-        PreparedStatement s=null;
-        ResultSet results=null;
-        long count=0;
-        try {
-            c=dataSource.getConnection();
-            s=c.prepareStatement(
-                "select count(1) "+
-                "from newsletter "
-                );
-            results=s.executeQuery();
-            if(results.next())
-                count=results.getLong(1);
-            results.close();
-            results=null;
-            s.close();
-            s=null;
-            c.close();
-            c=null;
-        } catch(SQLException e) {
-            if(results!=null) { try { results.close(); } catch(Exception f){} }
-            if(s!=null) { try { s.close(); } catch(Exception f){} }
-            if(c!=null) { try { c.close(); } catch(Exception f){} }
-            throw new IOException(e.toString());
-        }
+	/**
+	 * Count the number of objects from the <i>Newsletter</i>
+	 * data source. 
+	 */
+	public long countAll() throws IOException {
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		long count=0;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select count(1) "+
+				"from newsletter "
+				);
+			results=s.executeQuery();
+			if(results.next())
+				count=results.getLong(1);
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
 
-        return count;
-    }
+		return count;
+	}
 
     /**
      * Retrieve a set from the Newsletter data source
@@ -410,10 +410,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -537,10 +537,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -664,10 +664,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -791,10 +791,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -918,10 +918,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1045,10 +1045,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1172,10 +1172,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1299,10 +1299,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1426,10 +1426,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1555,10 +1555,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1688,10 +1688,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1821,10 +1821,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -1954,10 +1954,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2087,10 +2087,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2220,10 +2220,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2353,10 +2353,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2486,10 +2486,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2619,10 +2619,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2752,10 +2752,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -2885,10 +2885,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3018,10 +3018,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3151,10 +3151,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3284,10 +3284,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3417,10 +3417,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3550,10 +3550,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3683,10 +3683,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3816,10 +3816,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -3949,10 +3949,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4082,10 +4082,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4215,10 +4215,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4348,10 +4348,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4481,10 +4481,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4614,10 +4614,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4747,10 +4747,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -4880,10 +4880,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5013,10 +5013,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5146,10 +5146,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5279,10 +5279,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5412,10 +5412,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5545,10 +5545,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5678,10 +5678,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5811,10 +5811,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -5944,10 +5944,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6077,10 +6077,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6210,10 +6210,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6343,10 +6343,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6476,10 +6476,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6609,10 +6609,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6742,10 +6742,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -6875,10 +6875,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7008,10 +7008,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7141,10 +7141,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7274,10 +7274,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7407,10 +7407,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7540,10 +7540,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7673,10 +7673,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7806,10 +7806,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -7939,10 +7939,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8072,10 +8072,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8205,10 +8205,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8338,10 +8338,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8471,10 +8471,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8604,10 +8604,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8737,10 +8737,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8868,10 +8868,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
@@ -8995,10 +8995,10 @@ public class NewsletterFactory {
                 item.setPublished(results.getBoolean(6));
                 item.setDeleted(results.getBoolean(7));
                 item.setArchived(results.getBoolean(8));
-                item.setLastUpdate(results.getDate(9));
+                item.setLastUpdate(results.getTimestamp(9));
                 item.setLastUpdatePersonId(results.getLong(10));
-                item.setStartDate(results.getDate(11));
-                item.setEndDate(results.getDate(12));
+                item.setStartDate(results.getTimestamp(11));
+                item.setEndDate(results.getTimestamp(12));
                 list.add(item);
             }
             results.close();
