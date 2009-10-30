@@ -68,6 +68,18 @@
 	<servlet>
 		<description>
 		</description>
+		<display-name>ArticleAddAction</display-name>
+		<servlet-name>ArticleAddAction</servlet-name>
+		<servlet-class>au.edu.unimelb.news.servlet.ArticleAddAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ArticleAddAction</servlet-name>
+		<url-pattern>/ArticleAddAction</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>
+		</description>
 		<display-name>ArticleUpdateAction</display-name>
 		<servlet-name>ArticleUpdateAction</servlet-name>
 		<servlet-class>au.edu.unimelb.news.servlet.ArticleUpdateAction</servlet-class>
@@ -136,7 +148,7 @@
 		<servlet-name>RssServlet</servlet-name>
 		<url-pattern>/rss/*</url-pattern>
 	</servlet-mapping>
-  
+
   <error-page>
     <exception-type>java.lang.Exception</exception-type>
     <location>/exception.jsp</location>

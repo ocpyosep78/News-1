@@ -1,17 +1,15 @@
 package au.edu.unimelb.news.model;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import au.edu.unimelb.news.dao.Article;
 import au.edu.unimelb.news.dao.ArticleInfo;
-import au.edu.unimelb.news.dao.PublicationFactory;
 import au.edu.unimelb.news.dao.DAOFactory;
-import au.edu.unimelb.news.dao.Publication;
 import au.edu.unimelb.news.dao.SearchResult;
+import au.edu.unimelb.security.UserHelper;
+import au.edu.unimelb.security.model.User;
 
 public class Articles {
 
@@ -63,11 +61,24 @@ public class Articles {
 		try {
 			article = DAOFactory.getArticleFactory().get(Long.parseLong(request.getParameter("article_id")));
 		} catch(Exception e) {}
-		if(article == null)
+		if(article == null) {
 			article = new Article();
+			article.setDeleted(false);
+			article.setPublished(false);
+			User user = UserHelper.getUser(request);
+			article.setLastUpdatePersonId(user.getPersonId());
+		}
 
+		try {
+		if(request.getParameter("article_publication_id")!=null)
+			article.setPublicationId(Long.parseLong(request.getParameter("article_publication_id")));
+		} catch(Exception e) {}
 		if(request.getParameter("article_name")!=null)
 			article.setName(request.getParameter("article_name"));
+		if(request.getParameter("article_byline")!=null)
+			article.setByline(request.getParameter("article_byline"));
+		if(request.getParameter("article_details")!=null)
+			article.setDetails(request.getParameter("article_details"));
 
 		return article;
 	}

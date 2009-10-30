@@ -813,7 +813,6 @@ div.pagebar ul li a:hover {
 	-webkit-border-radius:3px;
 }
 
-
 #content li.unpublished a {
 	color: #666;
 	background-image: url("../images/lock_grey.png");
@@ -821,4 +820,10 @@ div.pagebar ul li a:hover {
 	background-position: top right;
 	padding-right: 20px;
 
+}
+
+form div.article_topic label {
+	float: left;
+	width: 45%;
+	clear: none;
 }

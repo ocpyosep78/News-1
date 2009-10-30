@@ -27,12 +27,10 @@
 <% SessionFeedback.display(session,out); %>
 
 <%
-  // If a username has been remembered (using a cookie), put that in the sign-in box.
-  String signinUsername=request.getParameter("signin_username");
-  if(signinUsername==null || signinUsername.length()==0) signinUsername=CookieHelper.getCookie("username",request);
+// If a username has been remembered (using a cookie), put that in the sign-in box.
+String signinUsername=request.getParameter("signin_username");
+if(signinUsername==null || signinUsername.length()==0) signinUsername=CookieHelper.getCookie("username",request);
 %>
-
-
 
 <div class="subject_options">
 <h3>Publications</h3>
