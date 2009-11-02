@@ -37,11 +37,11 @@ if((article.isPublished() && !user.can("Publication","ViewPublished",article.get
 	boolean updates = user.can("Publication","ArticleUpdate",article.getPublicationId());
 	boolean published = article.isPublished();
 
-	if(published || updates) {
+	if(!published || updates) {
 %>
 <div class="article_options">
 <% if(updates) { %><a href="<%=Settings.baseUrl%>/article_edit.jsp?article_id=<%=article.getId()%>" class="update_article">Update article</a> <% } %>
-<% if(!published) { %><a href="<%=Settings.baseUrl%>/article_publish.jsp?article_id=<%=article.getId()%>" class="publish_article">Publish article</a> <% } %>
+<% if(!published) { %><a href="<%=Settings.baseUrl%>/ArticlePublishAction?article_id=<%=article.getId()%>" class="publish_article">Publish article</a> <% } %>
 </div>
 <% } %>
 

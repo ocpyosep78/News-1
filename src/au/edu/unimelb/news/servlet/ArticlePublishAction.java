@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import au.edu.unimelb.helper.StringHelper;
-import au.edu.unimelb.news.Configuration;
 import au.edu.unimelb.news.dao.Article;
 import au.edu.unimelb.news.dao.DAOFactory;
 import au.edu.unimelb.news.model.Articles;
@@ -36,11 +35,11 @@ import au.edu.unimelb.security.model.User;
 /**
  * Handles requests to create new agenda items for a speciffic meeting.
  */
-public class ArticleAddAction extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
+public class ArticlePublishAction extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
 	static final long serialVersionUID = 1L;
 
-	public ArticleAddAction() {
+	public ArticlePublishAction() {
 		super();
 	}
 
@@ -57,34 +56,20 @@ public class ArticleAddAction extends javax.servlet.http.HttpServlet implements 
 
 		Article article = Articles.load(request);
 
-		StringBuffer warnings=new StringBuffer();
-		warnings.append(Configuration.validator.checkField("article_title", article.getName()));
-		warnings.append(Configuration.validator.checkField("article_byline", article.getByline()));
-		warnings.append(Configuration.validator.checkField("article_summary", article.getIntroduction()));
-		warnings.append(Configuration.validator.checkField("article_details", article.getDetails()));
-
-		/*
-		if(article.getId()==0 && DAOFactory.getArticleFactory().countByName(publication.getName())>0)
-			warnings.append("<li>A publication entry already exists with this exact name.</li>");
-		*/
-
-		if(warnings.length()>0) {
-			session.setAttribute("errors", warnings.toString());
-			getServletContext().getRequestDispatcher("/new_article.jsp").forward(request, response);
+		if(!user.can("Publication","ArticleUpdate",article.getPublicationId())) {
+			AuthorisationFailAction.display(request, response, true);
 			return;
 		}
 
-		if(article.getId()==0) {
-			if(!user.can("Publication","ArticleCreate")) {
-				AuthorisationFailAction.display(request, response, true);
-				return;
-			}
-			DAOFactory.getArticleFactory().insert(article);
-			LogHelper.log("Publication", "ArticleCreate", user.getPersonId(), "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> was added.", user.getIP());
-			session.setAttribute("info", "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> has been saved.");
+		article = DAOFactory.getArticleFactory().get(article.getId());
+		if(!article.isPublished()) {
+			article.setPublished(true);
+			DAOFactory.getArticleFactory().update(article);
+			LogHelper.log("Publication", "ArticleUpdate", user.getPersonId(), "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> is now published.", user.getIP());
 		}
+		session.setAttribute("info", "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> is now published.");
 
-		getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/article.jsp").forward(request, response);
 	}
 
 

@@ -20,6 +20,10 @@
 	border-top-color: #6633CC;
 }
 
+#content {
+	max-width: none;
+}
+
 #content.content-wide {
 	max-width: none;
 	padding: 0 24px;
@@ -848,4 +852,22 @@ div.article_options a.update_article {
 div.article_options a.publish_article {
 	background: url("../images/world.png") no-repeat;
 	background-position: top left;
+}
+
+form.contentform span.question {
+	width: 25%;
+}
+
+
+form.contentform span.answer {
+	width: 70%;
+}
+
+div#article_edit form.contentform input#article_byline {
+	width: 80%;
+}
+div#article_edit form.contentform input#article_title,
+div#article_edit form.contentform textarea#article_introduction,
+div#article_edit form.contentform textarea#article_details {
+	width: 100%;
 }

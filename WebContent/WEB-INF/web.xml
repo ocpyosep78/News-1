@@ -92,6 +92,18 @@
 	<servlet>
 		<description>
 		</description>
+		<display-name>ArticlePublishAction</display-name>
+		<servlet-name>ArticlePublishAction</servlet-name>
+		<servlet-class>au.edu.unimelb.news.servlet.ArticlePublishAction</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ArticlePublishAction</servlet-name>
+		<url-pattern>/ArticlePublishAction</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>
+		</description>
 		<display-name>NewsletterReorderAction</display-name>
 		<servlet-name>NewsletterReorderAction</servlet-name>
 		<servlet-class>au.edu.unimelb.news.servlet.NewsletterReorderAction</servlet-class>
