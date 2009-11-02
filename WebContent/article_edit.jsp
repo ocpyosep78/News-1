@@ -9,7 +9,7 @@
 <%@ page import='au.edu.unimelb.security.model.User' %>
 <%@ page import='au.edu.unimelb.template.LayoutHelper' %>
 <%@ page import='au.edu.unimelb.helper.CookieHelper' %>
-<% LayoutHelper.headerTitled(out,"News"); %>
+<% LayoutHelper.headerTitled(out,"Update article"); %>
 <% User user = UserHelper.getUser(request); %>
 <% LayoutHelper.menubar(out,user); %>
 <% ResourceBundle messages = ResourceBundle.getBundle("messages"); %>
@@ -27,10 +27,11 @@
 	SessionFeedback.display(session,out);
 %>
 
-<h2>Create new article</h2>
+<h2>Update article</h2>
 
 <div id="article_edit">
-<form method="post" action="<%=Settings.baseUrl%>/ArticleAddAction" class="contentform">
+<form method="post" action="<%=Settings.baseUrl%>/ArticleUpdateAction" class="contentform">
+<input type="hidden" name="article_id" value="<%=article.getId()%>" />
 
 <label for='article_publication_id' class='firstquestion'>
 <span class='question'>Publication:</span>
@@ -82,12 +83,12 @@
 </div>
 
 <%
-Calendar cal = new GregorianCalendar();
-cal.setTime(article.getPublishedDate());
-int startYear = cal.get(Calendar.YEAR)-2;
-int year = cal.get(Calendar.YEAR);
-int month = cal.get(Calendar.MONTH);
-int day = cal.get(Calendar.DAY_OF_MONTH);
+	Calendar cal = new GregorianCalendar();
+	cal.setTime(article.getPublishedDate());
+	int startYear = cal.get(Calendar.YEAR)-2;
+	int year = cal.get(Calendar.YEAR);
+	int month = cal.get(Calendar.MONTH);
+	int day = cal.get(Calendar.DAY_OF_MONTH);
 %>
 
 <div class="array article_date">
@@ -112,7 +113,7 @@ int day = cal.get(Calendar.DAY_OF_MONTH);
 </div>
 
 <div class="submit">
-<input type="submit" name="save_button" value="Add new article"/>
+<input type="submit" name="save_button" value="Update article"/>
 </div>
 
 </form>

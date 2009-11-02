@@ -103,6 +103,10 @@ ArticleByDate query "select a.id,a.name,a.status,a.publication_id,a.published,a.
 ArticleByDate parameter publication_id : long
 ArticleByDate returns article_info
 
+ArticlePublishedByDate query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? and published!=0 order by published_date desc"
+ArticlePublishedByDate parameter publication_id : long
+ArticlePublishedByDate returns article_info
+
 ArticleByBrowse query "select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where name like ? order by a.name,a.publication_id"
 ArticleByBrowse parameter name : String
 ArticleByBrowse returns article_info

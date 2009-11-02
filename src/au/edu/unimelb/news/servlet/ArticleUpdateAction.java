@@ -36,11 +36,11 @@ import au.edu.unimelb.security.model.User;
 /**
  * Handles requests to create new agenda items for a speciffic meeting.
  */
-public class ArticleAddAction extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
+public class ArticleUpdateAction extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
 	static final long serialVersionUID = 1L;
 
-	public ArticleAddAction() {
+	public ArticleUpdateAction() {
 		super();
 	}
 
@@ -66,7 +66,7 @@ public class ArticleAddAction extends javax.servlet.http.HttpServlet implements 
 		/*
 		if(article.getId()==0 && DAOFactory.getArticleFactory().countByName(publication.getName())>0)
 			warnings.append("<li>A publication entry already exists with this exact name.</li>");
-		*/
+		 */
 
 		if(warnings.length()>0) {
 			session.setAttribute("errors", warnings.toString());
@@ -74,17 +74,15 @@ public class ArticleAddAction extends javax.servlet.http.HttpServlet implements 
 			return;
 		}
 
-		if(article.getId()==0) {
-			if(!user.can("Publication","ArticleCreate")) {
-				AuthorisationFailAction.display(request, response, true);
-				return;
-			}
-			DAOFactory.getArticleFactory().insert(article);
-			LogHelper.log("Publication", "ArticleCreate", user.getPersonId(), "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> was added.", user.getIP());
-			session.setAttribute("info", "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> has been saved.");
+		if(!user.can("Publication","ArticleUpdate",article.getPublicationId())) {
+			AuthorisationFailAction.display(request, response, true);
+			return;
 		}
+		DAOFactory.getArticleFactory().update(article);
+		LogHelper.log("Publication", "ArticleUpdate", user.getPersonId(), "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> was updated.", user.getIP());
+		session.setAttribute("info", "Article <i>"+StringHelper.escapeHtml(article.getName())+"</i> has been saved.");
 
-		getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/article.jsp").forward(request, response);
 	}
 
 

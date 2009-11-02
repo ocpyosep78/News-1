@@ -1,6 +1,8 @@
 package au.edu.unimelb.news.model;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +15,7 @@ import au.edu.unimelb.security.model.User;
 
 public class Articles {
 
-/*
+	/*
 	public static boolean contains(String name) {
 		return publicationMap.containsKey(name);
 	}
@@ -21,7 +23,7 @@ public class Articles {
 	public static Article get(String name) {
 		return publicationMap.get(name);
 	}
-*/
+	 */
 
 	public static Article get(long id) throws IOException {
 		return DAOFactory.getArticleFactory().get(id);
@@ -45,7 +47,7 @@ public class Articles {
 				publicationIdMap.put(publication.getId(), publication);
 			}
 	}
-*/
+	 */
 
 	/**
 	 * Return a subject entry based upon information in the http servlet request. If a category_id
@@ -70,15 +72,35 @@ public class Articles {
 		}
 
 		try {
-		if(request.getParameter("article_publication_id")!=null)
-			article.setPublicationId(Long.parseLong(request.getParameter("article_publication_id")));
+			if(request.getParameter("article_publication_id")!=null)
+				article.setPublicationId(Long.parseLong(request.getParameter("article_publication_id")));
 		} catch(Exception e) {}
-		if(request.getParameter("article_name")!=null)
-			article.setName(request.getParameter("article_name"));
+		if(request.getParameter("article_title")!=null)
+			article.setName(request.getParameter("article_title"));
 		if(request.getParameter("article_byline")!=null)
 			article.setByline(request.getParameter("article_byline"));
 		if(request.getParameter("article_details")!=null)
 			article.setDetails(request.getParameter("article_details"));
+		if(request.getParameter("article_introduction")!=null)
+			article.setIntroduction(request.getParameter("article_introduction"));
+		if(request.getParameter("article_date_day")!=null) {
+			Calendar c = new GregorianCalendar();
+			c.setTime(article.getPublishedDate());
+			try { c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(request.getParameter("article_date_day"))); } catch(Exception e) {}
+			article.setPublishedDate(c.getTime());
+		}
+		if(request.getParameter("article_date_month")!=null) {
+			Calendar c = new GregorianCalendar();
+			c.setTime(article.getPublishedDate());
+			try { c.set(Calendar.MONTH, Integer.parseInt(request.getParameter("article_date_month"))); } catch(Exception e) {}
+			article.setPublishedDate(c.getTime());
+		}
+		if(request.getParameter("article_date_year")!=null) {
+			Calendar c = new GregorianCalendar();
+			c.setTime(article.getPublishedDate());
+			try { c.set(Calendar.YEAR, Integer.parseInt(request.getParameter("article_date_year"))); } catch(Exception e) {}
+			article.setPublishedDate(c.getTime());
+		}
 
 		return article;
 	}

@@ -827,3 +827,25 @@ form div.article_topic label {
 	width: 45%;
 	clear: none;
 }
+
+div.article_options {
+	padding: 4px 4px 4px 10px;
+	background: #cfc;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+}
+
+div.article_options a {
+	padding: 0 0 6px 22px;
+}
+
+div.article_options a.update_article {
+	background: url("../images/editgrid.gif") no-repeat;
+	background-position: top left;
+}
+
+
+div.article_options a.publish_article {
+	background: url("../images/world.png") no-repeat;
+	background-position: top left;
+}

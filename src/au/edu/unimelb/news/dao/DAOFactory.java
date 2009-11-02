@@ -448,6 +448,83 @@ public class DAOFactory {
 		return list;
 	}
 
+	public static List<ArticleInfo> queryArticlePublishedByDate(Long publicationId) throws IOException {
+		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? and published!=0 order by published_date desc"
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
+
+		return list;
+	}
+
+	public static List<ArticleInfo> queryArticlePublishedByDate(Long publicationId, int index, int limit) throws IOException {
+		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
+		Connection c=null;
+		PreparedStatement s=null;
+		ResultSet results=null;
+		try {
+			c=dataSource.getConnection();
+			s=c.prepareStatement(
+				"select a.id,a.name,a.status,a.publication_id,a.published,a.published_date from article a where a.publication_id=? and published!=0 order by published_date desc " +
+				"limit "+index+","+limit
+				);
+			s.setLong(1,publicationId);
+			results=s.executeQuery();
+			while(results.next()) {
+				ArticleInfo item=new ArticleInfo();
+				item.setId(results.getLong(1));
+				item.setName(results.getString(2));
+				item.setStatus(results.getString(3));
+				item.setPublicationId(results.getLong(4));
+				item.setPublished(results.getBoolean(5));
+				item.setPublishedDate(results.getTimestamp(6));
+				list.add(item);
+			}
+			results.close();
+			results=null;
+			s.close();
+			s=null;
+			c.close();
+			c=null;
+		} catch(SQLException e) {
+			if(results!=null) { try { results.close(); } catch(Exception f){} }
+			if(s!=null) { try { s.close(); } catch(Exception f){} }
+			if(c!=null) { try { c.close(); } catch(Exception f){} }
+			throw new IOException(e.toString());
+		}
+
+		return list;
+	}
+
 	public static List<ArticleInfo> queryArticleRecentlyPublished() throws IOException {
 		List<ArticleInfo> list = new ArrayList<ArticleInfo>();
 		Connection c=null;

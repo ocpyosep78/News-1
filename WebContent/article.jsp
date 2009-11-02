@@ -27,14 +27,24 @@
 <% SessionFeedback.display(session,out);
 
 if((article.isPublished() && !user.can("Publication","ViewPublished",article.getPublicationId()) ||
-	(!article.isPublished() && !user.can("Publication","ViewUnpublished")))) {
+	(!article.isPublished() && !user.can("Publication","ViewUnpublished",article.getPublicationId())))) {
 %>
 <h2>Permission denied</h2>
 <p>You do not have permission to view this particular article because
 <%=article.isPublished()?" this article belongs to a publication you do not have permission to read.":"this article has not been published yet." %>
 <%
 } else {
+	boolean updates = user.can("Publication","ArticleUpdate",article.getPublicationId());
+	boolean published = article.isPublished();
+
+	if(published || updates) {
 %>
+<div class="article_options">
+<% if(updates) { %><a href="<%=Settings.baseUrl%>/article_edit.jsp?article_id=<%=article.getId()%>" class="update_article">Update article</a> <% } %>
+<% if(!published) { %><a href="<%=Settings.baseUrl%>/article_publish.jsp?article_id=<%=article.getId()%>" class="publish_article">Publish article</a> <% } %>
+</div>
+<% } %>
+
 <div id="article">
 <h2><%= StringHelper.escapeHtml(article.getName()) %></h2>
 <%
@@ -54,7 +64,7 @@ for(NewsletterArticle item : DAOFactory.getNewsletterArticleFactory().getByArtic
 }
 if(!locationFound) {
 	DateFormat format = new SimpleDateFormat("EEEE d MMMM yyyy");
-	out.println("<p class=\"source\">"+Publications.get(article.getPublicationId()).getName()+", "+format.format(article.getLastUpdate())+"</p>");
+	out.println("<p class=\"source\">"+Publications.get(article.getPublicationId()).getName()+", "+format.format(article.getPublishedDate())+"</p>");
 }
 
 if(article.getName().startsWith("No ")) {

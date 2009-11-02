@@ -120,7 +120,11 @@ if(newsletters.size()==0) {
 List<ArticleInfo> articles;
 int articleCount = 0;
 
-articles = DAOFactory.queryArticleByDate(publication.getId(),pageNumber*pageSize,pageSize);
+if(user.can("Publication","ViewUnpublished",publication.getId())) {
+	articles = DAOFactory.queryArticleByDate(publication.getId(),pageNumber*pageSize,pageSize);
+} else {
+	articles = DAOFactory.queryArticlePublishedByDate(publication.getId(),pageNumber*pageSize,pageSize);
+}
 articleCount = (int)(DAOFactory.getArticleFactory().countByPublicationId(publication.getId())/pageSize)+1;
 year = new SimpleDateFormat("MMMM yyyy");
 
